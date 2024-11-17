@@ -71,7 +71,7 @@ const pdfConfiguration: PdfConfig = {
       { x: 135, y: 85, maxWidth: 44, fontSize: 13, color: rgb(0.17, 0.17, 0.2), infoToText: renderPassId },
       { x: 153.892, y: 178, fontSize: 6, textAlign: 'center', infoToText: renderCardHash },
     ],
-    form: [{ infoToFormFields: createAddressFormFields, x: 18.5, y: 68.5, width: 57, fontSize: 10 }],
+    form: [{ infoToFormFields: createAddressFormFields, x: 20, y: 74, width: 85, fontSize: 9 }],
   },
 }
 

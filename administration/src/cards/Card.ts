@@ -9,7 +9,7 @@ import { REGION_EXTENSION_NAME } from './extensions/RegionExtension'
 import Extensions, { Extension, ExtensionKey, ExtensionState, InferExtensionStateType } from './extensions/extensions'
 
 // Due to limited space on the cards
-const MAX_NAME_LENGTH = 30
+const MAX_NAME_LENGTH = 40
 // Due to limited space on the qr code
 const MAX_ENCODED_NAME_LENGTH = 50
 
