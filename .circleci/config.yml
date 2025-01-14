@@ -431,17 +431,13 @@ jobs:
                     mkdir -p ~/.ssh
                     touch ~/.ssh/known_hosts
                     echo "github.com ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCj7ndNxQowgcQnjshcLrqPEiiphnt+VTTvDP6mHBL9j1aNUkY4Ue1gvwnGLVlOhGeYrnZaMgRK6+PKCUXaDbC7qtbW8gIkhL7aGCsOr/C56SJMy/BCZfxd1nWzAOxSDPgVsmerOBYfNqltV9/hWCqBywINIR+5dIg6JTJ72pcEpEjcYgXkE2YEFXV1JHnsKgbLWNlhScqb2UmyRkQyytRLtL+38TGxkxCflmO+5Z8CSSNY7GidjMIZ7Q4zMjA2n1nGrlTDkzwDCsw+wqFPGQA179cnfGWOWRVruj16z6XyvxvjJwbz0wQZ75XK5tKSb7FNyeIEs4TT4jk+S4dhPeAUC5y+bDYirYgM4GC7uEnztnZyaVWQ7B381AK4Qdrwt51ZqExKbQpTUNn+EjqoTwvqNj4kqx5QUCI0ThS/YkOxJCXmPUWZbhjpCg56i+2aB6CmK2JGhn57K5mj0MNdBXA4/WnwH6XoPWJzK5Nyu2zB3nAZp+S5hpQs+p1vN1/wsjk=" >> ~/.ssh/known_hosts
-                    git clone git@github.com:urbica/martin.git ~/martin
-                    git config advice.detachedHead false
-                    git checkout ed14582a8f5c3e11bfb165f3b012edccd929b479
-                name: Checkout
+                    git config --global advice.detachedHead false
+                    git clone --depth 1 --branch v0.13.0 git@github.com:maplibre/martin.git ~/martin
+                name: Clone martin
             - restore_cache:
                 keys:
                     - v1-cargo-{{ checksum "Cargo.toml" }}-{{ checksum "Cargo.lock" }}
             - prepare_workspace
-            - run:
-                command: cargo update openssl --precise 0.10.64
-                name: Update OpenSSL library due to failed compilation
             - run:
                 command: |
                     cargo build --release --target x86_64-unknown-linux-gnu

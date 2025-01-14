@@ -4,8 +4,8 @@
     <meta charset="utf-8"/>
     <title>Display a map</title>
     <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no"/>
-    <script src="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.js"></script>
-    <link href="https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css" rel="stylesheet"/>
+    <script crossorigin src="https://unpkg.com/maplibre-gl@4.2.0/dist/maplibre-gl.js"></script>
+    <link href="https://unpkg.com/maplibre-gl@4.2.0/dist/maplibre-gl.css" rel="stylesheet"/>
     <style>
         body {
             margin: 0;
@@ -18,15 +18,24 @@
             bottom: 0;
             width: 100%;
         }
+
+        body > button {
+            position: relative;
+            z-index: 1;
+        }
     </style>
 </head>
 <body>
 <div id="map"></div>
+<button onclick="localStorage.setItem('style-url', BAYERN_URL); location.reload()">Switch to Bayern</button>
+<button onclick="localStorage.setItem('style-url', NUERNBERG_URL); location.reload()">Switch to Nuernberg</button>
 <script>
+  const BAYERN_URL = 'http://localhost:8000/project/bayern.ehrenamtskarte.app/map'
+  const NUERNBERG_URL = 'http://localhost:8000/project/nuernberg.sozialpass.app/map'
+  const styleUrl = localStorage.getItem("style-url") ?? BAYERN_URL
   new maplibregl.Map({
     container: 'map', // container id
-    //style: 'http://0.0.0.0:8000/project/bayern.ehrenamtskarte.app/map', // style URL
-    style: 'http://0.0.0.0:8000/project/nuernberg.sozialpass.app/map', // style URL
+    style: styleUrl, // style URL
     center: [0, 0], // starting position [lng, lat]
     zoom: 1 // starting zoom
   });

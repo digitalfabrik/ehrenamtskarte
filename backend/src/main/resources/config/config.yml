@@ -7,8 +7,8 @@ postgres:
   user: postgres
   password: postgres
 map:
-  # baseUrl: https://tiles.entitlementcard.app/rpc/physical_stores/{z}/{x}/{y}.pbf
-  baseUrl: http://localhost:5002/rpc/physical_stores/{z}/{x}/{y}.pbf
+  # baseUrl: https://tiles.entitlementcard.app/physical_stores/{z}/{x}/{y}
+  baseUrl: http://localhost:5002/physical_stores/{z}/{x}/{y}
 geocoding:
   enabled: false
   host: nominatim.maps.tuerantuer.org

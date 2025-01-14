@@ -1,7 +1,7 @@
 services:
   martin:
-    image: urbica/martin
-    command: martin --config /app/config.yaml
+    image: ghcr.io/maplibre/martin:v0.13.0
+    command: --config /app/config.yaml
     volumes:
       - ./docker/martin-config.yaml:/app/config.yaml
     depends_on:
@@ -31,6 +31,7 @@ services:
       - 127.0.0.1:5002:80
     volumes:
       - ./backend/ehrenamtskarte-maplibre-style:/usr/share/nginx/html
+      - ./docker/map.html:/usr/share/nginx/html/map.html
       - ./docker/nginx-development.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - martin

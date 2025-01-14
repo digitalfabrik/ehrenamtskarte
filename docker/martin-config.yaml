@@ -1,28 +1,25 @@
----
-# Database connection string
-connection_string: "postgres://postgres:postgres@db-postgis:5432/ehrenamtskarte"
-
-# Connection keep alive timeout [default: 75]
-keep_alive: 75
-
 # The socket address to bind [default: 0.0.0.0:3000]
-listen_addresses: "0.0.0.0:3000"
-
-# Maximum connections pool size [default: 20]
-pool_size: 20
-
-# Enable watch mode
-watch: false
-
-# Trust invalid certificates. This introduces significant vulnerabilities, and should only be used as a last resort.
-danger_accept_invalid_certs: false
+listen_addresses: '0.0.0.0:3000'
 
 # Number of web server workers
 worker_processes: 8
 
-function_sources:
-  physical_stores:
-    id: physical_stores
-    schema: public
+# Amount of memory (in MB) to use for caching tiles [default: 512, 0 to disable]
+# We disable it, as martin cannot flush its own cache (yet?), so the tiles would never be updated.
+cache_size_mb: 0
 
-    function: physical_stores
+# Database configuration. This can also be a list of PG configs.
+postgres:
+  # Database connection string. You can use env vars too, for example:
+  #   $DATABASE_URL
+  #   ${DATABASE_URL:-postgresql://postgres@localhost/db}
+  connection_string: 'postgres://postgres:postgres@db-postgis:5432/ehrenamtskarte'
+
+  # Associative arrays of function sources
+  functions:
+    physical_stores:
+      schema: public
+      function: physical_stores
+    physical_stores_clustered:
+      schema: public
+      function: physical_stores_clustered
