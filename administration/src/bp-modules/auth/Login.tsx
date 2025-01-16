@@ -23,7 +23,7 @@ const Login = ({ onSignIn }: { onSignIn: (payload: SignInPayload) => void }): Re
   const [signIn, mutationState] = useSignInMutation({
     onCompleted: (payload: SignInMutation) => onSignIn(payload.signInPayload),
     onError: error => {
-      const { title } = getMessageFromApolloError(error)
+      const { title } = getMessageFromApolloError(error, t)
       appToaster?.show({ intent: 'danger', message: title })
     },
   })

@@ -1,5 +1,6 @@
 import { Button, Classes, Dialog } from '@blueprintjs/core'
 import React, { ReactElement, ReactNode, useContext, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { TokenPayload } from './AuthProvider'
@@ -20,6 +21,7 @@ type Props = {
 const computeSecondsLeft = (authData: TokenPayload) => Math.round((authData.expiry.valueOf() - Date.now()) / 1000)
 
 const KeepAliveToken = ({ authData, onSignOut, onSignIn, children }: Props): ReactElement => {
+  const { t } = useTranslation('auth')
   const navigate = useNavigate()
   const projectId = useContext(ProjectConfigContext).projectId
   const email = useContext(WhoAmIContext).me!.email
@@ -42,12 +44,12 @@ const KeepAliveToken = ({ authData, onSignOut, onSignIn, children }: Props): Rea
 
   const [signIn, mutationState] = useSignInMutation({
     onCompleted: payload => {
-      appToaster?.show({ intent: 'success', message: 'Login-Zeitraum verlängert.' })
+      appToaster?.show({ intent: 'success', message: t('loginPeriodExtended') })
       onSignIn(payload.signInPayload)
       setPassword('')
     },
     onError: error => {
-      const { title } = getMessageFromApolloError(error)
+      const { title } = getMessageFromApolloError(error, t)
       appToaster?.show({ intent: 'danger', message: title })
     },
   })
@@ -58,7 +60,7 @@ const KeepAliveToken = ({ authData, onSignOut, onSignIn, children }: Props): Rea
       {children}
       <Dialog
         isOpen={secondsLeft <= 180}
-        title='Ihr Login-Zeitraum läuft ab!'
+        title={t('loginPeriodExpires')}
         icon='warning-sign'
         isCloseButtonShown={false}>
         <form
@@ -67,16 +69,26 @@ const KeepAliveToken = ({ authData, onSignOut, onSignIn, children }: Props): Rea
             extendLogin()
           }}>
           <div className={Classes.DIALOG_BODY}>
-            <p>Ihr Login-Zeitraum läuft in {secondsLeft} Sekunden ab. Danach werden Sie automatisch ausgeloggt.</p>
-            <p>Geben Sie Ihr Passwort ein, um den Login-Zeitraum zu verlängern.</p>
-            <PasswordInput label='' placeholder='Passwort' setValue={setPassword} value={password} />
+            <p>{t('loginPeriodSecondsLeft', { secondsLeft })}</p>
+            <p>{t('loginPeriodPasswordPrompt')}</p>
+            <PasswordInput
+              label=''
+              placeholder={t('loginPeriodPasswordPlaceholder')}
+              setValue={setPassword}
+              value={password}
+            />
           </div>
           <div className={Classes.DIALOG_FOOTER}>
             <div className={Classes.DIALOG_FOOTER_ACTIONS}>
               <Button onClick={onSignOut} loading={mutationState.loading}>
-                Ausloggen
+                {t('loginPeriodLogoutButton')}
               </Button>
-              <Button intent='primary' type='submit' loading={mutationState.loading} text='Login-Zeitraum verlängern' />
+              <Button
+                intent='primary'
+                type='submit'
+                loading={mutationState.loading}
+                text={t('loginPeriodExtendButton')}
+              />
             </div>
           </div>
         </form>

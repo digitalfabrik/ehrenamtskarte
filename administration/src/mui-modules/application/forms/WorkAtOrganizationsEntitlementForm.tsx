@@ -1,5 +1,6 @@
 import { Alert, Button } from '@mui/material'
 import React, { useCallback, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { BlueCardWorkAtOrganizationsEntitlementInput } from '../../../generated/graphql'
 import CustomDivider from '../CustomDivider'
@@ -74,6 +75,7 @@ const WorkAtOrganizationsEntitlementForm: Form<State, ValidatedInput, Additional
     }
   },
   Component: ({ state, setState, applicantName }: FormComponentProps<State, AdditionalProps>) => {
+    const { t } = useTranslation('applicationForms')
     const addActivity = () =>
       setState(state => {
         const newKey = Math.max(...state.map(({ key }) => key), 0) + 1
@@ -116,9 +118,9 @@ const WorkAtOrganizationsEntitlementForm: Form<State, ValidatedInput, Additional
         ))}
         <CustomDivider />
         {state.length < 5 ? (
-          <Button onClick={addActivity}>Weitere Tätigkeit hinzufügen</Button>
+          <Button onClick={addActivity}>{t('addActivityButton')}</Button>
         ) : (
-          <Alert severity='info'>Maximale Anzahl an Tätigkeiten erreicht.</Alert>
+          <Alert severity='info'>{t('maxActivitiesReached')}</Alert>
         )}
       </>
     )

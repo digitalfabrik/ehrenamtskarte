@@ -1,5 +1,6 @@
 import { Button, Spinner } from '@blueprintjs/core'
 import React, { ReactElement, ReactNode, createContext, useContext, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { AuthContext } from './AuthProvider'
 import StandaloneCenter from './bp-modules/StandaloneCenter'
@@ -15,6 +16,7 @@ export const WhoAmIContext = createContext<{
 })
 
 const WhoAmIProvider = ({ children }: { children: ReactNode }): ReactElement => {
+  const { t } = useTranslation('auth')
   const { projectId } = useContext(ProjectConfigContext)
   const { signOut } = useContext(AuthContext)
   const { loading, error, data, refetch, previousData } = useWhoAmIQuery({
@@ -34,12 +36,12 @@ const WhoAmIProvider = ({ children }: { children: ReactNode }): ReactElement => 
   if (!context.me || error) {
     return (
       <StandaloneCenter>
-        <p>Deine Konto-Informationen konnten nicht geladen werden.</p>
+        <p>{t('accountInformationNotAvailable')}</p>
         <Button icon='repeat' onClick={refetch}>
-          Erneut versuchen
+          {t('retry')}
         </Button>
         <Button icon='log-out' onClick={signOut}>
-          Ausloggen
+          {t('logout')}
         </Button>
       </StandaloneCenter>
     )

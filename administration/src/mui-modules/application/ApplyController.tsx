@@ -5,7 +5,7 @@ import '@fontsource/roboto/700.css'
 import { CircularProgress, DialogActions, Typography } from '@mui/material'
 import { SnackbarProvider, useSnackbar } from 'notistack'
 import React, { ReactElement, useCallback, useContext, useMemo, useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import getMessageFromApolloError from '../../errors/getMessageFromApolloError'
@@ -42,7 +42,7 @@ const ApplyController = (): React.ReactElement | null => {
   )
   const [addEakApplication, { loading: loadingSubmit }] = useAddEakApplicationMutation({
     onError: error => {
-      const { title } = getMessageFromApolloError(error)
+      const { title } = getMessageFromApolloError(error, t)
       enqueueSnackbar(title, { variant: 'error' })
     },
     onCompleted: ({ result }) => {
@@ -57,7 +57,7 @@ const ApplyController = (): React.ReactElement | null => {
   const regionsQuery = useGetRegionsQuery({
     variables: { project: projectId },
   })
-  const regionsQueryResult = getQueryResult(regionsQuery)
+  const regionsQueryResult = getQueryResult(regionsQuery, t)
   const arrayBufferManagerInitialized = useInitializeGlobalArrayBuffersManager()
   const getArrayBufferKeys = useMemo(
     () => (status === 'loading' ? null : () => ApplicationForm.getArrayBufferKeys(state)),
@@ -71,10 +71,6 @@ const ApplyController = (): React.ReactElement | null => {
     return <CircularProgress style={{ margin: 'auto' }} />
   }
 
-  const successText = `Ihr Antrag für die Ehrenamtskarte wurde erfolgreich übermittelt.
-            Über den Fortschritt Ihres Antrags werden Sie per E-Mail informiert.
-            Sie können das Fenster jetzt schließen.`
-
   if (!regionsQueryResult.successful) {
     return regionsQueryResult.component
   }
@@ -84,7 +80,7 @@ const ApplyController = (): React.ReactElement | null => {
   const submit = () => {
     const validationResult = ApplicationForm.validate(state, { regions })
     if (validationResult.type === 'error') {
-      enqueueSnackbar('Ungültige bzw. fehlende Eingaben entdeckt. Bitte prüfen Sie die rot markierten Felder.', {
+      enqueueSnackbar(t('invalidInputError'), {
         variant: 'error',
       })
       return
@@ -104,7 +100,9 @@ const ApplyController = (): React.ReactElement | null => {
         </Typography>
         {formSubmitted ? (
           <SuccessContent>
-            <Typography>{successText}</Typography>
+            <Typography>
+              <Trans i18nKey='application:submitSuccessText' />
+            </Typography>
           </SuccessContent>
         ) : (
           <ApplicationForm.Component

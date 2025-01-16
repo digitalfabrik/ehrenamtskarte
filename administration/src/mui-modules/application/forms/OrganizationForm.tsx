@@ -1,6 +1,6 @@
 import { Alert, Typography, styled } from '@mui/material'
 import React from 'react'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 
 import { OrganizationInput } from '../../../generated/graphql'
 import { normalizeName } from '../../../util/normalizeString'
@@ -87,7 +87,7 @@ const OrganizationForm: Form<State, ValidatedInput, AdditionalProps> = {
     const { t } = useTranslation('application')
     return (
       <>
-        <h4>Angaben zur Organisation</h4>
+        <h4>{t('organization.title')}</h4>
         <ShortTextForm.Component
           state={state.name}
           setState={useUpdateStateCallback(setState, 'name')}
@@ -101,13 +101,10 @@ const OrganizationForm: Form<State, ValidatedInput, AdditionalProps> = {
           options={organizationCategoryOptions}
         />
         <h4>{t('organizationContact.title')}</h4>
-        <Typography>
-          Bitte geben Sie hier die Daten der Person an, die ihr ehrenamtliches Engagement bestätigen kann.
-        </Typography>
+        <Typography>{t('applicationForms:organizationContactPersonDescription')}</Typography>
         {normalizeName(applicantName) === normalizeName(state.contactName.shortText) && (
           <WarningContactPersonSamePerson severity='warning'>
-            Die Kontaktperson der Organisation und die antragsstellende Person scheinen identisch zu sein. Bitte
-            beachten Sie, dass Anträge auf dieser Grundlage nicht bewilligt werden können.
+            <Trans i18nKey='applicationForms:organizationContactPersonAlert' />
           </WarningContactPersonSamePerson>
         )}
         <ShortTextForm.Component

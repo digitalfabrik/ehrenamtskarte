@@ -1,5 +1,6 @@
 import { Button } from '@mui/material'
 import React, { useContext, useState } from 'react'
+import { Trans, useTranslation } from 'react-i18next'
 
 import { useGetDataPolicyQuery } from '../../../generated/graphql'
 import { ProjectConfigContext } from '../../../project-configs/ProjectConfigContext'
@@ -50,6 +51,7 @@ const StepSendForm: Form<State, ValidatedInput, AdditionalProps> = {
     hasAcceptedEmailUsage: hasAcceptedEmailUsageOptions,
   }),
   Component: ({ state, setState, regionId }: FormComponentProps<State, AdditionalProps>) => {
+    const { t } = useTranslation('applicationForms')
     const setHasAcceptedDataPrivacyState = useUpdateStateCallback(setState, 'hasAcceptedDataPrivacy')
     const setGivenInformationIsCorrectAndComplete = useUpdateStateCallback(
       setState,
@@ -61,19 +63,18 @@ const StepSendForm: Form<State, ValidatedInput, AdditionalProps> = {
     const [openPrivacyPolicy, setOpenPrivacyPolicy] = useState<boolean>(false)
     const PrivacyLabel = (
       <span>
-        Ich erkläre mich damit einverstanden, dass meine Daten zum Zwecke der Antragsverarbeitung gespeichert werden und
-        akzeptiere die{' '}
+        <Trans i18nKey='applicationForms:acceptDataPrivacyPolicy' />{' '}
         <Button
           variant='text'
           style={{ textTransform: 'capitalize', padding: 0, verticalAlign: 'unset' }}
           onClick={() => setOpenPrivacyPolicy(true)}>
-          Datenschutzerklärung
+          {t('acceptDataPrivacyButton')}
         </Button>
         .
       </span>
     )
 
-    const policyQueryHandler = getQueryResult(policyQuery)
+    const policyQueryHandler = getQueryResult(policyQuery, t)
     if (!policyQueryHandler.successful) {
       return policyQueryHandler.component
     }
@@ -88,13 +89,13 @@ const StepSendForm: Form<State, ValidatedInput, AdditionalProps> = {
           label={PrivacyLabel}
         />
         <SubForms.hasAcceptedEmailUsage.Component
-          label='Ich stimme zu, dass ich von der lokalen Ehrenamtskoordination über Verlosungen und regionale Angebote informiert werden darf.'
+          label={t('acceptAdvertisement')}
           state={state.hasAcceptedEmailUsage}
           setState={setHasAcceptedEmailUsage}
           options={hasAcceptedEmailUsageOptions}
         />
         <SubForms.givenInformationIsCorrectAndComplete.Component
-          label='Ich versichere, dass alle angegebenen Informationen korrekt und vollständig sind.'
+          label={t('acceptInputCorrectComplete')}
           state={state.givenInformationIsCorrectAndComplete}
           setState={setGivenInformationIsCorrectAndComplete}
           options={givenInformationIsCorrectAndCompleteOptions}

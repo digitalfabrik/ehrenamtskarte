@@ -16,7 +16,7 @@ const RegionSettingsController = ({ regionId }: { regionId: number }): ReactElem
 
   const [updateRegionSettings, { loading }] = useUpdateRegionSettingsMutation({
     onError: error => {
-      const { title } = getMessageFromApolloError(error)
+      const { title } = getMessageFromApolloError(error, t)
       appToaster?.show({ intent: 'danger', message: title })
     },
     onCompleted: () => {
@@ -24,7 +24,7 @@ const RegionSettingsController = ({ regionId }: { regionId: number }): ReactElem
     },
   })
 
-  const regionSettingsByIdQueryResult = getQueryResult(regionSettingsByIdQuery)
+  const regionSettingsByIdQueryResult = getQueryResult(regionSettingsByIdQuery, t)
   if (!regionSettingsByIdQueryResult.successful) {
     return regionSettingsByIdQueryResult.component
   }

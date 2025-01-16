@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { BlueCardMilitaryReserveEntitlementInput } from '../../../generated/graphql'
 import CustomDivider from '../CustomDivider'
@@ -22,16 +23,19 @@ const MilitaryReserveEntitlementForm: Form<State, ValidatedInput> = {
   initialState: createCompoundInitialState(SubForms),
   getArrayBufferKeys: createCompoundGetArrayBufferKeys(SubForms),
   validate: createCompoundValidate(SubForms, {}),
-  Component: ({ state, setState }: FormComponentProps<State>) => (
-    <>
-      <CustomDivider label='Angaben zur Tätigkeit' />
-      <h4>Tätigkeitsnachweis</h4>
-      <p>
-        Hängen Sie hier bitte einen eingescannten oder abfotografierten Tätigkeitsnachweis an. {FileRequirementsText}
-      </p>
-      <FileInputForm.Component state={state.certificate} setState={useUpdateStateCallback(setState, 'certificate')} />
-    </>
-  ),
+  Component: ({ state, setState }: FormComponentProps<State>) => {
+    const { t } = useTranslation('applicationForms')
+    return (
+      <>
+        <CustomDivider label={t('activityInformation')} />
+        <h4>{t('certificateHeadline')}</h4>
+        <p>
+          {t('certificateDescription')} {FileRequirementsText}
+        </p>
+        <FileInputForm.Component state={state.certificate} setState={useUpdateStateCallback(setState, 'certificate')} />
+      </>
+    )
+  },
 }
 
 export default MilitaryReserveEntitlementForm

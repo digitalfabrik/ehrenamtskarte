@@ -1,5 +1,6 @@
 import { FormGroup, InputGroup, Intent } from '@blueprintjs/core'
 import React, { ReactElement, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import FormErrorMessage from '../../bp-modules/self-service/components/FormErrorMessage'
 import useWindowDimensions from '../../hooks/useWindowDimensions'
@@ -22,6 +23,7 @@ const KoblenzReferenceNumberExtensionForm = ({
   isValid,
   showRequired,
 }: ExtensionComponentProps<KoblenzReferenceNumberExtensionState>): ReactElement => {
+  const { t } = useTranslation('extensions')
   const [touched, setTouched] = useState(false)
   const { viewportSmall } = useWindowDimensions()
   const { koblenzReferenceNumber } = value
@@ -31,18 +33,18 @@ const KoblenzReferenceNumberExtensionForm = ({
   const getErrorMessage = (): string | null => {
     const errors: string[] = []
     if (hasSpecialChars(value.koblenzReferenceNumber)) {
-      errors.push('Das Aktenzeichen enthält ungültige Sonderzeichen.')
+      errors.push(t('referenceNrSpecialCharactersError'))
     }
     if (hasInvalidLength(value.koblenzReferenceNumber.length)) {
       errors.push(
-        `Das Aktenzeichen muss eine Länge zwischen ${KoblenzReferenceNumberMinLength} und ${KoblenzReferenceNumberMaxLength} haben.`
+        t('referenceNrInvalidLengthError', { KoblenzReferenceNumberMinLength, KoblenzReferenceNumberMaxLength })
       )
     }
     return errors.join(' ')
   }
 
   return (
-    <FormGroup label='Aktenzeichen' labelFor='koblenz-reference-number-input'>
+    <FormGroup label={t('referenceNrLabel')} labelFor='koblenz-reference-number-input'>
       <InputGroup
         fill
         large={viewportSmall}

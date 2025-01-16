@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { GoldenCardHonoredByMinisterPresidentEntitlementInput } from '../../../generated/graphql'
 import CustomDivider from '../CustomDivider'
@@ -22,14 +23,19 @@ const HonoredByMinisterPresidentEntitlementForm: Form<State, ValidatedInput, Add
   initialState: createCompoundInitialState(SubForms),
   getArrayBufferKeys: createCompoundGetArrayBufferKeys(SubForms),
   validate: createCompoundValidate(SubForms, {}),
-  Component: ({ state, setState }: FormComponentProps<State, AdditionalProps, Options>) => (
-    <>
-      <CustomDivider label='Angaben zum Ehrenzeichen' />
-      <h4>Urkunde</h4>
-      <p>Hängen Sie hier bitte Ihre eingescannte oder abfotografierte Urkunde an. {FileRequirementsText}</p>
-      <FileInputForm.Component state={state.certificate} setState={useUpdateStateCallback(setState, 'certificate')} />
-    </>
-  ),
+  Component: ({ state, setState }: FormComponentProps<State, AdditionalProps, Options>) => {
+    const { t } = useTranslation('applicationForms')
+    return (
+      <>
+        <CustomDivider label={t('honoredByMinisterDivider')} />
+        <h4>{t('honoredByMinisterCertificate')}</h4>
+        <p>
+          {t('honoredByMinisterCertificateDescription')} {FileRequirementsText}
+        </p>
+        <FileInputForm.Component state={state.certificate} setState={useUpdateStateCallback(setState, 'certificate')} />
+      </>
+    )
+  },
 }
 
 export default HonoredByMinisterPresidentEntitlementForm

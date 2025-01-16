@@ -1,5 +1,6 @@
 import { useApolloClient } from '@apollo/client'
 import { useCallback, useContext, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { Card, generateCardInfo, updateCard as updateCardObject } from '../../../cards/Card'
 import { CsvError, generateCsv, getCSVFilename } from '../../../cards/CsvFactory'
@@ -44,6 +45,7 @@ type UseCardGeneratorReturn = {
 }
 
 const useCardGenerator = (region: Region): UseCardGeneratorReturn => {
+  const { t } = useTranslation('errors')
   const projectConfig = useContext(ProjectConfigContext)
   const [cards, setCards] = useState<Card[]>([])
   const [state, setState] = useState(CardActivationState.input)
@@ -52,10 +54,10 @@ const useCardGenerator = (region: Region): UseCardGeneratorReturn => {
   const appToaster = useAppToaster()
   const [sendMail] = useSendCardCreationConfirmationMailMutation({
     onCompleted: () => {
-      appToaster?.show({ intent: 'success', message: 'Bestätigungsmail wurde versendet.' })
+      appToaster?.show({ intent: 'success', message: t('cards:cardCreationConfirmationMessage') })
     },
     onError: error => {
-      const { title } = getMessageFromApolloError(error)
+      const { title } = getMessageFromApolloError(error, t)
       appToaster?.show({
         intent: 'danger',
         message: title,
@@ -103,7 +105,7 @@ const useCardGenerator = (region: Region): UseCardGeneratorReturn => {
       if (codes !== undefined) {
         // try rollback
         try {
-          await deleteCards(client, region.id, extractCardInfoHashes(codes))
+          await deleteCards(client, region.id, extractCardInfoHashes(codes), t)
         } catch (e) {
           console.log(e)
         }
@@ -115,23 +117,23 @@ const useCardGenerator = (region: Region): UseCardGeneratorReturn => {
         })
       } else if (error instanceof PdfError) {
         appToaster?.show({
-          message: 'Etwas ist schiefgegangen beim Erstellen der PDF.',
+          message: t('pdfCreationError'),
           intent: 'danger',
         })
       } else if (error instanceof CsvError) {
         appToaster?.show({
-          message: 'Etwas ist schiefgegangen beim Erstellen der CSV.',
+          message: t('csvCreationError'),
           intent: 'danger',
         })
       } else {
         appToaster?.show({
-          message: 'Unbekannter Fehler: Etwas ist schiefgegangen.',
+          message: t('unknownError'),
           intent: 'danger',
         })
       }
       setState(CardActivationState.input)
     },
-    [appToaster, client, region]
+    [appToaster, client, region, t]
   )
 
   const generateCards = useCallback(
@@ -150,6 +152,7 @@ const useCardGenerator = (region: Region): UseCardGeneratorReturn => {
           projectConfig.projectId,
           cardInfos,
           projectConfig.staticQrCodesEnabled,
+          t,
           applicationIdToMarkAsProcessed
         )
 
@@ -168,7 +171,7 @@ const useCardGenerator = (region: Region): UseCardGeneratorReturn => {
         setCards([])
       }
     },
-    [cards, client, projectConfig, handleError, sendCardConfirmationMails, region.activatedForCardConfirmationMail]
+    [cards, client, projectConfig, handleError, sendCardConfirmationMails, region.activatedForCardConfirmationMail, t]
   )
 
   const generateCardsPdf = useCallback(

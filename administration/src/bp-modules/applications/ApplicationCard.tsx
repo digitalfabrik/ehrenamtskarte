@@ -120,7 +120,7 @@ const RightElement = ({ jsonField, application }: RightElementProps): ReactEleme
     const workAtOrganizationsEntitlement =
       findValue(applicationDetails, 'blueCardWorkAtOrganizationsEntitlement', 'Array')?.value ?? []
 
-    const isAlreadyVerified = workAtOrganizationsEntitlement.some(
+    return workAtOrganizationsEntitlement.some(
       (entitlement: GeneralJsonField) =>
         Array.isArray(entitlement.value) &&
         entitlement.value.some(
@@ -128,7 +128,6 @@ const RightElement = ({ jsonField, application }: RightElementProps): ReactEleme
             organizationField.name === 'isAlreadyVerified' && organizationField.value === true
         )
     )
-    return isAlreadyVerified
   }
 
   const isPreVerified = isJuleicaEntitlementType() || isPreVerifiedByOrganization()
@@ -175,7 +174,7 @@ const ApplicationCard = ({
   const [openNoteDialog, setOpenNoteDialog] = useState(false)
   const [deleteApplication, { loading }] = useDeleteApplicationMutation({
     onError: error => {
-      const { title } = getMessageFromApolloError(error)
+      const { title } = getMessageFromApolloError(error, t)
       appToaster?.show({ intent: 'danger', message: title })
     },
     onCompleted: ({ deleted }: { deleted: boolean }) => {

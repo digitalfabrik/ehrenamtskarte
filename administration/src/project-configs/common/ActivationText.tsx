@@ -1,5 +1,7 @@
 import { Button, Typography, styled } from '@mui/material'
+import { TFunction } from 'i18next'
 import React, { ReactElement } from 'react'
+import { Trans } from 'react-i18next'
 
 const ActivationButton = styled(Button)`
   margin-top: 12px;
@@ -8,37 +10,38 @@ const ActivationButton = styled(Button)`
   }
 `
 
-export const ActivationText = (applicationName: string, downloadLink: string, deepLink: string): ReactElement => (
+export const ActivationText = (
+  applicationName: string,
+  downloadLink: string,
+  deepLink: string,
+  t: TFunction
+): ReactElement => (
   <div>
     <Typography variant='h6' mb='8px'>
-      Aktivierung nur in der App möglich
+      {t('headline')}
     </Typography>
     <span>
-      Falls Sie die App {applicationName} installiert haben und sich dennoch Ihr Browser geöffnet hat, nutzen Sie bitte
-      diese Schaltfläche zur Aktivierung: <br />{' '}
+      <Trans i18nKey='activation:description' values={{ applicationName }} /> <br />{' '}
       <ActivationButton href={deepLink} variant='contained' size='small'>
-        Karte aktivieren
+        {t('activateButton')}
       </ActivationButton>
       <br /> <br />
-      <b>Andernfalls befolgen Sie diese Schritte:</b>
+      <b>{t('steps')}</b>
     </span>
     <ol>
       <li>
+        <Trans i18nKey='activation:downloadApp' values={{ applicationName }} />
         Laden Sie sich die App <b>{applicationName}</b> im App- oder PlayStore auf Ihrem Smartphone herunter.
       </li>
       <li>
         {' '}
-        Öffnen Sie dafür den folgenden Link auf Ihrem Smartphone:
+        {t('openOnMobileDevice')}
         <br />
         <a href={downloadLink} target='_blank' rel='noreferrer'>
           {downloadLink}
         </a>
       </li>
-      <li>
-        Öffnen Sie nach erfolgreicher Installation das PDF mit dem Aktivierungscode und führen Sie die Aktivierung
-        erneut durch. Gegebenenfalls müssen Sie dabei die heruntergeladene App auswählen, um den Vorgang in der App zu
-        starten.
-      </li>
+      <li>{t('explanation')}</li>
     </ol>
   </div>
 )

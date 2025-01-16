@@ -1,4 +1,5 @@
 import { ApolloClient, ApolloError } from '@apollo/client'
+import { TFunction } from 'i18next'
 
 import getMessageFromApolloError from '../errors/getMessageFromApolloError'
 import { CardInfo, DynamicActivationCode, StaticVerificationCode } from '../generated/card_pb'
@@ -24,6 +25,7 @@ const createCards = async (
   projectId: string,
   cardInfos: CardInfo[],
   generateStaticCodes: boolean,
+  t: TFunction,
   applicationIdToMarkAsProcessed?: number
 ): Promise<CreateCardsResult[]> => {
   const encodedCardInfos = cardInfos.map(cardInfo => uint8ArrayToBase64(cardInfo.toBinary()))
@@ -33,7 +35,7 @@ const createCards = async (
   })
 
   if (result.errors) {
-    const { title } = getMessageFromApolloError(new ApolloError({ graphQLErrors: result.errors }))
+    const { title } = getMessageFromApolloError(new ApolloError({ graphQLErrors: result.errors }), t)
     throw new CreateCardsError(title)
   }
   if (!result.data) {

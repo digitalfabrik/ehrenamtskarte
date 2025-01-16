@@ -1,6 +1,6 @@
 import { Alert, Typography, styled } from '@mui/material'
 import React from 'react'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 
 import { ApplicationType, BavariaCardType } from '../../../generated/graphql'
 import CustomDivider from '../CustomDivider'
@@ -92,27 +92,20 @@ const StepCardTypeForm: Form<State, ValidatedInput> = {
 
     return (
       <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <Typography>{t('applicationForms:cardTypeExplanation')}</Typography>
         <Typography>
-          Die Bayerische Ehrenamtskarte gibt es in zwei Varianten: Die blaue Ehrenamtskarte, welche für drei Jahre
-          gültig ist, und die goldene Ehrenamtskarte, welche unbegrenzt gültig ist. Für die blaue Ehrenamtskarte ist
-          beispielsweise berechtigt, wer sich seit mindestens zwei Jahren mindestens fünf Stunden pro Woche ehrenamtlich
-          engagiert. Für die goldene Ehrenamtskarte ist beispielsweise berechtigt, wer sich seit mindestens 25 Jahren
-          mindestens fünf Stunden pro Woche ehrenamtlich engagiert.
-        </Typography>
-        <Typography>
-          Die Erfüllung der Voraussetzungen wird im nächsten Schritt des Antrags abgefragt. Weitere Informationen können
-          Sie{' '}
+          {t('applicationForms:cardTypeRequirements')}{' '}
           <a
             href='https://www.ehrenamt.bayern.de/vorteile-wettbewerbe/ehrenamtskarte/index.php#sec3'
             target='_blank'
             rel='noreferrer'>
-            hier einsehen
+            {t('applicationForms:cardTypeRequirementsButton')}
           </a>
           .
         </Typography>
         <SubForms.cardType.Component
           divideItems={false}
-          title='Antrag auf:'
+          title={t('applicationForms:cardTypeTitle')}
           options={cardTypeOptions}
           state={state.cardType}
           setState={useUpdateStateCallback(setState, 'cardType')}
@@ -122,7 +115,7 @@ const StepCardTypeForm: Form<State, ValidatedInput> = {
             <CustomDivider />
             <SubForms.applicationType.Component
               divideItems={false}
-              title='Art des Antrags:'
+              title={t('applicationForms:applicationType')}
               options={applicationTypeOptions}
               state={state.applicationType}
               setState={updateApplicationType}
@@ -131,8 +124,7 @@ const StepCardTypeForm: Form<State, ValidatedInput> = {
         ) : null}
         <CustomDivider />
         <Typography>
-          Die Ehrenamtskarte ist als physische Karte und als digitale Version für Ihr Smartphone oder Tablet erhältlich.
-          Hier können Sie auswählen, welche Kartentypen Sie beantragen möchten.
+          <Trans i18nKey='applicationForms:applicationTypeDescription' />
         </Typography>
         <SubForms.wantsDigitalCard.Component
           state={state.wantsDigitalCard}

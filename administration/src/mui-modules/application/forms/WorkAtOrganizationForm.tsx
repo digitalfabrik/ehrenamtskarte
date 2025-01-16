@@ -20,21 +20,22 @@ import {
 import OrganizationForm from './OrganizationForm'
 
 const ActivityDivider = ({ onDelete }: { onDelete?: () => void }) => {
+  const { t } = useTranslation('applicationForms')
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   return (
     <>
       <CustomDivider
-        label='Ehrenamtliche Tätigkeit'
+        label={t('workAtOrganization')}
         onDelete={onDelete === undefined ? undefined : () => setDeleteDialogOpen(true)}
       />
       {onDelete === undefined ? null : (
         <ConfirmDialog
           open={deleteDialogOpen}
           onUpdateOpen={setDeleteDialogOpen}
-          confirmButtonText='Löschen'
-          content='Wollen Sie die Tätigkeit unwiderruflich löschen?'
+          confirmButtonText={t('misc:delete')}
+          content={t('deleteActivityContent')}
           onConfirm={onDelete}
-          title='Tätigkeit löschen?'
+          title={t('deleteActivityTitle')}
         />
       )}
     </>
@@ -69,11 +70,11 @@ const WorkAtOrganizationForm: Form<State, ValidatedInput, AdditionalProps> = {
     return (
       <>
         <ActivityDivider onDelete={onDelete} />
-        <h4>Angaben zu Ihrer ehrenamtlichen Tätigkeit</h4>
+        <h4>{t('applicationForms:workAtOrganizationHeadline')}</h4>
         <SubForms.responsibility.Component
           state={state.responsibility}
           setState={useUpdateStateCallback(setState, 'responsibility')}
-          label='Ehrenamtliche Tätigkeit'
+          label={t('applicationForms:workAtOrganization')}
         />
         <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
           <div style={{ flex: '2' }}>
@@ -105,10 +106,9 @@ const WorkAtOrganizationForm: Form<State, ValidatedInput, AdditionalProps> = {
           label={t('payment')}
           options={paymentOptions}
         />
-        <h4>Tätigkeitsnachweis</h4>
+        <h4>{t('applicationForms:certificateHeadline')}</h4>
         <p>
-          Falls vorhanden, hängen Sie hier bitte einen eingescannten oder abfotografierten Tätigkeitsnachweis an.{' '}
-          {FileRequirementsText}
+          {t('certificate')} {FileRequirementsText}
         </p>
         <SubForms.certificate.Component
           state={state.certificate}

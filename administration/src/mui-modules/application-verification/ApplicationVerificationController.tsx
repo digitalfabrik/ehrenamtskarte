@@ -2,6 +2,7 @@ import { Check, Close } from '@mui/icons-material'
 import { Alert, AlertTitle, Button, Card, Divider, Typography, styled } from '@mui/material'
 import { SnackbarProvider, useSnackbar } from 'notistack'
 import React, { ReactElement, useContext, useState } from 'react'
+import { Trans, useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 
 import JsonFieldView from '../../bp-modules/applications/JsonFieldView'
@@ -41,18 +42,19 @@ type ApplicationVerificationProps = {
 }
 
 const ApplicationVerification = ({ applicationVerificationAccessKey }: ApplicationVerificationProps) => {
+  const { t } = useTranslation('applicationVerification')
   const [verificationFinished, setVerificationFinished] = useState(false)
   const config = useContext(ProjectConfigContext)
   const { enqueueSnackbar } = useSnackbar()
   const [verifyOrRejectApplicationVerification] = useVerifyOrRejectApplicationVerificationMutation({
     onError: error => {
-      const { title } = getMessageFromApolloError(error)
+      const { title } = getMessageFromApolloError(error, t)
       enqueueSnackbar(title, { variant: 'error' })
     },
     onCompleted: ({ result }) => {
       if (!result) {
         console.error('Verify operation returned false.')
-        enqueueSnackbar('Etwas ist schief gelaufen.', { variant: 'error' })
+        enqueueSnackbar(t('unknown'), { variant: 'error' })
       } else {
         setVerificationFinished(true)
       }
@@ -73,7 +75,7 @@ const ApplicationVerification = ({ applicationVerificationAccessKey }: Applicati
     variables: { applicationVerificationAccessKey },
   })
 
-  const applicationQueryHandler = getQueryResult(applicationQuery)
+  const applicationQueryHandler = getQueryResult(applicationQuery, t)
   if (!applicationQueryHandler.successful) {
     return applicationQueryHandler.component
   }
@@ -81,23 +83,20 @@ const ApplicationVerification = ({ applicationVerificationAccessKey }: Applicati
   const { verification, application } = applicationQueryHandler.data
 
   if (verification.rejectedDate || verification.verifiedDate) {
-    return <CenteredMessage>Sie haben diesen Antrag bereits bearbeitet.</CenteredMessage>
+    return <CenteredMessage>{t('alreadyVerified')}</CenteredMessage>
   }
   if (application.withdrawalDate) {
     return (
       <CenteredMessage>
-        {`Der Antrag wurde vom Antragsteller am ${formatDateWithTimezone(
-          application.withdrawalDate,
-          config.timezone
-        )} zurückgezogen.`}
+        {t('withdrawMessageForVerifier', { date: formatDateWithTimezone(application.withdrawalDate, config.timezone) })}
       </CenteredMessage>
     )
   }
   if (verificationFinished) {
     return (
       <CenteredMessage>
-        <AlertTitle>Ihre Eingaben wurden erfolgreich gespeichert.</AlertTitle>
-        Vielen Dank für Ihre Mithilfe. Sie können das Fenster jetzt schließen.
+        <AlertTitle>{t('verificationFinishedTitle')}</AlertTitle>
+        {t('verificationFinishedContent')}
       </CenteredMessage>
     )
   }
@@ -112,14 +111,10 @@ const ApplicationVerification = ({ applicationVerificationAccessKey }: Applicati
           {config.name}
         </Typography>
         <Typography my='8px' variant='body1'>
-          Guten Tag {verification.contactName},
+          {t('greeting', { contactName: verification.contactName })}
           <br />
           <br />
-          Sie wurden gebeten, die Angaben eines Antrags auf Ehrenamtskarte zu bestätigen. Die Antragstellerin oder der
-          Antragsteller hat Sie als Kontaktperson der Organisation {verification.organizationName} angegeben. Im
-          Folgenden können Sie den zugehörigen Antrag einsehen. Wir bitten Sie, die enthaltenen Angaben, welche die
-          Organisation {verification.organizationName} betreffen, zu bestätigen. Falls Sie denken, die Angaben wurden
-          fälschlicherweise gemacht, bitten wir Sie, den Angaben zu widersprechen.
+          <Trans i18nKey='applicationVerification:text' values={{ organizationName: verification.organizationName }} />
         </Typography>
         <Divider style={{ margin: '24px 0px' }} />
         <Typography variant='h6' mb='8px'>
@@ -134,10 +129,13 @@ const ApplicationVerification = ({ applicationVerificationAccessKey }: Applicati
         />
         <Divider style={{ margin: '24px 0px' }} />
         <Typography mt='8px' variant='body1'>
-          Können Sie die Angaben, welche die Organisation <b>{verification.organizationName}</b> betreffen, bestätigen?
+          <Trans
+            i18nKey='applicationVerification:confirmationMessage'
+            values={{ organizationName: verification.organizationName }}
+          />
         </Typography>
         <StyledAlert severity='warning'>
-          <b>Wichtig!</b> Die Eingabe kann nicht rückgängig gemacht werden.
+          <Trans i18nKey='applicationVerification:confirmationNote' />
         </StyledAlert>
         <ButtonContainer>
           <Button
@@ -145,14 +143,14 @@ const ApplicationVerification = ({ applicationVerificationAccessKey }: Applicati
             color='error'
             endIcon={<Close />}
             onClick={() => submitApplicationVerification(false)}>
-            Widersprechen
+            {t('rejectButton')}
           </Button>
           <Button
             variant='contained'
             color='success'
             endIcon={<Check />}
             onClick={() => submitApplicationVerification(true)}>
-            Bestätigen
+            {t('confirmationButton')}
           </Button>
         </ButtonContainer>
       </div>
@@ -161,13 +159,14 @@ const ApplicationVerification = ({ applicationVerificationAccessKey }: Applicati
 }
 
 const ApplicationVerificationController = (): ReactElement => {
+  const { t } = useTranslation('applicationVerification')
   const { applicationVerificationAccessKey } = useParams()
 
   if (!applicationVerificationAccessKey) {
     return (
       <CenteredMessage>
-        <AlertTitle>Nicht gefunden</AlertTitle>
-        Die Seite konnte nicht gefunden werden.
+        <AlertTitle>{t('verificationNotFoundTitle')}</AlertTitle>
+        {t('verificationNotFoundDescription')}
       </CenteredMessage>
     )
   }

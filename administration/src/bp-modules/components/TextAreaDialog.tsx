@@ -39,7 +39,7 @@ const TextAreaDialog = ({
   const { t } = useTranslation('misc')
   const [text, setText] = useState<string>(defaultText ?? '')
   const maxCharsExceeded = maxChars === undefined ? false : text.length > maxChars
-  const { title: errorMessage } = defaultErrorMap({
+  const { title: errorMessage } = defaultErrorMap(t, {
     code: GraphQlExceptionCode.InvalidNoteSize,
     maxSize: maxChars,
   })

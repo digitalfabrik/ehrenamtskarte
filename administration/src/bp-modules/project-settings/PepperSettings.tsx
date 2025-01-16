@@ -27,7 +27,7 @@ const PepperSettings = (): ReactElement => {
     </Container>
   )
   const pepperQuery = useGetHashingPepperQuery()
-  const result = getQueryResult(pepperQuery, errorComponent)
+  const result = getQueryResult(pepperQuery, t, errorComponent)
   if (!result.successful) {
     return result.component
   }

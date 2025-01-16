@@ -20,7 +20,7 @@ const NotificationSettings = ({ projectId }: NotificationSettingsProps): ReactEl
   const appToaster = useAppToaster()
   const [updateNotificationSettings, { loading }] = useUpdateNotificationSettingsMutation({
     onError: error => {
-      const { title } = getMessageFromApolloError(error)
+      const { title } = getMessageFromApolloError(error, t)
       appToaster?.show({ intent: 'danger', message: title })
     },
     onCompleted: () => appToaster?.show({ intent: 'success', message: t('notificationUpdateSuccess') }),
@@ -29,16 +29,16 @@ const NotificationSettings = ({ projectId }: NotificationSettingsProps): ReactEl
   const notificationSettingsQuery = useGetNotificationSettingsQuery({ variables: { project: projectId } })
 
   useEffect(() => {
-    const notificationQueryResult = getQueryResult(notificationSettingsQuery)
+    const notificationQueryResult = getQueryResult(notificationSettingsQuery, t)
     if (notificationQueryResult.successful) {
       const { notificationOnApplication, notificationOnVerification } =
         notificationQueryResult.data.notificationSettings
       setReceiveEmailForActivation(notificationOnApplication)
       setReceiveEmailForVerification(notificationOnVerification)
     }
-  }, [notificationSettingsQuery])
+  }, [notificationSettingsQuery, t])
 
-  const notificationQueryResult = getQueryResult(notificationSettingsQuery)
+  const notificationQueryResult = getQueryResult(notificationSettingsQuery, t)
   if (!notificationQueryResult.successful) {
     return notificationQueryResult.component
   }

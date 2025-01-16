@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { ApplicationInput, BavariaCardType, Region } from '../../../generated/graphql'
 import SteppedSubForms, { useFormAsStep } from '../SteppedSubForms'
@@ -70,8 +71,9 @@ const ApplicationForm: Form<State, ValidatedInput, AdditionalProps, Options> = {
     }
   },
   Component: ({ state, setState, options, onSubmit, loading }: FormComponentProps<State, AdditionalProps, Options>) => {
+    const { t } = useTranslation('applicationForms')
     const personalDataStep = useFormAsStep(
-      'Persönliche Angaben',
+      t('applicationStepPersonalData'),
       PersonalDataForm,
       state,
       setState,
@@ -81,7 +83,7 @@ const ApplicationForm: Form<State, ValidatedInput, AdditionalProps, Options> = {
     )
     const cardTypeStep = useFormAsStep('Kartentyp', StepCardTypeForm, state, setState, 'stepCardType', {}, {})
     const requirementsStep = useFormAsStep(
-      'Voraussetzungen',
+      t('applicationStepRequirements'),
       StepRequirementsForm,
       state,
       setState,
@@ -90,7 +92,7 @@ const ApplicationForm: Form<State, ValidatedInput, AdditionalProps, Options> = {
       { applicantName: `${state.stepPersonalData.forenames.shortText} ${state.stepPersonalData.surname.shortText}` }
     )
     const sendStep = useFormAsStep(
-      'Antrag Senden',
+      t('applicationStepSubmit'),
       StepSendForm,
       state,
       setState,

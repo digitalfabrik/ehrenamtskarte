@@ -1,6 +1,7 @@
 import { Alert, Card } from '@mui/material'
 import { styled } from '@mui/system'
 import React, { ReactElement, useContext } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useLocation } from 'react-router-dom'
 
 import { ProjectConfigContext } from '../../project-configs/ProjectConfigContext'
@@ -26,11 +27,12 @@ const CenteredMessage = styled(Alert)`
 `
 
 const ActivationPage = (): ReactElement | null => {
+  const { t } = useTranslation('activation')
   const config = useContext(ProjectConfigContext)
   const { hash } = useLocation()
 
   if (!hash) {
-    return <CenteredMessage severity='error'>Ihr Aktivierungslink ist ungültig</CenteredMessage>
+    return <CenteredMessage severity='error'>{t('invalidLink')}</CenteredMessage>
   }
 
   return (

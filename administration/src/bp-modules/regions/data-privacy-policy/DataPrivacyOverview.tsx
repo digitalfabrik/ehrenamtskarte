@@ -47,7 +47,7 @@ const DataPrivacyOverview = ({ dataPrivacyPolicy, regionId }: RegionOverviewProp
   const [dataPrivacyText, setDataPrivacyText] = useState<string>(dataPrivacyPolicy)
   const [updateDataPrivacy, { loading }] = useUpdateDataPolicyMutation({
     onError: error => {
-      const { title } = getMessageFromApolloError(error)
+      const { title } = getMessageFromApolloError(error, t)
       appToaster?.show({ intent: 'danger', message: title })
     },
     onCompleted: () => appToaster?.show({ intent: 'success', message: t('dataPrivacyChangeSuccessful') }),
@@ -56,7 +56,7 @@ const DataPrivacyOverview = ({ dataPrivacyPolicy, regionId }: RegionOverviewProp
 
   const onSave = () => updateDataPrivacy({ variables: { regionId, text: dataPrivacyText } })
 
-  const { title: errorMessage } = defaultErrorMap({
+  const { title: errorMessage } = defaultErrorMap(t, {
     code: GraphQlExceptionCode.InvalidDataPolicySize,
     maxSize: MAX_CHARS,
   })

@@ -1,3 +1,4 @@
+import { TFunction } from 'i18next'
 import React, { ReactElement } from 'react'
 
 import { CardInfo } from '../generated/card_pb'
@@ -20,8 +21,8 @@ type ErrorExtensions = {
   [key: string]: unknown
 }
 
-const defaultErrorMap = (extensions?: ErrorExtensions): GraphQLErrorMessage => {
-  const defaultError = { title: 'Etwas ist schief gelaufen.' }
+const defaultErrorMap = (t: TFunction, extensions?: ErrorExtensions): GraphQLErrorMessage => {
+  const defaultError = { title: t('errors:unknown') }
 
   if (!extensions || extensions.code === undefined) {
     return defaultError
@@ -29,101 +30,100 @@ const defaultErrorMap = (extensions?: ErrorExtensions): GraphQLErrorMessage => {
   switch (extensions.code) {
     case GraphQlExceptionCode.EmailAlreadyExists:
       return {
-        title: 'Die Email-Adresse wird bereits verwendet.',
+        title: t('errors:mailAddressAlreadyUsed'),
       }
     case GraphQlExceptionCode.InvalidLink:
       return {
-        title: 'Ihr Link ist nicht (mehr) gültig',
+        title: t('errors:invalidLink'),
         description: <InvalidLink />,
       }
     case GraphQlExceptionCode.InvalidCardHash:
       return {
-        title: 'Die Karte hat ein ungültiges Format.',
+        title: t('errors:invalidFormat'),
       }
     case GraphQlExceptionCode.InvalidCodeType:
       return {
-        title: 'Diese Kombination aus Karte und Kartentyp (statisch/dynamisch) existiert nicht.',
+        title: t('errors:invalidCodeType'),
       }
     case GraphQlExceptionCode.InvalidCredentials:
       return {
-        title: 'Der Login ist fehlgeschlagen.',
+        title: t('errors:invalidCredentials'),
       }
     case GraphQlExceptionCode.InvalidFileType:
       return {
-        title: 'Dieser Dateityp wird nicht unterstützt.',
+        title: t('errors:invalidFileType'),
       }
     case GraphQlExceptionCode.InvalidInput:
       return {
-        title: 'Die Anfrage enthält ungültige Eingaben.',
+        title: t('errors:invalidInput'),
       }
     case GraphQlExceptionCode.InvalidFileSize:
       return {
-        title: 'Die Datei ist zu groß.',
+        title: t('errors:invalidFileSize'),
       }
     case GraphQlExceptionCode.InvalidDataPolicySize:
       return {
-        title: `Unzulässige Zeichenlänge der Datenschutzerklärung. Maximal sind ${extensions.maxSize} Zeichen erlaubt.`,
+        title: t('errors:invalidDataPolicySize', { maxSize: extensions.maxSize }),
       }
     case GraphQlExceptionCode.InvalidJson:
       return {
-        title: 'Daten konnten nicht geparsed werden.',
+        title: t('errors:invalidJson'),
       }
     case GraphQlExceptionCode.InvalidNoteSize:
       return {
-        title: `Unzulässige Zeichenlänge der Notiz erreicht. Maximal sind ${extensions.maxSize} Zeichen erlaubt.`,
+        title: t('errors:invalidNoteSize', { maxSize: extensions.maxSize }),
       }
     case GraphQlExceptionCode.InvalidPassword:
       return {
-        title: 'Kein gültiges Passwort.',
+        title: t('errors:invalidPassword'),
       }
     case GraphQlExceptionCode.InvalidPasswordResetLink:
       return {
-        title: 'Ungültiger Link',
+        title: t('errors:invalidPasswordResetLink'),
         description: <InvalidPasswordResetLink />,
       }
     case GraphQlExceptionCode.InvalidQrCodeSize: {
       const cardInfo = CardInfo.fromBinary(base64ToUint8Array(extensions.encodedCardInfoBase64!))
-      const codeTypeText = extensions.codeType === CodeType.Dynamic ? 'Aktivierungscode' : 'statische QR-Code'
+      const codeTypeText =
+        extensions.codeType === CodeType.Dynamic
+          ? t('errors:invalidQrCodeSize:dynamicType')
+          : t('errors:invalidQrCodeSize:staticType')
       return {
-        title: `Der ${codeTypeText} für ${cardInfo.fullName} kann nicht generiert werden, da er zu viele Daten enthält.`,
+        title: t('errors:invalidQrCodeSize:title', { codeType: codeTypeText, fullName: cardInfo.fullName }),
       }
     }
     case GraphQlExceptionCode.InvalidRole:
       return {
-        title: 'Diese Rolle kann nicht zugewiesen werden.',
+        title: t('errors:invalidRole'),
       }
     case GraphQlExceptionCode.UserEntitlementNotFound:
       return {
-        title:
-          'Wir konnten Ihre Angaben nicht im System finden. Bitte überprüfen Sie Ihre Angaben und versuchen Sie es erneut.',
+        title: t('errors:entitlementNotFound'),
       }
     case GraphQlExceptionCode.UserEntitlementExpired:
       return {
-        title:
-          'Sie sind nicht länger berechtigt, einen KoblenzPass zu erstellen. Bitte kontaktieren Sie koblenzpass@stadt.koblenz.de für weitere Informationen.',
+        title: t('errors:entitlementExpired'),
       }
     case GraphQlExceptionCode.MailNotSent:
       return {
-        title: `Email konnte nicht an ${extensions.recipient} gesendet werden.`,
+        title: t('errors:mailNotSend', { recipient: extensions.recipient }),
       }
     case GraphQlExceptionCode.PasswordResetKeyExpired:
       return {
-        title: 'Die Gültigkeit ihres Links ist abgelaufen',
+        title: t('errors:passwordResetKeyExpired'),
         description: <PasswordResetKeyExpired />,
       }
     case GraphQlExceptionCode.RegionNotFound:
       return {
-        title: 'Diese Region existiert nicht.',
+        title: t('errors:regionNotFound'),
       }
     case GraphQlExceptionCode.RegionNotActivatedForApplication:
       return {
-        title:
-          'Für diese Region kann der zentrale Beantragungsprozess noch nicht genutzt werden, kontaktieren Sie bitte Ihre zuständige Behörde direkt.',
+        title: t('errors:regionNotActivatedForApplication'),
       }
     case GraphQlExceptionCode.RegionNotActivatedCardConfirmationMail:
       return {
-        title:
-          'Für diese Region ist das Senden von Bestätigungsmails gesperrt. Dies kann in den regionsspezifischen Einstellungen geändert werden.',
+        title: t('errors:regionNotActivatedForConfirmationMail'),
       }
   }
 }

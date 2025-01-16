@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { BlueCardEntitlementInput, BlueCardEntitlementType } from '../../../generated/graphql'
 import i18next from '../../../i18n'
@@ -52,53 +53,56 @@ const BlueCardEntitlementForm: Form<State, ValidatedInput, AdditionalProps, Opti
     WORK_AT_DEPARTMENT: 'workAtDepartmentEntitlement',
     WORK_AT_ORGANIZATIONS: 'workAtOrganizationsEntitlement',
   }),
-  Component: ({ state, setState, applicantName }: FormComponentProps<State, AdditionalProps, Options>) => (
-    <>
-      <SubForms.entitlementType.Component
-        state={state.entitlementType}
-        divideItems
-        title='Ich erfülle folgende Voraussetzung für die Beantragung einer blauen Ehrenamtskarte:'
-        options={entitlementTypeOptions}
-        setState={useUpdateStateCallback(setState, 'entitlementType')}
-      />
-      <SwitchComponent value={state.entitlementType.selectedValue}>
-        {{
-          [BlueCardEntitlementType.WorkAtOrganizations]: (
-            <SubForms.workAtOrganizationsEntitlement.Component
-              state={state.workAtOrganizationsEntitlement}
-              setState={useUpdateStateCallback(setState, 'workAtOrganizationsEntitlement')}
-              applicantName={applicantName}
-            />
-          ),
-          [BlueCardEntitlementType.Juleica]: (
-            <SubForms.juleicaEntitlement.Component
-              state={state.juleicaEntitlement}
-              setState={useUpdateStateCallback(setState, 'juleicaEntitlement')}
-            />
-          ),
-          [BlueCardEntitlementType.WorkAtDepartment]: (
-            <SubForms.workAtDepartmentEntitlement.Component
-              state={state.workAtDepartmentEntitlement}
-              setState={useUpdateStateCallback(setState, 'workAtDepartmentEntitlement')}
-              applicantName={applicantName}
-            />
-          ),
-          [BlueCardEntitlementType.MilitaryReserve]: (
-            <SubForms.militaryReserveEntitlement.Component
-              state={state.militaryReserveEntitlement}
-              setState={useUpdateStateCallback(setState, 'militaryReserveEntitlement')}
-            />
-          ),
-          [BlueCardEntitlementType.VolunteerService]: (
-            <SubForms.volunteerServiceEntitlement.Component
-              state={state.volunteerServiceEntitlement}
-              setState={useUpdateStateCallback(setState, 'volunteerServiceEntitlement')}
-            />
-          ),
-        }}
-      </SwitchComponent>
-    </>
-  ),
+  Component: ({ state, setState, applicantName }: FormComponentProps<State, AdditionalProps, Options>) => {
+    const { t } = useTranslation('applicationForms')
+    return (
+      <>
+        <SubForms.entitlementType.Component
+          state={state.entitlementType}
+          divideItems
+          title={t('blueCardRequirementsTitle')}
+          options={entitlementTypeOptions}
+          setState={useUpdateStateCallback(setState, 'entitlementType')}
+        />
+        <SwitchComponent value={state.entitlementType.selectedValue}>
+          {{
+            [BlueCardEntitlementType.WorkAtOrganizations]: (
+              <SubForms.workAtOrganizationsEntitlement.Component
+                state={state.workAtOrganizationsEntitlement}
+                setState={useUpdateStateCallback(setState, 'workAtOrganizationsEntitlement')}
+                applicantName={applicantName}
+              />
+            ),
+            [BlueCardEntitlementType.Juleica]: (
+              <SubForms.juleicaEntitlement.Component
+                state={state.juleicaEntitlement}
+                setState={useUpdateStateCallback(setState, 'juleicaEntitlement')}
+              />
+            ),
+            [BlueCardEntitlementType.WorkAtDepartment]: (
+              <SubForms.workAtDepartmentEntitlement.Component
+                state={state.workAtDepartmentEntitlement}
+                setState={useUpdateStateCallback(setState, 'workAtDepartmentEntitlement')}
+                applicantName={applicantName}
+              />
+            ),
+            [BlueCardEntitlementType.MilitaryReserve]: (
+              <SubForms.militaryReserveEntitlement.Component
+                state={state.militaryReserveEntitlement}
+                setState={useUpdateStateCallback(setState, 'militaryReserveEntitlement')}
+              />
+            ),
+            [BlueCardEntitlementType.VolunteerService]: (
+              <SubForms.volunteerServiceEntitlement.Component
+                state={state.volunteerServiceEntitlement}
+                setState={useUpdateStateCallback(setState, 'volunteerServiceEntitlement')}
+              />
+            ),
+          }}
+        </SwitchComponent>
+      </>
+    )
+  },
 }
 
 export default BlueCardEntitlementForm

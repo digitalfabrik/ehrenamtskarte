@@ -1,6 +1,7 @@
 import { Button, FormGroup, MenuItem } from '@blueprintjs/core'
 import { ItemRenderer, Select } from '@blueprintjs/select'
 import React, { ReactElement } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { BavariaCardType as BavariaCardTypeEnum } from '../../generated/card_pb'
 import { Extension, ExtensionComponentProps } from './extensions'
@@ -15,6 +16,7 @@ type BavariaCardTypeState = typeof BAVARIA_CARD_TYPE_STANDARD | typeof BAVARIA_C
 export type BavariaCardTypeExtensionState = { [BAVARIA_CARD_TYPE_EXTENSION_NAME]: BavariaCardTypeState }
 
 const StartDayForm = ({ value, setValue }: ExtensionComponentProps<BavariaCardTypeExtensionState>): ReactElement => {
+  const { t } = useTranslation('extensions')
   const CardTypeSelect = Select.ofType<BavariaCardTypeState>()
 
   const renderCardType: ItemRenderer<BavariaCardTypeState> = (cardType, { handleClick, modifiers }) => {
@@ -33,7 +35,7 @@ const StartDayForm = ({ value, setValue }: ExtensionComponentProps<BavariaCardTy
   }
 
   return (
-    <FormGroup label='Kartentyp'>
+    <FormGroup label={t('bavariaCardTypeLabel')}>
       <CardTypeSelect
         items={[BAVARIA_CARD_TYPE_STANDARD, BAVARIA_CARD_TYPE_GOLD]}
         activeItem={value.bavariaCardType}

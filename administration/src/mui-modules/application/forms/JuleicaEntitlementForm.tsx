@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { BlueCardJuleicaEntitlementInput } from '../../../generated/graphql'
 import CustomDivider from '../CustomDivider'
@@ -27,23 +28,26 @@ const JuleicaEntitlementForm: Form<State, ValidatedInput> = {
   getArrayBufferKeys: createCompoundGetArrayBufferKeys(SubForms),
   validate: createCompoundValidate(SubForms, { juleicaExpirationDate: { maximumDate: null } }),
   Component: ({ state, setState }: FormComponentProps<State>) => {
+    const { t } = useTranslation('application')
     const juleicaBackSetState = useUpdateStateCallback(setState, 'copyOfJuleicaBack')
     return (
       <>
         <CustomDivider label='Angaben zur JuLeiCa' />
         <ShortTextForm.Component
-          label='Kartennummer'
+          label={t('juleicaNumber')}
           state={state.juleicaNumber}
           setState={useUpdateStateCallback(setState, 'juleicaNumber')}
         />
         <DateForm.Component
-          label='Karte gültig bis'
+          label={t('juleicaExpiration')}
           state={state.juleicaExpirationDate}
           setState={useUpdateStateCallback(setState, 'juleicaExpirationDate')}
           options={{ maximumDate: null }}
         />
-        <h4>Kopie der JuLeiCa</h4>
-        <p>Hängen Sie hier bitte Ihre eingescannte oder abfotografierte JuLeiCa an. {FileRequirementsText}</p>
+        <h4>{t('applicationForms:juleicaCardAttachment')}</h4>
+        <p>
+          {t('applicationForms:juleicaCardAttachmentDescription')} {FileRequirementsText}
+        </p>
         <SubForms.copyOfJuleicaFront.Component
           state={state.copyOfJuleicaFront}
           setState={useUpdateStateCallback(setState, 'copyOfJuleicaFront')}

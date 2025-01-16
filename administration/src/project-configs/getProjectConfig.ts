@@ -6,6 +6,7 @@ import {
   NUERNBERG_PRODUCTION_ID,
   NUERNBERG_STAGING_ID,
 } from 'build-configs/constants'
+import { TFunction } from 'i18next'
 import { ReactElement, ReactNode } from 'react'
 
 import { JsonField } from '../bp-modules/applications/JsonFieldView'
@@ -109,7 +110,7 @@ export type ProjectConfig = {
   timezone: string
   activityLogConfig?: ActivityLogConfig
   activation?: {
-    activationText: (applicationName: string, downloadLink: string, deepLink: string) => ReactElement
+    activationText: (applicationName: string, downloadLink: string, deepLink: string, t: TFunction) => ReactElement
     downloadLink: string
   }
   csvExport: CsvExport

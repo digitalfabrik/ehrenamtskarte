@@ -31,6 +31,7 @@ export type StoresData = {
   [key: string]: string
 }
 const StoresImport = ({ fields }: StoreImportProps): ReactElement => {
+  const { t } = useTranslation('errors')
   const { projectId } = useContext(ProjectConfigContext)
   const navigate = useNavigate()
   const appToaster = useAppToaster()
@@ -54,7 +55,7 @@ const StoresImport = ({ fields }: StoreImportProps): ReactElement => {
       setAcceptingStores([])
     },
     onError: error => {
-      const { title } = getMessageFromApolloError(error)
+      const { title } = getMessageFromApolloError(error, t)
       appToaster?.show({ intent: 'danger', message: title })
     },
   })

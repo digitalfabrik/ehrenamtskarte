@@ -19,7 +19,7 @@ const ForgotPasswordController = (): ReactElement => {
   const [sendResetMail, { loading }] = useSendResetMailMutation({
     onCompleted: () => setFinished(true),
     onError: error => {
-      const { title } = getMessageFromApolloError(error)
+      const { title } = getMessageFromApolloError(error, t)
       appToaster?.show({
         intent: 'danger',
         message: title,

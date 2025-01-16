@@ -1,6 +1,7 @@
 import { Alert } from '@mui/material'
 import { SnackbarProvider } from 'notistack'
 import React, { ReactElement, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -13,21 +14,22 @@ const CenteredMessage = styled(Alert)`
 `
 
 const ApplicationApplicantController = ({ providedKey }: { providedKey: string }): ReactElement => {
+  const { t } = useTranslation('applicationApplicant')
   const [isWithdrawed, setIsWithdrawed] = useState<boolean>(false)
   const applicationQuery = useGetApplicationByApplicantQuery({
     variables: { accessKey: providedKey },
   })
-  const applicationQueryHandler = getQueryResult(applicationQuery)
+  const applicationQueryHandler = getQueryResult(applicationQuery, t)
   if (!applicationQueryHandler.successful) {
     return applicationQueryHandler.component
   }
   const application = applicationQueryHandler.data.application
 
   if (application.withdrawalDate) {
-    return <CenteredMessage>Ihr Antrag wurde bereits zurückgezogen.</CenteredMessage>
+    return <CenteredMessage>{t('alreadyWithdrawed')}</CenteredMessage>
   }
   if (isWithdrawed) {
-    return <CenteredMessage>Ihr Antrag wurde zurückgezogen.</CenteredMessage>
+    return <CenteredMessage>{t('withdrawConfirmation')}</CenteredMessage>
   }
   return (
     <ApplicationApplicantView

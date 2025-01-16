@@ -62,9 +62,9 @@ const PersonalDataForm: Form<State, ValidatedInput, AdditionalProps, Options> = 
             />
           </div>
         </div>
-        <CustomDivider label='Adresse (Erstwohnsitz)' />
+        <CustomDivider label={t('applicationForms:personalAddress')} />
         <SubForms.address.Component state={state.address} setState={useUpdateStateCallback(setState, 'address')} />
-        <CustomDivider label='Weitere Angaben' />
+        <CustomDivider label={t('applicationForms:personalFurtherInformation')} />
         <SubForms.emailAddress.Component
           state={state.emailAddress}
           setState={useUpdateStateCallback(setState, 'emailAddress')}

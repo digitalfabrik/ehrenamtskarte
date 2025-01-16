@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { BlueCardWorkAtDepartmentEntitlementInput } from '../../../generated/graphql'
 import CustomDivider from '../CustomDivider'
@@ -27,31 +28,33 @@ const WorkAtDepartmentEntitlementForm: Form<State, ValidatedInput, AdditionalPro
   initialState: createCompoundInitialState(SubForms),
   getArrayBufferKeys: createCompoundGetArrayBufferKeys(SubForms),
   validate: createCompoundValidate(SubForms, {}),
-  Component: ({ state, setState, applicantName }: FormComponentProps<State, AdditionalProps>) => (
-    <>
-      <CustomDivider label='Angaben zur Tätigkeit' />
-      <SubForms.organization.Component
-        state={state.organization}
-        setState={useUpdateStateCallback(setState, 'organization')}
-        applicantName={applicantName}
-      />
-      <h4>Angaben zur Tätigkeit</h4>
-      <SubForms.responsibility.Component
-        label='Funktion oder Tätigkeit'
-        state={state.responsibility}
-        setState={useUpdateStateCallback(setState, 'responsibility')}
-      />
-      <h4>Tätigkeitsnachweis</h4>
-      <p>
-        Falls vorhanden, hängen Sie hier bitte einen eingescannten oder abfotografierten Tätigkeitsnachweis an.{' '}
-        {FileRequirementsText}
-      </p>
-      <SubForms.certificate.Component
-        state={state.certificate}
-        setState={useUpdateStateCallback(setState, 'certificate')}
-      />
-    </>
-  ),
+  Component: ({ state, setState, applicantName }: FormComponentProps<State, AdditionalProps>) => {
+    const { t } = useTranslation('applicationForms')
+    return (
+      <>
+        <CustomDivider label={t('activityInformation')} />
+        <SubForms.organization.Component
+          state={state.organization}
+          setState={useUpdateStateCallback(setState, 'organization')}
+          applicantName={applicantName}
+        />
+        <h4>{t('activityInformation')}</h4>
+        <SubForms.responsibility.Component
+          label={t('activityFunction')}
+          state={state.responsibility}
+          setState={useUpdateStateCallback(setState, 'responsibility')}
+        />
+        <h4>{t('certificateHeadline')}</h4>
+        <p>
+          {t('certificateDescription')} {FileRequirementsText}
+        </p>
+        <SubForms.certificate.Component
+          state={state.certificate}
+          setState={useUpdateStateCallback(setState, 'certificate')}
+        />
+      </>
+    )
+  },
 }
 
 export default WorkAtDepartmentEntitlementForm

@@ -2,6 +2,7 @@ import { Send } from '@mui/icons-material'
 import { Button, ButtonBase, CircularProgress, Divider, Step, StepContent, StepLabel, Stepper } from '@mui/material'
 import { useSnackbar } from 'notistack'
 import React, { ReactElement, ReactNode, useCallback, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { SetState, useUpdateStateCallback } from './hooks/useUpdateStateCallback'
 import { Form, ValidationResult } from './util/FormType'
@@ -29,6 +30,7 @@ const SubForm = ({
   onSubmit?: () => void
   loading: boolean
 }) => {
+  const { t } = useTranslation('application')
   const [formContext, setFormContxt] = useState<FormContextType>(initialFormContext)
   const { enqueueSnackbar } = useSnackbar()
   useEffect(() => setFormContxt(state => ({ ...state, disableAllInputs: loading })), [loading])
@@ -54,12 +56,12 @@ const SubForm = ({
         <Divider sx={{ margin: '16px' }} />
         {index === 0 ? null : (
           <Button onClick={() => setActiveStep(() => index - 1)} disabled={formContext.disableAllInputs}>
-            Zurück
+            {t('backButton')}
           </Button>
         )}
         {onSubmit === undefined ? (
           <Button type='submit' variant='contained' disabled={formContext.disableAllInputs}>
-            Nächster Schritt
+            {t('nextStepButton')}
           </Button>
         ) : (
           <Button
@@ -67,7 +69,7 @@ const SubForm = ({
             variant='contained'
             disabled={formContext.disableAllInputs}
             endIcon={loading ? <CircularProgress size={20} color='inherit' /> : <Send />}>
-            Antrag Abschicken
+            {t('submitApplicationButton')}
           </Button>
         )}
       </form>

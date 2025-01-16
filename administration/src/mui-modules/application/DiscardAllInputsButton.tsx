@@ -1,10 +1,12 @@
 import { Delete } from '@mui/icons-material'
 import { Button } from '@mui/material'
 import React, { ReactElement, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import ConfirmDialog from './ConfirmDialog'
 
 const DiscardAllInputsButton = ({ discardAll }: { discardAll: () => void }): ReactElement => {
+  const { t } = useTranslation('application')
   const [dialogOpen, setDialogOpen] = useState(false)
   return (
     <>
@@ -14,8 +16,8 @@ const DiscardAllInputsButton = ({ discardAll }: { discardAll: () => void }): Rea
       <ConfirmDialog
         open={dialogOpen}
         onUpdateOpen={setDialogOpen}
-        title='Alle Eingaben verwerfen?'
-        content='Wollen Sie wirklich alle Eingaben unwiderruflich löschen?'
+        title={t('discardInputsTitle')}
+        content={t('discardInputsContent')}
         onConfirm={discardAll}
       />
     </>

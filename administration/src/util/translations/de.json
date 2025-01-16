@@ -1,4 +1,14 @@
 {
+  "activation": {
+    "invalidLinkError": "Ihr Aktivierungslink ist ungültig",
+    "headline": "Aktivierung nur in der App möglich",
+    "description": "Falls Sie die App <strong>{{applicationName}}</strong> installiert haben und sich dennoch Ihr Browser geöffnet hat, nutzen Sie bitte diese Schaltfläche zur Aktivierung:",
+    "explanation": "Öffnen Sie nach erfolgreicher Installation das PDF mit dem Aktivierungscode und führen Sie die Aktivierung erneut durch. Gegebenenfalls müssen Sie dabei die heruntergeladene App auswählen, um den Vorgang in der App zu starten.",
+    "steps": "Andernfalls befolgen Sie diese Schritte:",
+    "activateButton": "Karte aktivieren",
+    "openOnMobileDevice": "Öffnen Sie dafür den folgenden Link auf Ihrem Smartphone:",
+    "downloadApp": "Laden Sie sich die App <strong>{{applicationName}}</strong> im App- oder PlayStore auf Ihrem Smartphone herunter."
+  },
   "application": {
     "personalData": "Persönliche Daten",
     "forenames": "Vorname(n)",
@@ -65,7 +75,59 @@
     "sentSuccessfully": "Erfolgreich gesendet",
     "sentError": "Fehler beim Senden",
     "positiveAnswer": "Ja",
-    "negativeAnswer": "Nein"
+    "negativeAnswer": "Nein",
+    "nextStepButton": "Nächster Schritt",
+    "backButton": "Zurück",
+    "submitApplicationButton": "Antrag Abschicken",
+    "discardInputsTitle": "Alle Eingaben verwerfen?",
+    "discardInputsContent": "Wollen Sie wirklich alle Eingaben unwiderruflich löschen?",
+    "submitSuccessText": "Ihr Antrag für die Ehrenamtskarte wurde erfolgreich übermittelt.<br/>Über den Fortschritt Ihres Antrags werden Sie per E-Mail informiert.<br/>Sie können das Fenster jetzt schließen.",
+    "invalidInputError": "Ungültige bzw. fehlende Eingaben entdeckt. Bitte prüfen Sie die rot markierten Felder."
+  },
+  "applicationForms": {
+    "addActivityButton": "Weitere Tätigkeit hinzufügen",
+    "maxActivitiesReached": "Maximale Anzahl an Tätigkeiten erreicht.",
+    "workAtOrganization": "Ehrenamtliche Tätigkeit",
+    "workAtOrganizationHeadline": "Angaben zu Ihrer ehrenamtlichen Tätigkeit",
+    "deleteActivityContent": "Wollen Sie die Tätigkeit unwiderruflich löschen?",
+    "certificateHeadline": "Tätigkeitsnachweis",
+    "certificateDescription": "Falls vorhanden, hängen Sie hier bitte einen eingescannten oder abfotografierten Tätigkeitsnachweis an.",
+    "deleteActivityTitle": "Tätigkeit löschen?",
+    "activityFunction": "Funktion oder Tätigkeit",
+    "activityInformation": "Angaben zur Tätigkeit",
+    "acceptDataPrivacyPolicy": "Ich erkläre mich damit einverstanden, dass meine Daten zum Zwecke der Antragsverarbeitung gespeichert werden und <br/>akzeptiere die",
+    "acceptDataPrivacyButton": "Datenschutzerklärung",
+    "acceptAdvertisement": "Ich stimme zu, dass ich von der lokalen Ehrenamtskoordination über Verlosungen und regionale Angebote informiert werden darf.",
+    "acceptInputCorrectComplete": "Ich versichere, dass alle angegebenen Informationen korrekt und vollständig sind.",
+    "cardTypeExplanation": "Die Bayerische Ehrenamtskarte gibt es in zwei Varianten: Die blaue Ehrenamtskarte, welche für drei Jahre gültig ist, und die goldene Ehrenamtskarte, welche unbegrenzt gültig ist. Für die blaue Ehrenamtskarte ist beispielsweise berechtigt, wer sich seit mindestens zwei Jahren mindestens fünf Stunden pro Woche ehrenamtlich engagiert. Für die goldene Ehrenamtskarte ist beispielsweise berechtigt, wer sich seit mindestens 25 Jahren mindestens fünf Stunden pro Woche ehrenamtlich engagiert.",
+    "cardTypeRequirements": "Die Erfüllung der Voraussetzungen wird im nächsten Schritt des Antrags abgefragt. Weitere Informationen können Sie",
+    "cardTypeRequirementsButton": "hier einsehen",
+    "cardTypeTitle": "Antrag auf:",
+    "applicationType": "Art des Antrags:",
+    "applicationTypeDescription": "Die Ehrenamtskarte ist als physische Karte und als digitale Version für Ihr Smartphone oder Tablet erhältlich.<br/>Hier können Sie auswählen, welche Kartentypen Sie beantragen möchten.",
+    "regionAlertPostalCode": "Bitte geben Sie oben eine 5-stellige Postleitzahl an, sodass die zuständige Behörde automatisch ermittelt werden kann.",
+    "regionNotDetermined": "Leider konnte die zuständige Behörde nicht automatisch anhand Ihrer Postleitzahl ermittelt werden. <br />Bitte nutzen Sie das folgende Auswahlfeld, um Ihre zuständige Behörde auszuwählen.",
+    "regionNotUnique": "Ihr Postleitzahlen-Gebiet ist nicht eindeutig einer Region zuordenbar. Bitte wählen Sie die korrekte Region<br />Ihres Hauptwohnsitzes aus der Liste:",
+    "regionDetermined": "Die zuständige Behörde konnte anhand Ihrer Postleitzahl automatisch ermittelt werden.",
+    "regionSelectionDescriptionStart": "In der Regel müssen Sie die Ehrenamtskarte in dem Landkreis oder der kreisfreien Stadt Ihres Hauptwohnsitzes beantragen. Weitere Informationen können Sie ",
+    "regionSelectionDescriptionEnd": "einsehen",
+    "regionSelectionListTextStart": "Eine Liste der teilnehmenden Landkreise und kreisfreien Städte für den zentralen Beantragungsprozess finden Sie im Auswahlfeld unten.<br />Alle anderen Regionen können Sie",
+    "regionSelectionListTextEnd": "direkt kontaktieren, um Ihre Ehrenamtskarte zu erhalten.",
+    "regionSelectionLabel": "Empfänger des Antrags",
+    "personalAddress": "Adresse (Erstwohnsitz)",
+    "personalFurtherInformation": "Weitere Angaben",
+    "organizationContactPersonDescription": "Bitte geben Sie hier die Daten der Person an, die ihr ehrenamtliches Engagement bestätigen kann.",
+    "organizationContactPersonAlert": "Die Kontaktperson der Organisation und die antragsstellende Person scheinen identisch zu sein. <br/>Bitte beachten Sie, dass Anträge auf dieser Grundlage nicht bewilligt werden können.",
+    "juleicaCardAttachmentTitle": "Kopie der JuLeiCa",
+    "juleicaCardAttachmentDescription": "Hängen Sie hier bitte Ihre eingescannte oder abfotografierte JuLeiCa an.",
+    "honoredByMinisterDivider": "Angaben zum Ehrenzeichen",
+    "honoredByMinisterCertificate": "Urkunde",
+    "honoredByMinisterCertificateDescription": "Hängen Sie hier bitte Ihre eingescannte oder abfotografierte Urkunde an.",
+    "goldenCardRequirementsTitle": "Ich erfülle folgende Voraussetzung für die Beantragung einer goldenen Ehrenamtskarte:",
+    "blueCardRequirementsTitle": "Ich erfülle folgende Voraussetzung für die Beantragung einer blauen Ehrenamtskarte:",
+    "applicationStepPersonalData": "Persönliche Angaben",
+    "applicationStepRequirements": "Voraussetzungen",
+    "applicationStepSubmit": "Antrag Senden"
   },
   "applications": {
     "allApplications": "Alle Anträge",
@@ -131,7 +193,17 @@
     "passwordValidationNeedsLowerCaseLetter": "Ihr Passwort muss mindestens einen Kleinbuchstaben enthalten.",
     "passwordValidationNeedsUpperCaseLetter": "Ihr Passwort muss mindestens einen Großbuchstaben enthalten.",
     "passwordValidationNeedsSpecialCharacter": "Ihr Passwort muss mindestens ein Sonderzeichen enthalten.",
-    "passwordValidationMustBeEqual": "Die Passwörter stimmen nicht überein."
+    "passwordValidationMustBeEqual": "Die Passwörter stimmen nicht überein.",
+    "accountInformationNotAvailable": "Deine Konto-Informationen konnten nicht geladen werden.",
+    "retry": "Erneut versuchen",
+    "logout": "Ausloggen",
+    "loginPeriodExtended": "Login-Zeitraum verlängert.",
+    "loginPeriodExpires": "Ihr Login-Zeitraum läuft ab!",
+    "loginPeriodSecondsLeft": "Ihr Login-Zeitraum läuft in {{secondsLeft}} Sekunden ab. Danach werden Sie automatisch ausgeloggt.",
+    "loginPeriodPasswordPrompt": "Geben Sie Ihr Passwort ein, um den Login-Zeitraum zu verlängern.",
+    "loginPeriodPasswordPlaceholder": "Passwort",
+    "loginPeriodLogoutButton": "Ausloggen",
+    "loginPeriodExtendButton": "Login-Zeitraum verlängern"
   },
   "cards": {
     "backToSelection": "Zurück zur Auswahl",
@@ -161,7 +233,8 @@
     "importFileWrongFormat": "Die gewählte Datei hat einen unzulässigen Dateityp.",
     "importFileTooBig": "Die ausgewählte Datei ist zu groß.",
     "printQRCodes": "QR-Codes drucken",
-    "validationError": "Validierungsfehler"
+    "validationError": "Validierungsfehler",
+    "cardCreationConfirmationMessage": "Bestätigungsmail wurde versendet."
   },
   "misc": {
     "openAppStore": "AppStore öffnen",
@@ -179,7 +252,10 @@
     "showPassword": "Passwort anzeigen",
     "hidePassword": "Passwort verstecken",
     "userSettings": "Benutzereinstellungen",
-    "logout": "Logout"
+    "logout": "Logout",
+    "confirm": "Bestätigen",
+    "delete": "Löschen",
+    "clickHere": "hier"
   },
   "home": {
     "incomingApplications": "Eingehende Anträge",
@@ -397,6 +473,7 @@
   },
   "errors": {
     "retry": "Erneut Versuchen",
+    "serverNotAvailable": "Server nicht erreichbar.",
     "unknown": "Etwas ist schief gelaufen.",
     "unknownError": "Ein Fehler ist aufgetreten.",
     "notAuthorized": "Fehlende Berechtigung",
@@ -409,6 +486,77 @@
     "notAuthorizedToManageStores": "Sie sind nicht berechtigt, Akzeptanzpartner zu verwalten.",
     "notAuthorizedToManageUsers": "Sie sind nicht berechtigt, Benutzer zu verwalten.",
     "manageStoresNotActivated": "Die Verwaltung der Akzeptanzpartner ist nicht aktiviert.",
-    "cardCreationFailed": "Beim Erstellen der Karte(n) ist ein Fehler aufgetreten."
+    "cardCreationFailed": "Beim Erstellen der Karte(n) ist ein Fehler aufgetreten.",
+    "mailAddressAlreadyUsed": "Die Email-Adresse wird bereits verwendet.",
+    "invalidLink": "Ihr Link ist nicht (mehr) gültig",
+    "invalidFormat": "Die Karte hat ein ungültiges Format.",
+    "invalidCodeType": "Diese Kombination aus Karte und Kartentyp (statisch/dynamisch) existiert nicht.",
+    "invalidCredentials": "Der Login ist fehlgeschlagen.",
+    "invalidFileType": "Dieser Dateityp wird nicht unterstützt.",
+    "invalidInput": "Die Anfrage enthält ungültige Eingaben.",
+    "invalidFileSize": "Die Datei ist zu groß.",
+    "invalidDataPolicySize": "Unzulässige Zeichenlänge der Datenschutzerklärung. Maximal sind {{maxSize}} Zeichen erlaubt.",
+    "invalidJson": "Daten konnten nicht geparsed werden.",
+    "invalidNoteSize": "Unzulässige Zeichenlänge der Notiz erreicht. Maximal sind {{maxSize}} Zeichen erlaubt.",
+    "invalidPassword": "Kein gültiges Passwort.",
+    "invalidPasswordResetLink": "Ungültiger Link",
+    "invalidQrCodeSize": {
+      "dynamicType": "Aktivierungscode",
+      "staticType": "statische QR-Code",
+      "title": "Der {{codeType}} für {{fullName}} kann nicht generiert werden, da er zu viele Daten enthält."
+    },
+    "invalidRole": "Diese Rolle kann nicht zugewiesen werden.",
+    "entitlementNotFound": "Wir konnten Ihre Angaben nicht im System finden. Bitte überprüfen Sie Ihre Angaben und versuchen Sie es erneut.",
+    "entitlementExpired": "Sie sind nicht länger berechtigt, einen KoblenzPass zu erstellen. Bitte kontaktieren Sie koblenzpass@stadt.koblenz.de für weitere Informationen.",
+    "mailNotSend": "Email konnte nicht an {{recipient}} gesendet werden.",
+    "passwordResetKeyExpired": "Die Gültigkeit ihres Links ist abgelaufen",
+    "regionNotFound": "Diese Region existiert nicht.",
+    "regionNotActivatedForApplication": "Für diese Region kann der zentrale Beantragungsprozess noch nicht genutzt werden, kontaktieren Sie bitte Ihre zuständige Behörde direkt.",
+    "regionNotActivatedForConfirmationMail": "Für diese Region ist das Senden von Bestätigungsmails gesperrt. Dies kann in den regionsspezifischen Einstellungen geändert werden.",
+    "pdfCreationError": "Etwas ist schiefgegangen beim Erstellen der PDF.",
+    "csvCreationError": "Etwas ist schiefgegangen beim Erstellen der CSV."
+  },
+  "applicationVerification": {
+    "withdrawMessageForVerifier": "Der Antrag wurde vom Antragsteller am {{date}} zurückgezogen.",
+    "verificationFinishedTitle": "Ihre Eingaben wurden erfolgreich gespeichert.",
+    "verificationFinishedContent": "Vielen Dank für Ihre Mithilfe. Sie können das Fenster jetzt schließen.",
+    "greeting": "Guten Tag {{contactName}},",
+    "text": "Sie wurden gebeten, die Angaben eines Antrags auf Ehrenamtskarte zu bestätigen. Die Antragstellerin oder der Antragsteller hat Sie als Kontaktperson der Organisation <strong>{{organizationName}}</strong> angegeben. Im Folgenden können Sie den zugehörigen Antrag einsehen. Wir bitten Sie, die enthaltenen Angaben, welche die Organisation <strong>{{organizationName}}</strong> betreffen, zu bestätigen. Falls Sie denken, die Angaben wurden fälschlicherweise gemacht, bitten wir Sie, den Angaben zu widersprechen.",
+    "alreadyVerified": "Sie haben diesen Antrag bereits bearbeitet.",
+    "confirmationMessage": "Können Sie die Angaben, welche die Organisation <strong>{{organizationName}}</strong> betreffen, bestätigen?",
+    "confirmationNote": "<strong>Wichtig!</strong> Die Eingabe kann nicht rückgängig gemacht werden.",
+    "rejectButton": "Widersprechen",
+    "confirmationButton": "Bestätigen",
+    "verificationNotFoundTitle": "Nicht gefunden",
+    "verificationNotFoundDescription": "Die Seite konnte nicht gefunden werden."
+  },
+  "applicationApplicant": {
+    "alreadyWithdrawed": "Der Antrag wurde bereits zurückgezogen.",
+    "headline": "Ihr Antrag auf die Ehrenamtskarte Bayern vom",
+    "withdrawInformation": "Hier können Sie Ihren Antrag zurückziehen und Ihre Eingaben unwiderruflich löschen.",
+    "withdrawApplication": "Antrag zurückziehen",
+    "withdrawConfirmationTitle": "Antrag zurückziehen?",
+    "withdrawConfirmationContent": "Möchten Sie Ihren Antrag zurückziehen?",
+    "withdrawConfirmation": "Ihr Antrag wurde zurückgezogen."
+  },
+  "errorTemplates": {
+    "invalidLinkHeadline": "Der von Ihnen geöffnete Link ist ungültig. Mögliche Gründe:",
+    "browserIssue": "Der Link wurde fehlerhaft in den Browser übertragen. Versuchen Sie, den Link manuell aus der Email in die Adresszeile Ihres Browsers zu kopieren.",
+    "applicationApproved": "Für Antragsstellerinnen und Antragssteller: Ihr Antrag wurde bewilligt und die Karte befindet sich nun in der Erstellung bzw. im Versand zu Ihnen. Die Erstellung und der Versand der Karte kann einige Wochen in Anspruch nehmen. Falls Sie keine Karte erhalten, wenden Sie sich bitte an Ihre zuständige Behörde.",
+    "applicationRejected": "Für Organisationen des ehrenamtlichen Engagements: Der Antrag wurde bereits abschließend bearbeitet oder von Ihnen genehmigt/abgelehnt.",
+    "applicationRequirementsNotFulfilled": "Die Berechtigungen für den Erhalt der Karte waren nicht erfüllt und Ihr Antrag wurde gelöscht.",
+    "passwordAlreadyReset": "Sie haben Ihr Passwort mithilfe des Links bereits zurückgesetzt.",
+    "passwordLinkInvalid": "Sie haben einen weiteren Link angefordert. Es ist immer nur der aktuellste Link gültig.",
+    "passwordResetKeyExpired": "Unter folgendem Link können Sie Ihr Passwort erneut zurücksetzen und erhalten einen neuen Link."
+  },
+  "extensions": {
+    "bavariaCardTypeLabel": "Kartentyp",
+    "birthdayMissingError": "Bitte geben Sie ein gültiges Geburtsdatum an.",
+    "birthdayFutureError": "Das Geburtsdatum darf nicht in der Zukunft liegen.",
+    "birthdayLabel": "Geburtsdatum",
+    "referenceNrSpecialCharactersError": "Das Aktenzeichen enthält ungültige Sonderzeichen.",
+    "referenceNrInvalidLengthError": "Das Aktenzeichen muss eine Länge zwischen {{KoblenzReferenceNumberMinLength}} und {{KoblenzReferenceNumberMaxLength}} haben.",
+    "referenceNrLabel": "Aktenzeichen",
+    "startDayLabel": "Startdatum"
   }
 }

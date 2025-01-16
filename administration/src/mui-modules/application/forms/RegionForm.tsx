@@ -1,6 +1,8 @@
 import { Alert, CircularProgress, Typography } from '@mui/material'
 import { styled } from '@mui/system'
+import { TFunction } from 'i18next'
 import React, { useContext, useEffect } from 'react'
+import { Trans, useTranslation } from 'react-i18next'
 
 import { Region, useGetRegionsByPostalCodeQuery } from '../../../generated/graphql'
 import { ProjectConfigContext } from '../../../project-configs/ProjectConfigContext'
@@ -33,17 +35,17 @@ const getOptionsLabel = (prefix: string, name: string) => `${name} (${prefix})`
 export const getOptions = (regions: Region[]): SelectItem[] =>
   regions.map(region => ({ label: getOptionsLabel(region.prefix, region.name), value: region.id.toString() }))
 
-const renderAlert = (state: State, postalCode: string, query: ReturnType<typeof useGetRegionsByPostalCodeQuery>) => {
+const renderAlert = (
+  state: State,
+  postalCode: string,
+  query: ReturnType<typeof useGetRegionsByPostalCodeQuery>,
+  t: TFunction
+) => {
   if (state.region.manuallySelected) {
     return null
   }
   if (postalCode.length !== 5) {
-    return (
-      <StyledAlert severity='error'>
-        Bitte geben Sie oben eine 5-stellige Postleitzahl an, sodass die zuständige Behörde automatisch ermittelt werden
-        kann.
-      </StyledAlert>
-    )
+    return <StyledAlert severity='error'>{t('regionAlertPostalCode')}</StyledAlert>
   }
   if (query.loading) {
     return <StyledAlert severity='info' icon={<CircularProgress size='1em' />} />
@@ -51,8 +53,7 @@ const renderAlert = (state: State, postalCode: string, query: ReturnType<typeof 
   if (query.error) {
     return (
       <StyledAlert severity='warning'>
-        Leider konnte die zuständige Behörde nicht automatisch anhand Ihrer Postleitzahl ermittelt werden. <br />
-        Bitte nutzen Sie das folgende Auswahlfeld, um Ihre zuständige Behörde auszuwählen.
+        <Trans i18nKey='applicationForms:regionNotDetermined' />
       </StyledAlert>
     )
   }
@@ -60,8 +61,7 @@ const renderAlert = (state: State, postalCode: string, query: ReturnType<typeof 
     const regions = query.data.regions
     return (
       <StyledAlert severity='warning'>
-        Ihr Postleitzahlen-Gebiet ist nicht eindeutig einer Region zuordenbar. Bitte wählen Sie die korrekte Region
-        Ihres Hauptwohnsitzes aus der Liste:
+        <Trans i18nKey='applicationForms:regionNotUnique' />
         <StyledRegionsList>
           {regions.map(region => {
             const displayName = `${region.name} (${region.prefix})`
@@ -72,11 +72,7 @@ const renderAlert = (state: State, postalCode: string, query: ReturnType<typeof 
     )
   }
   if (query.data) {
-    return (
-      <StyledAlert severity='success'>
-        Die zuständige Behörde konnte anhand Ihrer Postleitzahl automatisch ermittelt werden.
-      </StyledAlert>
-    )
+    return <StyledAlert severity='success'>{t('regionDetermined')}</StyledAlert>
   }
   return null
 }
@@ -92,6 +88,7 @@ const RegionForm: Form<State, ValidatedInput, AdditionalProps, Options> = {
     return { type: 'valid', value: { regionId: Number(result.value.shortText) } }
   },
   Component: ({ state, setState, options, postalCode }: FormComponentProps<State, AdditionalProps, Options>) => {
+    const { t } = useTranslation('applicationForms')
     const setRegionState = useUpdateStateCallback(setState, 'region')
     const project = useContext(ProjectConfigContext).projectId
     const regionQuery = useGetRegionsByPostalCodeQuery({
@@ -130,30 +127,30 @@ const RegionForm: Form<State, ValidatedInput, AdditionalProps, Options> = {
     return (
       <>
         <Typography>
-          {`In der Regel müssen Sie die Ehrenamtskarte in dem Landkreis oder der kreisfreien Stadt Ihres Hauptwohnsitzes beantragen. Weitere Informationen können Sie `}
+          {t('regionSelectionDescriptionStart')}
           <a
             href='https://www.ehrenamt.bayern.de/vorteile-wettbewerbe/ehrenamtskarte/'
             target='_blank'
             rel='noreferrer'>
-            hier
-          </a>
-          {` einsehen.`}
+            {t('misc:clickHere')}
+          </a>{' '}
+          {t('regionSelectionDescriptionEnd')}
+          .
           <br />
-          {`Eine Liste der teilnehmenden Landkreise und kreisfreien Städte für den zentralen Beantragungsprozess finden Sie im Auswahlfeld unten.
-          Alle anderen Regionen können Sie `}
+          <Trans i18nKey='applicationForms:regionSelectionListTextStart' />{' '}
           <a
             href='https://www.ehrenamt.bayern.de/vorteile-wettbewerbe/ehrenamtskarte/landkreise.php'
             target='_blank'
             rel='noreferrer'>
-            hier
-          </a>
-          {` direkt kontaktieren, um Ihre Ehrenamtskarte zu erhalten.`}
+            {t('misc:clickHere')}
+          </a>{' '}
+          {t('regionSelectionListTextEnd')}
         </Typography>
-        {renderAlert(state, postalCode, regionQuery)}
+        {renderAlert(state, postalCode, regionQuery, t)}
         <SubForms.region.Component
           state={state.region}
           setState={setRegionState}
-          label='Empfänger des Antrags'
+          label={t('regionSelectionLabel')}
           options={{ items: getOptions(options.regions) }}
         />
       </>

@@ -11,11 +11,17 @@ type Translations = {
 
 export const loadTranslations = (): Translations => ({
   de: {
+    activation: deTranslations.activation,
     application: deTranslations.application,
     applications: deTranslations.applications,
+    applicationForms: deTranslations.applicationForms,
+    applicationVerification: deTranslations.applicationVerification,
+    applicationApplicant: deTranslations.applicationApplicant,
     auth: deTranslations.auth,
     cards: deTranslations.cards,
+    extensions: deTranslations.extensions,
     errors: deTranslations.errors,
+    errorTemplates: deTranslations.errorTemplates,
     misc: deTranslations.misc,
     home: deTranslations.home,
     projectSettings: deTranslations.projectSettings,

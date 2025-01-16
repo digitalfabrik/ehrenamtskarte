@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { BlueCardVolunteerServiceEntitlementInput } from '../../../generated/graphql'
 import CustomDivider from '../CustomDivider'
@@ -24,21 +25,24 @@ const VolunteerServiceEntitlementForm: Form<State, ValidatedInput> = {
   initialState: createCompoundInitialState(SubForms),
   getArrayBufferKeys: createCompoundGetArrayBufferKeys(SubForms),
   validate: createCompoundValidate(SubForms, {}),
-  Component: ({ state, setState }: FormComponentProps<State>) => (
-    <>
-      <CustomDivider label='Angaben zur Tätigkeit' />
-      <ShortTextForm.Component
-        label='Name des Programms'
-        state={state.programName}
-        setState={useUpdateStateCallback(setState, 'programName')}
-      />
-      <h4>Tätigkeitsnachweis</h4>
-      <p>
-        Hängen Sie hier bitte einen eingescannten oder abfotografierten Tätigkeitsnachweis an. {FileRequirementsText}
-      </p>
-      <FileInputForm.Component state={state.certificate} setState={useUpdateStateCallback(setState, 'certificate')} />
-    </>
-  ),
+  Component: ({ state, setState }: FormComponentProps<State>) => {
+    const { t } = useTranslation('applicationForms')
+    return (
+      <>
+        <CustomDivider label={t('activityInformation')} />
+        <ShortTextForm.Component
+          label={t('application:volunteerServiceEntitlement:programName')}
+          state={state.programName}
+          setState={useUpdateStateCallback(setState, 'programName')}
+        />
+        <h4>{t('application:volunteerServiceEntitlement:certificate')}</h4>
+        <p>
+          {t('certificateDescription')} {FileRequirementsText}
+        </p>
+        <FileInputForm.Component state={state.certificate} setState={useUpdateStateCallback(setState, 'certificate')} />
+      </>
+    )
+  },
 }
 
 export default VolunteerServiceEntitlementForm

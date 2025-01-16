@@ -30,8 +30,8 @@ const ManageProjectUsers = () => {
   const regionsQuery = useGetRegionsQuery({ variables: { project: projectId } })
   const usersQuery = useGetUsersInProjectQuery({ variables: { project: projectId } })
 
-  const regionsQueryResult = getQueryResult(regionsQuery)
-  const usersQueryResult = getQueryResult(usersQuery)
+  const regionsQueryResult = getQueryResult(regionsQuery, t)
+  const usersQueryResult = getQueryResult(usersQuery, t)
 
   if (!regionsQueryResult.successful) {
     return regionsQueryResult.component
@@ -56,8 +56,8 @@ const ManageRegionUsers = ({ region }: { region: Region }) => {
   const regionsQuery = useGetRegionsQuery({ variables: { project: projectId } })
   const usersQuery = useGetUsersInRegionQuery({ variables: { regionId: region.id } })
 
-  const regionsQueryResult = getQueryResult(regionsQuery)
-  const usersQueryResult = getQueryResult(usersQuery)
+  const regionsQueryResult = getQueryResult(regionsQuery, t)
+  const usersQueryResult = getQueryResult(usersQuery, t)
 
   if (!regionsQueryResult.successful) {
     return regionsQueryResult.component

@@ -50,7 +50,7 @@ const EditUserDialog = ({
 
   const [editAdministrator, { loading }] = useEditAdministratorMutation({
     onError: error => {
-      const { title } = getMessageFromApolloError(error)
+      const { title } = getMessageFromApolloError(error, t)
       appToaster?.show({ intent: 'danger', message: title })
     },
     onCompleted: () => {

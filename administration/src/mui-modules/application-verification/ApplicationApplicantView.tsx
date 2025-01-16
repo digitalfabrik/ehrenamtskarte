@@ -3,6 +3,7 @@ import { Button, Card, CircularProgress, Divider, Typography } from '@mui/materi
 import { styled } from '@mui/system'
 import { useSnackbar } from 'notistack'
 import React, { ReactElement, useContext, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { Application } from '../../bp-modules/applications/ApplicationsOverview'
 import JsonFieldView, { GeneralJsonField } from '../../bp-modules/applications/JsonFieldView'
@@ -42,6 +43,7 @@ const ApplicationApplicantView = ({
   providedKey,
   gotWithdrawed,
 }: ApplicationApplicantViewProps): ReactElement => {
+  const { t } = useTranslation('applicationApplicant')
   const [dialogOpen, setDialogOpen] = useState<boolean>(false)
   const { createdDate: createdDateString, jsonValue, id } = application
   const jsonField: GeneralJsonField = JSON.parse(jsonValue)
@@ -51,7 +53,7 @@ const ApplicationApplicantView = ({
 
   const [withdrawApplication, { loading: withdrawalLoading }] = useWithdrawApplicationMutation({
     onError: error => {
-      const { title } = getMessageFromApolloError(error)
+      const { title } = getMessageFromApolloError(error, t)
       enqueueSnackbar(title, { variant: 'error' })
     },
     onCompleted: ({ isWithdrawed }: { isWithdrawed: boolean }) => {
@@ -59,7 +61,7 @@ const ApplicationApplicantView = ({
         gotWithdrawed()
       } else {
         console.error('Withdraw operation returned false.')
-        enqueueSnackbar('Der Antrag wurde bereits zurückgezogen.', { variant: 'error' })
+        enqueueSnackbar(t('alreadyWithdrawed'), { variant: 'error' })
       }
     },
   })
@@ -80,7 +82,7 @@ const ApplicationApplicantView = ({
     <ApplicationViewCard elevation={2}>
       <ApplicationViewCardContent>
         <Typography mb='8px' variant='h6'>
-          Ihr Antrag auf die Ehrenamtskarte Bayern vom {formatDateWithTimezone(createdDateString, config.timezone)}
+          {`${t('headline')} ${formatDateWithTimezone(createdDateString, config.timezone)}`}
         </Typography>
         <JsonFieldView
           jsonField={jsonField}
@@ -96,16 +98,16 @@ const ApplicationApplicantView = ({
           <>
             <StyledDivider />
             <Typography mt='8px' mb='16px' variant='body2'>
-              Hier können Sie Ihren Antrag zurückziehen und Ihre Eingaben unwiderruflich löschen.
+              {t('withdrawInformation')}
             </Typography>
             <Button variant='contained' endIcon={<Delete />} onClick={() => setDialogOpen(true)}>
-              Antrag zurückziehen
+              {t('withdrawApplication')}
             </Button>
             <ConfirmDialog
               open={dialogOpen}
               onUpdateOpen={setDialogOpen}
-              title='Antrag zurückziehen?'
-              content='Möchten Sie den Antrag zurückziehen?'
+              title={t('withdrawConfirmationTitle')}
+              content={t('withdrawConfirmationContent')}
               onConfirm={submitWithdrawal}
             />
           </>

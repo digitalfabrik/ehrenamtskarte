@@ -1,5 +1,6 @@
 import { FormGroup } from '@blueprintjs/core'
 import React, { ReactElement, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import CustomDatePicker from '../../bp-modules/components/CustomDatePicker'
 import FormErrorMessage from '../../bp-modules/self-service/components/FormErrorMessage'
@@ -18,15 +19,16 @@ const BirthdayForm = ({
   isValid,
   showRequired,
 }: ExtensionComponentProps<BirthdayExtensionState>): ReactElement => {
+  const { t } = useTranslation('extensions')
   const [touched, setTouched] = useState(false)
   const { birthday } = value
   const showErrorMessage = touched || showRequired
   const getErrorMessage = (): string | null => {
     if (!birthday) {
-      return 'Bitte geben Sie ein gültiges Geburtsdatum an.'
+      return t('birthdayMissingError')
     }
     if (birthday.isAfter(PlainDate.fromLocalDate(new Date()))) {
-      return 'Das Geburtsdatum darf nicht in der Zukunft liegen.'
+      return t('birthdayFutureError')
     }
     return null
   }
@@ -36,7 +38,7 @@ const BirthdayForm = ({
   }
 
   return (
-    <FormGroup label='Geburtsdatum'>
+    <FormGroup label={t('birthdayLabel')}>
       <CustomDatePicker
         date={birthday?.toLocalDate() ?? null}
         onBlur={() => setTouched(true)}
