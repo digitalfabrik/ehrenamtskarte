@@ -1042,16 +1042,16 @@ parameters:
             - run
             - skip
         type: enum
-    run_deliver_beta_backend_administration:
-        default: false
-        type: boolean
-    run_deliver_production_backend_administration:
-        default: false
-        type: boolean
     run_delivery_beta_all:
         default: false
         type: boolean
+    run_delivery_beta_backend_administration:
+        default: false
+        type: boolean
     run_delivery_beta_native:
+        default: false
+        type: boolean
+    run_delivery_production_backend_administration:
         default: false
         type: boolean
     run_delivery_production_native:
@@ -1147,7 +1147,78 @@ workflows:
                     - equal:
                         - main
                         - << pipeline.git.branch >>
-    deliver_beta_all:
+    deliver_production_backend_administration:
+        jobs:
+            - bump_version:
+                context:
+                    - deliverino
+                platforms: web
+                prepare_delivery: true
+            - check_administration
+            - build_administration:
+                requires:
+                    - check_administration
+                    - bump_version
+            - pack_administration:
+                requires:
+                    - build_administration
+            - build_martin
+            - check_backend
+            - build_backend:
+                requires:
+                    - check_backend
+            - pack_backend:
+                requires:
+                    - build_backend
+                    - bump_version
+            - check_health_backend:
+                requires:
+                    - pack_backend
+            - pack_martin:
+                requires:
+                    - build_martin
+                    - bump_version
+            - pack_meta:
+                requires:
+                    - bump_version
+            - upload_packages_to_server:
+                bundle: administration
+                context:
+                    - credentials-ehrenamtskarte
+                name: upload_administration_packages_to_server_production
+                production: true
+                requires:
+                    - pack_administration
+                    - check_health_backend
+                    - pack_martin
+                    - pack_meta
+            - upload_packages_to_server:
+                bundle: backend
+                context:
+                    - credentials-ehrenamtskarte
+                name: upload_backend_packages_to_server_production
+                production: true
+                requires:
+                    - pack_administration
+                    - check_health_backend
+                    - pack_martin
+                    - pack_meta
+            - install_packages_to_server:
+                context:
+                    - credentials-ehrenamtskarte
+                name: install_packages_to_server_production
+                production: true
+                requires:
+                    - upload_administration_packages_to_server_production
+                    - upload_backend_packages_to_server_production
+            - notify_release:
+                context:
+                    - deliverino
+                production_delivery: true
+                requires:
+                    - install_packages_to_server_production
+        when: << pipeline.parameters.run_delivery_production_backend_administration >>
+    delivery_beta_all:
         jobs:
             - bump_version:
                 context:
@@ -1329,7 +1400,7 @@ workflows:
                     - deliver_ios_koblenz
                     - install_packages_to_server_staging
         when: << pipeline.parameters.run_delivery_beta_all >>
-    deliver_beta_backend_administration:
+    delivery_beta_backend_administration:
         jobs:
             - bump_version:
                 context:
@@ -1399,78 +1470,7 @@ workflows:
                 production_delivery: false
                 requires:
                     - install_packages_to_server_staging
-        when: << pipeline.parameters.run_deliver_beta_backend_administration >>
-    deliver_production_backend_administration:
-        jobs:
-            - bump_version:
-                context:
-                    - deliverino
-                platforms: web
-                prepare_delivery: true
-            - check_administration
-            - build_administration:
-                requires:
-                    - check_administration
-                    - bump_version
-            - pack_administration:
-                requires:
-                    - build_administration
-            - build_martin
-            - check_backend
-            - build_backend:
-                requires:
-                    - check_backend
-            - pack_backend:
-                requires:
-                    - build_backend
-                    - bump_version
-            - check_health_backend:
-                requires:
-                    - pack_backend
-            - pack_martin:
-                requires:
-                    - build_martin
-                    - bump_version
-            - pack_meta:
-                requires:
-                    - bump_version
-            - upload_packages_to_server:
-                bundle: administration
-                context:
-                    - credentials-ehrenamtskarte
-                name: upload_administration_packages_to_server_production
-                production: true
-                requires:
-                    - pack_administration
-                    - check_health_backend
-                    - pack_martin
-                    - pack_meta
-            - upload_packages_to_server:
-                bundle: backend
-                context:
-                    - credentials-ehrenamtskarte
-                name: upload_backend_packages_to_server_production
-                production: true
-                requires:
-                    - pack_administration
-                    - check_health_backend
-                    - pack_martin
-                    - pack_meta
-            - install_packages_to_server:
-                context:
-                    - credentials-ehrenamtskarte
-                name: install_packages_to_server_production
-                production: true
-                requires:
-                    - upload_administration_packages_to_server_production
-                    - upload_backend_packages_to_server_production
-            - notify_release:
-                context:
-                    - deliverino
-                production_delivery: true
-                requires:
-                    - install_packages_to_server_production
-        when: << pipeline.parameters.run_deliver_production_backend_administration >>
+        when: << pipeline.parameters.run_delivery_beta_backend_administration >>
     delivery_beta_native:
         jobs:
             - bump_version:

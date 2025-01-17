@@ -1,4 +1,4 @@
-when: << pipeline.parameters.run_deliver_beta_backend_administration >>
+when: << pipeline.parameters.run_delivery_beta_backend_administration >>
 jobs:
   - bump_version:
       prepare_delivery: true

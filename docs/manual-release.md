@@ -1,8 +1,9 @@
-# Setup of production
+# Manual releases
 
-> The deployment to production is done by the [Digitalfabrik](https://github.com/digitalfabrik/) and restricted by permissions.
-> Reach out to [@maxammann](https://github.com/maxammann/) or [@sarahsporck](https://github.com/sarahsporck/) or [@f1sh1918](https://github.com/f1sh1918/) for more information and insights.
-
+> The deployment is done by the [Digitalfabrik](https://github.com/digitalfabrik/) and restricted by permissions.
+> Reach out to [@maxammann](https://github.com/maxammann/) or [@ztefanie](https://github.com/ztefanie/) or [@f1sh1918](https://github.com/f1sh1918/) for more information and insights.
+> This article is about manual releases.
+> Further information to our release workflows can be found [CI/CD](./cicd.md)
 ## Certificates and Signing
 
 ### Android
@@ -34,14 +35,13 @@ In `frontend/iOS`  run `bundle exec fastlane match appstore` .
 - Use user [app-team@integreat-app.de](mailto:app-team@integreat-app.de) and password from `<passbolt - Digitalfabrik Fastlane Match>`
 - Set correct app_identifier (a list of identifier is also allowed): `app.sozialpass.nuernberg,de.nrw.it.ehrensachebayern`
 
-## Release Workflow
+## Create beta release
 
-- Create a release branch: `release-<version>`  (check out the next version in the google play console or in app store connect)
-- Create a  [Github release](https://github.com/digitalfabrik/entitlementcard/releases/new) based on that branch
-- Set a new tag with `<version>`
-- Generate release notes and update CHANGELOG.md
-- Update version in `/administration/package.json` and `frontend/pubspec.yaml`
+- Create a release branch on current main: `release-<version> f.e. "release-2024.11.1`  (check out how to determine next version [here](./cicd.md#determining-the-next-version))
 - Create PR to main branch
+- Trigger `delivery_beta_all` workflow or `delivery_beta_natve` or `delivery_beta_backend_administration` if you just want to create a release artifact for a particular platform.
+
+Hint: Since we want to keep all our platforms on the same version, try to avoid single platform releases.
 
 ### Frontend
 
@@ -85,19 +85,6 @@ fvm flutter build ipa --flavor bayern --release --dart-define=environment=produc
 - Navigate the dialog and finally distribute the app. This will create a release on Testflight. It may take a while until the new build will be listed.
 - Once apple has approved the Testflight release, the app can be “promoted”. 
 - For that change the build and version number in app store connect and let the app be checked a second time. Finally the app can be released.
-
-
-### Backend and Administration
-- creating release branch triggers `backend` job with `deploy-production` and creates new bundles on the `entitlementcard.app` server.
-- connect via ssh `ssh <username>@entitlementcard.app`
-- switch to root user `sudo -i`
-- run `sh /var/cache/salt/minion/files/base/entitlementcard/files/eak-update`
-- check backend health log: `journalctl -u eak-backend.service --since "1h ago"`
-
-#### Additional Commands
-- check installed version of administration: `apt-cache policy eak-administration`
-- check available versions: `ll -trh /srv/local-apt-repository`
-- check current version of migration: `sudo -u backend psql entitlementcard` && `SELECT * from migrations;`
 
 ## Snapshots
 

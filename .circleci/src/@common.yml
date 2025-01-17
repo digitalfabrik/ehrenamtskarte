@@ -12,10 +12,10 @@ parameters:
     default: "run_if_on_main"
     type: enum
     enum: ["run_if_on_main", "run", "skip"]
-  run_deliver_beta_backend_administration:
+  run_delivery_beta_backend_administration:
     default: false
     type: boolean
-  run_deliver_production_backend_administration:
+  run_delivery_production_backend_administration:
     default: false
     type: boolean
   run_frontend:
