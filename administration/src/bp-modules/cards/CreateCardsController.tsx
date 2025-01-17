@@ -1,5 +1,6 @@
 import { ButtonGroup, NonIdealState } from '@blueprintjs/core'
 import React, { ReactElement, useContext } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -16,14 +17,15 @@ const Buttons = styled(ButtonGroup)`
 const CreateCardsController = (): ReactElement => {
   const { region } = useContext(WhoAmIContext).me!
   const { freinetCSVImportEnabled } = useContext(ProjectConfigContext)
+  const { t } = useTranslation('cards')
 
   const navigate = useNavigate()
   if (!region) {
     return (
       <NonIdealState
         icon='cross'
-        title='Fehlende Berechtigung'
-        description='Sie sind nicht berechtigt, Karten auszustellen.'
+        title={t('errors:notAuthorized')}
+        description={t('errors:notAuthorizedToCreateCards')}
       />
     )
   }
@@ -31,11 +33,11 @@ const CreateCardsController = (): ReactElement => {
   return (
     <StandaloneCenter>
       <Buttons vertical>
-        <CardFormButton text='Einzelne Karten erstellen' icon='add' onClick={() => navigate('./add')} />
-        <CardFormButton text='Mehrere Karten importieren' icon='upload' onClick={() => navigate('./import')} />
+        <CardFormButton text={t('createSingleCards')} icon='add' onClick={() => navigate('./add')} />
+        <CardFormButton text={t('importMultipleCards')} icon='upload' onClick={() => navigate('./import')} />
         {freinetCSVImportEnabled && (
           <CardFormButton
-            text='Karten aus Freinet Export importieren'
+            text={t('importCardsFromFreinet')}
             icon='upload'
             onClick={() => navigate(`./import?${FREINET_PARAM}=true`)}
           />

@@ -1,5 +1,6 @@
 import { Alignment, Button, Navbar } from '@blueprintjs/core'
 import React, { ReactElement, useContext } from 'react'
+import { useTranslation } from 'react-i18next'
 import { NavLink } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -21,6 +22,7 @@ type Props = {
 }
 
 const Navigation = ({ onSignOut }: Props): ReactElement => {
+  const { t } = useTranslation('misc')
   const config = useContext(ProjectConfigContext)
   const { region, role } = useContext(WhoAmIContext).me!
   const canSeeProjectSettings =
@@ -31,7 +33,9 @@ const Navigation = ({ onSignOut }: Props): ReactElement => {
       <Navbar.Group>
         <Navbar.Heading>
           <NavLink to='/' style={{ color: 'black', textDecoration: 'none', display: 'block' }}>
-            <div style={{ flexDirection: 'column' }}>{config.name} Verwaltung</div>
+            <div style={{ flexDirection: 'column' }}>
+              {config.name} {t('administration')}
+            </div>
             {!region ? null : (
               <span>
                 {region.prefix} {region.name} {`(${process.env.REACT_APP_VERSION})`}
@@ -44,12 +48,12 @@ const Navigation = ({ onSignOut }: Props): ReactElement => {
           <>
             {config.applicationFeature ? (
               <NavLink to='/applications'>
-                <Button minimal icon='form' text='Eingehende Anträge' />
+                <Button minimal icon='form' text={t('inComingApplications')} />
               </NavLink>
             ) : null}
             {config.cardCreation ? (
               <NavLink to='/cards'>
-                <Button minimal icon='id-number' text='Karten erstellen' />
+                <Button minimal icon='id-number' text={t('createCards')} />
               </NavLink>
             ) : null}
           </>
@@ -57,28 +61,28 @@ const Navigation = ({ onSignOut }: Props): ReactElement => {
         {role === Role.ProjectAdmin || role === Role.RegionAdmin ? (
           <>
             <NavLink to='/users'>
-              <Button minimal icon='people' text='Benutzer verwalten' />
+              <Button minimal icon='people' text={t('manageUsers')} />
             </NavLink>
             {config.cardStatistics.enabled ? (
               <NavLink to='/statistics'>
-                <Button minimal icon='stacked-chart' text='Statistiken' />
+                <Button minimal icon='stacked-chart' text={t('statistics')} />
               </NavLink>
             ) : null}
           </>
         ) : null}
         {role === Role.RegionAdmin && config.applicationFeature ? (
           <NavLink to='/region'>
-            <Button minimal icon='path-search' text='Region verwalten' />
+            <Button minimal icon='path-search' text={t('manageRegion')} />
           </NavLink>
         ) : null}
         {canSeeProjectSettings ? (
           <NavLink to='/project'>
-            <Button minimal icon='projects' text='Projekt verwalten' />
+            <Button minimal icon='projects' text={t('manageProject')} />
           </NavLink>
         ) : null}
         {role === Role.ProjectStoreManager ? (
           <NavLink to='/stores'>
-            <Button minimal icon='shop' text='Akzeptanzpartner verwalten' />
+            <Button minimal icon='shop' text={t('manageStores')} />
           </NavLink>
         ) : null}
       </Navbar.Group>

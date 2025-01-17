@@ -1,5 +1,6 @@
 import { Tooltip } from '@blueprintjs/core'
 import React, { memo } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { Application } from './ApplicationsOverview'
@@ -17,13 +18,14 @@ export const UnFocusedDiv = styled.div`
 
 const VerificationQuickIndicator = memo(({ verifications }: { verifications: Application['verifications'] }) => {
   const verificationStati = verifications.map(getStatus)
+  const { t } = useTranslation('applications')
   return (
     <Tooltip
       content={
         <div>
-          <b>Bestätigung(en) durch Organisationen:</b>
+          <b>{t('confirmationsByOrganizations')}</b>
           <br />
-          Bestätigt/Ausstehend/Widersprochen
+          {t('verified/pending/rejected')}
         </div>
       }>
       <UnFocusedDiv>

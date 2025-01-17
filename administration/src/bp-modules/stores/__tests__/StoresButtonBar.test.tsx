@@ -1,10 +1,11 @@
-import { act, fireEvent, render } from '@testing-library/react'
+import { act, fireEvent } from '@testing-library/react'
 import React, { ReactNode } from 'react'
 
 import { ProjectConfigProvider } from '../../../project-configs/ProjectConfigContext'
 import { LOCAL_STORAGE_PROJECT_KEY } from '../../../project-configs/constants'
 import koblenzConfig from '../../../project-configs/koblenz/config'
 import nuernbergConfig from '../../../project-configs/nuernberg/config'
+import { renderWithTranslation } from '../../../testing/render'
 import { AcceptingStoresEntry } from '../AcceptingStoresEntry'
 import StoresButtonBar from '../StoresButtonBar'
 import { invalidStoreData, validStoreData } from '../__mock__/mockStoreEntry'
@@ -23,7 +24,7 @@ describe('StoresButtonBar', () => {
     `should goBack when clicking back for $projectConfig.name`,
     async ({ projectConfig }) => {
       localStorage.setItem(LOCAL_STORAGE_PROJECT_KEY, projectConfig.projectId)
-      const { getByText } = render(
+      const { getByText } = renderWithTranslation(
         <StoresButtonBar
           dryRun
           setDryRun={setDryRun}
@@ -50,7 +51,7 @@ describe('StoresButtonBar', () => {
     `should disable import button for no stores for $projectConfig.name`,
     async ({ projectConfig }) => {
       localStorage.setItem(LOCAL_STORAGE_PROJECT_KEY, projectConfig.projectId)
-      const { getByText } = render(
+      const { getByText } = renderWithTranslation(
         <StoresButtonBar
           dryRun
           setDryRun={setDryRun}
@@ -63,7 +64,7 @@ describe('StoresButtonBar', () => {
         }
       )
 
-      const importButton = getByText('Import Stores').closest('button') as HTMLButtonElement
+      const importButton = getByText('Importiere Akzeptanzpartner').closest('button') as HTMLButtonElement
       expect(importButton).toBeTruthy()
       expect(importButton.disabled).toBeTruthy()
       fireEvent.mouseOver(importButton)
@@ -83,7 +84,7 @@ describe('StoresButtonBar', () => {
       localStorage.setItem(LOCAL_STORAGE_PROJECT_KEY, projectConfig.projectId)
       const fields = projectConfig.storesManagement.enabled ? projectConfig.storesManagement.fields : []
       const stores = [new AcceptingStoresEntry(invalidStoreData, fields)]
-      const { getByText } = render(
+      const { getByText } = renderWithTranslation(
         <StoresButtonBar
           dryRun
           setDryRun={setDryRun}
@@ -94,7 +95,7 @@ describe('StoresButtonBar', () => {
         { wrapper }
       )
 
-      const importButton = getByText('Import Stores').closest('button') as HTMLButtonElement
+      const importButton = getByText('Importiere Akzeptanzpartner').closest('button') as HTMLButtonElement
       expect(importButton).toBeTruthy()
       fireEvent.mouseOver(importButton)
       fireEvent.click(importButton)
@@ -115,7 +116,7 @@ describe('StoresButtonBar', () => {
       localStorage.setItem(LOCAL_STORAGE_PROJECT_KEY, projectConfig.projectId)
       const fields = projectConfig.storesManagement.enabled ? projectConfig.storesManagement.fields : []
       const stores = [new AcceptingStoresEntry(validStoreData, fields)]
-      const { getByText } = render(
+      const { getAllByText } = renderWithTranslation(
         <StoresButtonBar
           dryRun
           setDryRun={setDryRun}
@@ -126,10 +127,12 @@ describe('StoresButtonBar', () => {
         { wrapper }
       )
 
-      const importButton = getByText('Import Stores').closest('button') as HTMLButtonElement
+      const importButton = getAllByText('Importiere Akzeptanzpartner')[0].closest('button') as HTMLButtonElement
       expect(importButton).toBeTruthy()
       fireEvent.click(importButton)
-      const importConfirmationButton = getByText('Stores importieren').closest('button') as HTMLButtonElement
+      const importConfirmationButton = getAllByText('Importiere Akzeptanzpartner')[1].closest(
+        'button'
+      ) as HTMLButtonElement
       fireEvent.click(importConfirmationButton)
       await act(async () => null) // Popper update() - https://github.com/popperjs/react-popper/issues/350
 

@@ -1,5 +1,6 @@
 import React, { ReactElement, useCallback, useContext, useEffect, useRef } from 'react'
 import FlipMove from 'react-flip-move'
+import { useTranslation } from 'react-i18next'
 import { useSearchParams } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -51,6 +52,7 @@ const AddCardsForm = ({
   setApplicationIdToMarkAsProcessed,
 }: CreateCardsFormProps): ReactElement => {
   const projectConfig = useContext(ProjectConfigContext)
+  const { t } = useTranslation('cards')
   const [searchParams, setSearchParams] = useSearchParams()
 
   useEffect(() => {
@@ -101,7 +103,7 @@ const AddCardsForm = ({
           </FormColumn>
         ))}
         <FormColumn key='AddButton'>
-          <CardFormButton text='Karte hinzufügen' icon='add' onClick={addForm} />
+          <CardFormButton text={t('addCard')} icon='add' onClick={addForm} />
         </FormColumn>
       </FormsWrapper>
       <div ref={bottomRef} />

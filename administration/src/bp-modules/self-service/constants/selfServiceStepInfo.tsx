@@ -1,5 +1,7 @@
 import React, { ReactElement } from 'react'
 
+import i18next from '../../../i18n'
+
 type SelfServiceStepInfo = {
   stepNr: number
   headline: string
@@ -10,35 +12,30 @@ type SelfServiceStepInfo = {
 const selfServiceStepInfo: SelfServiceStepInfo[] = [
   {
     stepNr: 1,
-    headline: 'Herzlich Willkommen!',
-    subHeadline: 'In wenigen Schritten zu Ihrem eigenen KoblenzPass.',
-    text: (
-      <span>
-        {' '}
-        Um Ihren Pass zu aktivieren bzw. herunterladen zu können, benötigen wir noch zusätzliche Informationen von
-        Ihnen.
-      </span>
-    ),
+    headline: i18next.t('selfService:welcome'),
+    subHeadline: i18next.t('selfService:fewStepsNeeded'),
+    text: <span>{i18next.t('selfService:explanation')}</span>,
   },
   {
     stepNr: 2,
-    headline: 'Ihr KoblenzPass wurde erstellt.',
-    subHeadline: 'Nur noch ein paar Klicks, bis Sie alle Vorteile nutzen können.',
+    headline: i18next.t('selfService:createdPassSuccessfully'),
+    subHeadline: i18next.t('selfService:fewMoreStepsNeeded'),
     text: (
       <span>
-        <b>App bereits installiert? </b>Dann klicken Sie auf „Weiter zur Aktivierung“
+        <b>{i18next.t('selfService:appAlreadyInstalled')} </b>
+        {i18next.t('selfService:appAlreadyInstalledPrompt')}
       </span>
     ),
   },
   {
     stepNr: 3,
-    headline: 'Fast geschafft!',
-    subHeadline: 'KoblenzPass aktivieren und Backup herunterladen',
+    headline: i18next.t('selfService:almostThere'),
+    subHeadline: i18next.t('selfService:activateAndDownloadPrompt'),
     text: (
       <span>
-        Laden Sie den KoblenzPass als PDF-Datei herunter, um ihn{' '}
-        <b>notfalls erneut in der App hinterlegen zu können. </b>
-        Sie können den KoblenzPass so außerdem auch <b>ohne mobiles Endgerät nutzen</b>.
+        {i18next.t('selfService:lastStepExplanation1')}
+        <b>{i18next.t('selfService:lastStepExplanation2')}</b>
+        {i18next.t('selfService:lastStepExplanation3')} <b>{i18next.t('selfService:lastStepExplanation4')}</b>.
       </span>
     ),
   },

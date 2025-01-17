@@ -1,6 +1,7 @@
 import { Button, FormGroup, Tooltip } from '@blueprintjs/core'
 import { TextField } from '@mui/material'
 import React, { ReactElement, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import PlainDate from '../../../util/PlainDate'
@@ -46,13 +47,14 @@ const StatisticsFilterBar = ({
   isDataAvailable,
   onExportCsv,
 }: StatisticsFilterBarProps): ReactElement => {
+  const { t } = useTranslation('statistics')
   const [dateStart, setDateStart] = useState(defaultStartDate)
   const [dateEnd, setDateEnd] = useState(defaultEndDate)
 
   return (
     <StickyBottomBar>
       <InputContainer>
-        <StyledFormGroup label='Startzeitraum' inline>
+        <StyledFormGroup label={t('start')} inline>
           <TextField
             fullWidth
             type='date'
@@ -68,7 +70,7 @@ const StatisticsFilterBar = ({
             onChange={e => setDateStart(e.target.value)}
           />
         </StyledFormGroup>
-        <StyledFormGroup label='Endzeitraum' inline>
+        <StyledFormGroup label={t('end')} inline>
           <TextField
             fullWidth
             type='date'
@@ -84,22 +86,20 @@ const StatisticsFilterBar = ({
             onChange={e => setDateEnd(e.target.value)}
           />
         </StyledFormGroup>
-        <Tooltip
-          disabled={IsValidDateTimePeriod(dateStart, dateEnd)}
-          content='Bitte geben Sie ein gültiges Start- und Enddatum an. Das Enddatum darf nicht vor dem Startdatum liegen.'>
+        <Tooltip disabled={IsValidDateTimePeriod(dateStart, dateEnd)} content={t('invalidStartOrEnd')}>
           <Button
             icon='tick'
-            text='Filter anwenden'
+            text={t('applyFilter')}
             intent='success'
             onClick={() => onApplyFilter(dateStart, dateEnd)}
             disabled={!IsValidDateTimePeriod(dateStart, dateEnd)}
           />
         </Tooltip>
       </InputContainer>
-      <Tooltip disabled={isDataAvailable} content='Es sind keine Daten zum Export verfügbar.'>
+      <Tooltip disabled={isDataAvailable} content={t('noDataAvailableForExport')}>
         <Button
           icon='floppy-disk'
-          text='CSV Export'
+          text={t('exportToCsv')}
           intent='primary'
           onClick={() => onExportCsv(dateStart, dateEnd)}
           disabled={!isDataAvailable}

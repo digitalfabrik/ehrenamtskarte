@@ -1,4 +1,5 @@
 import React, { ReactElement } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { ApplicationStatusBarItemType } from './constants'
@@ -33,10 +34,11 @@ const ApplicationStatusBarItem = ({
   count,
 }: ApplicationStatusBarItemProps): ReactElement => {
   const { title } = item
+  const { t } = useTranslation('applications')
 
   return (
     <ItemContainer onClick={() => setActiveBarItem(item)} id={title} $active={active}>
-      {title}(<span data-testid={`status-${title}-count`}>{count}</span>)
+      {t(title)}(<span data-testid={`status-${t(title)}-count`}>{count}</span>)
     </ItemContainer>
   )
 }

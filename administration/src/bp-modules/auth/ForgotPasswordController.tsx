@@ -1,5 +1,6 @@
 import { Button, Card, Classes, FormGroup, H2, H3, H4, InputGroup } from '@blueprintjs/core'
 import React, { ReactElement, useContext, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import getMessageFromApolloError from '../../errors/getMessageFromApolloError'
@@ -11,6 +12,7 @@ import StandaloneCenter from '../StandaloneCenter'
 const ForgotPasswordController = (): ReactElement => {
   const config = useContext(ProjectConfigContext)
   const appToaster = useAppToaster()
+  const { t } = useTranslation('auth')
   const [finished, setFinished] = useState(false)
   const [email, setEmail] = useState('')
 
@@ -37,28 +39,25 @@ const ForgotPasswordController = (): ReactElement => {
     <StandaloneCenter>
       <Card style={{ width: '100%', maxWidth: '500px' }}>
         <H2>{config.name}</H2>
-        <H3>Verwaltung</H3>
-        <H4>Passwort vergessen</H4>
+        <H3>{t('administration')}</H3>
+        <H4>{t('forgotPassword')}</H4>
         {finished ? (
           <>
+            <p>{t('resetPasswordSuceessMessage', { email })}</p>
+            <p>{t('checkSpamHint')}</p>
             <p>
-              Falls die angegebene E-Mail-Adresse {email} in unserem System existiert, wird eine E-Mail an sie gesendet.
-              Darin finden Sie einen Link, mit dem Sie Ihr Passwort zurücksetzen können.
-            </p>
-            <p>Bitte prüfen Sie Ihren Spam-Ordner.</p>
-            <p>
-              <Link to='/'>Zum Login</Link>
+              <Link to='/'>{t('toLogin')}</Link>
             </p>
           </>
         ) : (
           <>
-            <p>Falls Sie Ihr Passwort vergessen haben, können Sie es hier zurücksetzen.</p>
+            <p>{t('resetPasswordText')}</p>
             <form
               onSubmit={e => {
                 e.preventDefault()
                 submit()
               }}>
-              <FormGroup label='Email-Adresse'>
+              <FormGroup label={t('eMail')}>
                 <InputGroup
                   value={email}
                   onChange={e => setEmail(e.target.value)}
@@ -69,11 +68,11 @@ const ForgotPasswordController = (): ReactElement => {
               <div
                 className={Classes.DIALOG_FOOTER_ACTIONS}
                 style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Link to='/'>Zurück zum Login</Link>
+                <Link to='/'>{t('backToLogin')}</Link>
                 <Button
                   type='submit'
                   intent='primary'
-                  text='Passwort zurücksetzen'
+                  text={t('resetPassword')}
                   loading={loading}
                   disabled={email === ''}
                 />

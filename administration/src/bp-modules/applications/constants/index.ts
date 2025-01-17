@@ -12,23 +12,23 @@ export type ApplicationStatusBarItemType = {
 
 export const barItems: ApplicationStatusBarItemType[] = [
   {
-    title: 'Alle Anträge',
+    title: 'allApplications',
     status: undefined,
   },
   {
-    title: 'Akzeptiert',
+    title: 'accepted',
     status: ApplicationStatus.fullyVerified,
   },
   {
-    title: 'Abgelehnt',
+    title: 'rejected',
     status: ApplicationStatus.fullyRejected,
   },
   {
-    title: 'Zurückgezogen',
+    title: 'withdrawed',
     status: ApplicationStatus.withdrawed,
   },
   {
-    title: 'Offen',
+    title: 'open',
     status: ApplicationStatus.ambiguous,
   },
 ]

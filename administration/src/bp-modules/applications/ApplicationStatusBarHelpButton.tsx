@@ -1,5 +1,6 @@
 import { Button, H4, Popover } from '@blueprintjs/core'
 import React, { ReactElement } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 const HelpButton = styled(Button)`
@@ -18,49 +19,52 @@ const PopoverContent = styled.div`
   padding: 10px;
 `
 
-const ApplicationStatusHelpButton = (): ReactElement => (
-  <Popover
-    content={
-      <PopoverContent>
-        <Headline>Welcher Status hat welche Bedeutung?</Headline>
-        <Description>
-          <li>
-            <b>Akzeptiert:</b>
-            <Description>
-              Der Antrag wurden von allen Organisationen geprüft und genehmigt.
-              <br />
-              Die Karte kann erstellt werden.
-            </Description>
-          </li>
-          <li>
-            <b>Abgelehnt:</b>
-            <Description>
-              Der Antrag wurde von allen Organisationen abgelehnt.
-              <br />
-              Der Antrag kann gelöscht werden.
-            </Description>
-          </li>
-          <li>
-            <b>Zurückgezogen:</b>
-            <Description>
-              Der Antragssteller hat den Antrag zurückgezogen.
-              <br />
-              Der Antrag kann gelöscht werden.
-            </Description>
-          </li>
-          <li>
-            <b>Offen:</b>
-            <Description>
-              Der Antrag wurde noch nicht von allen Organisationen geprüft.
-              <br />
-              Die Karte sollte noch nicht erstellt werden.
-            </Description>
-          </li>
-        </Description>
-      </PopoverContent>
-    }>
-    <HelpButton icon='help' minimal />
-  </Popover>
-)
+const ApplicationStatusHelpButton = (): ReactElement => {
+  const { t } = useTranslation('applications')
+  return (
+    <Popover
+      content={
+        <PopoverContent>
+          <Headline>{t('whichStatusMeansWhat')}</Headline>
+          <Description>
+            <li>
+              <b>{t('accepted')}:</b>
+              <Description>
+                {t('acceptedDescription')}
+                <br />
+                {t('cardCouldBeCreated')}
+              </Description>
+            </li>
+            <li>
+              <b>{t('rejected')}:</b>
+              <Description>
+                {t('rejectedDescription')}
+                <br />
+                {t('applicationCouldBeDeleted')}
+              </Description>
+            </li>
+            <li>
+              <b>{t('withdrawed')}:</b>
+              <Description>
+                {t('withdrawedDescription')}
+                <br />
+                {t('applicationCouldBeDeleted')}
+              </Description>
+            </li>
+            <li>
+              <b>{t('open')}:</b>
+              <Description>
+                {t('pendingDescription')}
+                <br />
+                {t('cardShouldNotYetBeCreated')}
+              </Description>
+            </li>
+          </Description>
+        </PopoverContent>
+      }>
+      <HelpButton icon='help' minimal />
+    </Popover>
+  )
+}
 
 export default ApplicationStatusHelpButton

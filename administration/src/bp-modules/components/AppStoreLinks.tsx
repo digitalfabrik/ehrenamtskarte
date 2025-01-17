@@ -1,5 +1,6 @@
 import { styled } from '@mui/system'
 import React, { ReactElement } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import AndroidStoreIcon from '../../assets/android_appstore_icon.svg'
 import AppStoreIcon from '../../assets/ios_appstore_icon.svg'
@@ -26,17 +27,20 @@ type AppStoreLinksProps = {
   playStoreLink: string
   appStoreLink: string
 }
-const AppStoreLinks = ({ appStoreLink, playStoreLink }: AppStoreLinksProps): ReactElement => (
-  <LinkContainer>
-    <StoreLink href={appStoreLink} target='_blank' rel='noreferrer'>
-      <StoreIcon src={AppStoreIcon} alt='App Store öffnen' />
-      AppStore öffnen
-    </StoreLink>
-    <StoreLink href={playStoreLink} target='_blank' rel='noreferrer'>
-      <StoreIcon src={AndroidStoreIcon} alt='Google Play öffnen' />
-      Google Play öffnen
-    </StoreLink>
-  </LinkContainer>
-)
+const AppStoreLinks = ({ appStoreLink, playStoreLink }: AppStoreLinksProps): ReactElement => {
+  const { t } = useTranslation('misc')
+  return (
+    <LinkContainer>
+      <StoreLink href={appStoreLink} target='_blank' rel='noreferrer'>
+        <StoreIcon src={AppStoreIcon} alt='App Store öffnen' />
+        {t('openAppStore')}
+      </StoreLink>
+      <StoreLink href={playStoreLink} target='_blank' rel='noreferrer'>
+        <StoreIcon src={AndroidStoreIcon} alt='Google Play öffnen' />
+        {t('openPlayStore')}
+      </StoreLink>
+    </LinkContainer>
+  )
+}
 
 export default AppStoreLinks

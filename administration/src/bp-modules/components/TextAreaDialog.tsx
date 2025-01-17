@@ -1,5 +1,6 @@
 import { Button, Dialog, DialogFooter, TextArea, Tooltip } from '@blueprintjs/core'
 import React, { ReactElement, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import defaultErrorMap from '../../errors/DefaultErrorMap'
@@ -35,6 +36,7 @@ const TextAreaDialog = ({
   defaultText,
   maxChars,
 }: NoteProps): ReactElement => {
+  const { t } = useTranslation('misc')
   const [text, setText] = useState<string>(defaultText ?? '')
   const maxCharsExceeded = maxChars === undefined ? false : text.length > maxChars
   const { title: errorMessage } = defaultErrorMap({
@@ -44,13 +46,13 @@ const TextAreaDialog = ({
 
   const actions = (
     <ButtonContainer>
-      <Button intent='none' text='Schließen' icon='cross' onClick={onClose} />
+      <Button intent='none' text={t('close')} icon='cross' onClick={onClose} />
       <Tooltip disabled={!maxCharsExceeded} content={errorMessage}>
         <Button
           disabled={maxCharsExceeded}
           loading={loading}
           intent='success'
-          text='Speichern'
+          text={t('save')}
           icon='floppy-disk'
           onClick={() => onSave(text)}
         />

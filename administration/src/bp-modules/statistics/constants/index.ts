@@ -6,8 +6,4 @@ import PlainDate from '../../../util/PlainDate'
 export const defaultStartDate = PlainDate.fromLocalDate(addDays(subYears(new Date(), 1), 1)).toString()
 export const defaultEndDate = PlainDate.fromLocalDate(new Date()).toString()
 
-export const statisticKeyLabels = new Map<string, string>([
-  ['region', 'Region'],
-  ['cardsCreated', 'Erstellte Karten'],
-  ['cardsActivated', 'Davon aktiviert'],
-])
+export const statisticKeyLabels = ['region', 'cardsCreated', 'cardsActivated']

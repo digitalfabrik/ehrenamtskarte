@@ -1,6 +1,7 @@
 import { Icon, NonIdealState, NonIdealStateIconSize } from '@blueprintjs/core'
 import { parse } from 'csv-parse/browser/esm/sync'
 import React, { ChangeEventHandler, ReactElement, useCallback, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { StoresFieldConfig } from '../../project-configs/getProjectConfig'
@@ -61,6 +62,7 @@ const getStoreDuplicates = (stores: AcceptingStoresEntry[]): number[][] =>
 const StoresCsvInput = ({ setAcceptingStores, fields, setIsLoadingCoordinates }: StoresCsvInputProps): ReactElement => {
   const fileInput = useRef<HTMLInputElement>(null)
   const appToaster = useAppToaster()
+  const { t } = useTranslation('stores')
   const headers = fields.map(field => field.name)
 
   const showInputError = useCallback(
@@ -86,14 +88,12 @@ const StoresCsvInput = ({ setAcceptingStores, fields, setIsLoadingCoordinates }:
       } catch (error) {
         if (error instanceof Error && error.message.includes('line')) {
           showInputError(
-            `Keine gültige CSV Datei. Nicht jede Reihe enthält gleich viele Spalten. (Fehler in Zeile ${error.message
-              .split('line')[1]
-              .trim()})`,
+            `${t('csvInvalidDifferentColumnLength')} (${t('errorInLine')} ${error.message.split('line')[1].trim()})`,
             LONG_ERROR_TIMEOUT
           )
           return
         }
-        showInputError('Beim Verarbeiten der Datei ist ein unbekannter Fehler aufgetreten')
+        showInputError(t('csvImportUnknownError'))
         return
       }
       const numberOfColumns = lines[0]?.length
@@ -101,24 +101,24 @@ const StoresCsvInput = ({ setAcceptingStores, fields, setIsLoadingCoordinates }:
       /* This is necessary, can be removed once "noUncheckedIndexedAccess" is enabled in tsconfig  */
       /* eslint-disable-next-line @typescript-eslint/no-unnecessary-condition */
       if (!numberOfColumns) {
-        showInputError('Die gewählte Datei ist leer.')
+        showInputError(t('csvInvalidFileEmpty'))
         return
       }
 
       if (lines.length < 2) {
-        showInputError('Die Datei muss mindestens einen Eintrag enthalten.')
+        showInputError(t('csvInvalidNoEntries'))
         return
       }
 
       if (lines.some((line: string[]) => line.length !== headers.length)) {
-        showInputError(`Die CSV enthält eine ungültige Anzahl an Spalten.`)
+        showInputError(t('csvInvalidNumberOfColumns'))
         return
       }
 
       const csvHeader = lines.shift() ?? []
 
       if (csvHeader.toString() !== headers.toString()) {
-        showInputError(`Die erforderlichen Spalten sind nicht vorhanden oder nicht in der richtigen Reihenfolge.`)
+        showInputError(t('csvInvalidColumns'))
         return
       }
       const acceptingStores = lines.map((line: string[]) => lineToStoreEntry(line, csvHeader, fields))
@@ -133,12 +133,12 @@ const StoresCsvInput = ({ setAcceptingStores, fields, setIsLoadingCoordinates }:
       Promise.all(getStoresWithCoordinates(acceptingStores, showInputError))
         .then(updatedStores => setAcceptingStores(updatedStores))
         .catch(() => {
-          showInputError('Fehler beim Abrufen der fehlenden Koordinaten!')
+          showInputError(t('csvCouldNotGetCoordinates'))
           setAcceptingStores(acceptingStores)
         })
         .finally(() => setIsLoadingCoordinates(false))
     },
-    [showInputError, setAcceptingStores, headers, fields, setIsLoadingCoordinates]
+    [showInputError, setAcceptingStores, headers, fields, setIsLoadingCoordinates, t]
   )
 
   const onInputChange: ChangeEventHandler<HTMLInputElement> = event => {
@@ -150,12 +150,12 @@ const StoresCsvInput = ({ setAcceptingStores, fields, setIsLoadingCoordinates }:
 
     const file = event.currentTarget.files[0]
     if (!(file.type in defaultExtensionsByMIMEType)) {
-      showInputError('Die gewählte Datei hat einen unzulässigen Dateityp.')
+      showInputError(t('csvInvalidDatatype'))
       return
     }
 
     if (file.size > FILE_SIZE_LIMIT_BYTES) {
-      showInputError('Die ausgewählete Datei ist zu groß.')
+      showInputError(t('csvInvalidFileTooBig'))
       return
     }
     reader.readAsText(file)
@@ -163,7 +163,7 @@ const StoresCsvInput = ({ setAcceptingStores, fields, setIsLoadingCoordinates }:
 
   return (
     <InputContainer
-      title='Wählen Sie eine Datei'
+      title={t('selectAFile')}
       icon={<Icon intent='warning' size={NonIdealStateIconSize.STANDARD} icon='upload' />}
       description={<StoresRequirementsText header={headers} />}
       action={

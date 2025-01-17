@@ -1,5 +1,6 @@
 import { Tooltip } from '@blueprintjs/core'
 import React, { memo } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import JuleicaLogo from '../../assets/juleica.svg'
 import Verein360Logo from '../../assets/verein360.svg'
@@ -13,13 +14,14 @@ export enum PreVerifiedQuickIndicatorType {
 
 const PreVerifiedQuickIndicator = memo(({ type }: { type: PreVerifiedQuickIndicatorType }) => {
   const logo = type === PreVerifiedQuickIndicatorType.Juleica ? JuleicaLogo : Verein360Logo
+  const { t } = useTranslation('applications')
   return (
     <Tooltip
       content={
         <div>
-          <b>Bestätigung(en) durch Organisationen:</b>
+          <b>{t('confirmationsByOrganizations')}</b>
           <br />
-          Bestätigung ist nicht erforderlich
+          {t('noConfirmationNeeded')}
         </div>
       }>
       <UnFocusedDiv>

@@ -1,5 +1,6 @@
 import { Button, Tooltip } from '@blueprintjs/core'
 import React, { ReactElement } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import getMessageFromApolloError from '../../errors/getMessageFromApolloError'
@@ -36,13 +37,14 @@ const NoteDialogController = ({
   onChange,
 }: NoteDialogControllerProps): ReactElement | null => {
   const appToaster = useAppToaster()
+  const { t } = useTranslation('applications')
   const [updateApplicationNote, { loading }] = useUpdateApplicationNoteMutation({
     onError: error => {
       const { title } = getMessageFromApolloError(error)
       appToaster?.show({ intent: 'danger', message: title })
     },
     onCompleted: () => {
-      appToaster?.show({ intent: 'success', message: 'Notiz erfolgreich geändert.', timeout: 2000 })
+      appToaster?.show({ intent: 'success', message: t('noteChangedSuccessfully'), timeout: 2000 })
       onOpenNoteDialog(false)
     },
   })
@@ -77,7 +79,7 @@ const NoteDialogController = ({
           loading={loading}
           onSave={onSave}
           onClose={onClose}
-          placeholder='Fügen Sie hier eine Notiz hinzu...'
+          placeholder={t('applicationNotePlaceholder')}
         />
       )}
     </>

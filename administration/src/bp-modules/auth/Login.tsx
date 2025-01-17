@@ -1,5 +1,6 @@
 import { Card, H2, H3, H4 } from '@blueprintjs/core'
 import React, { ReactElement, useContext } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import getMessageFromApolloError from '../../errors/getMessageFromApolloError'
 import { SignInMutation, SignInPayload, useSignInMutation } from '../../generated/graphql'
@@ -17,6 +18,7 @@ type State = {
 const Login = ({ onSignIn }: { onSignIn: (payload: SignInPayload) => void }): ReactElement => {
   const config = useContext(ProjectConfigContext)
   const appToaster = useAppToaster()
+  const { t } = useTranslation('auth')
   const [state, setState] = React.useState<State>({ email: '', password: '' })
   const [signIn, mutationState] = useSignInMutation({
     onCompleted: (payload: SignInMutation) => onSignIn(payload.signInPayload),
@@ -37,8 +39,8 @@ const Login = ({ onSignIn }: { onSignIn: (payload: SignInPayload) => void }): Re
     <StandaloneCenter>
       <Card style={{ width: '100%', maxWidth: '500px' }}>
         <H2>{config.name}</H2>
-        <H3>Verwaltung</H3>
-        <H4>Login</H4>
+        <H3>{t('administration')}</H3>
+        <H4>{t('login')}</H4>
         <LoginForm
           password={state.password}
           email={state.email}

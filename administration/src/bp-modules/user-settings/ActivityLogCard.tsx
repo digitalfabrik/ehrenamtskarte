@@ -1,5 +1,6 @@
 import { Button, Card, Dialog, DialogBody, H2 } from '@blueprintjs/core'
 import React, { ReactElement, useContext, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { ProjectConfigContext } from '../../project-configs/ProjectConfigContext'
@@ -52,6 +53,7 @@ const StyledTable = styled.table`
   }
 `
 const ActivityLogCard = ({ activityLogConfig }: { activityLogConfig: ActivityLogConfig }): ReactElement => {
+  const { t } = useTranslation('userSettings')
   const [openLog, setOpenLog] = useState<boolean>(false)
   const { card: cardConfig } = useContext(ProjectConfigContext)
   const activityLogSorted = loadActivityLog(cardConfig).sort((a, b) => (a.timestamp < b.timestamp ? 1 : -1))
@@ -60,14 +62,14 @@ const ActivityLogCard = ({ activityLogConfig }: { activityLogConfig: ActivityLog
     <>
       <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
         <Card style={{ width: '500px' }}>
-          <H2>Aktivitätsprotokoll</H2>
-          <p>Hier können sie den Verlauf ihrer Aktivitäten einsehen.</p>
+          <H2>{t('activityLog')}</H2>
+          <p>{t('activityLogDescription')}</p>
           <div style={{ textAlign: 'right', padding: '10px 0' }}>
-            <Button text='Aktivitäten ansehen' intent='primary' onClick={() => setOpenLog(true)} />
+            <Button text={t('viewActivity')} intent='primary' onClick={() => setOpenLog(true)} />
           </div>
         </Card>
       </div>
-      <ActivityDialog isOpen={openLog} title='Aktivitätsprotokoll' onClose={() => setOpenLog(false)} isCloseButtonShown>
+      <ActivityDialog isOpen={openLog} title={t('activityLog')} onClose={() => setOpenLog(false)} isCloseButtonShown>
         <ActivityDialogBody>
           <StyledTable>
             <StickyTableHeader>
@@ -81,7 +83,7 @@ const ActivityLogCard = ({ activityLogConfig }: { activityLogConfig: ActivityLog
               {activityLogSorted.length > 0 ? (
                 activityLogSorted.map(activityLogConfig.renderLogEntry)
               ) : (
-                <EmptyLog>Keine Einträge vorhanden</EmptyLog>
+                <EmptyLog>{t('noEntries')}</EmptyLog>
               )}
             </tbody>
           </StyledTable>

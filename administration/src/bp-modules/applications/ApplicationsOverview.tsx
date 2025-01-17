@@ -1,6 +1,8 @@
 import { NonIdealState } from '@blueprintjs/core'
+import { TFunction } from 'i18next'
 import React, { ReactElement, useMemo, useState } from 'react'
 import FlipMove from 'react-flip-move'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { GetApplicationsQuery } from '../../generated/graphql'
@@ -53,13 +55,14 @@ const sortApplications = (applications: Application[]): Application[] =>
     }))
     .sort((a, b) => sortByStatus(a.status, b.status) || sortByDateAsc(new Date(a.createdDate), new Date(b.createdDate)))
 
-const getEmptyApplicationsListStatusDescription = (activeBarItem: ApplicationStatusBarItemType): string =>
-  activeBarItem.status !== undefined ? `${activeBarItem.title.toLowerCase()}en` : ''
+const getEmptyApplicationsListStatusDescription = (activeBarItem: ApplicationStatusBarItemType, t: TFunction): string =>
+  activeBarItem.status !== undefined ? `${t(activeBarItem.title).toLowerCase()}en` : ''
 
 const ApplicationsOverview = ({ applications }: { applications: Application[] }): ReactElement => {
   const [updatedApplications, setUpdatedApplications] = useState(applications)
   const { applicationIdForPrint, printApplicationById } = usePrintApplication()
   const [activeBarItem, setActiveBarItem] = useState<ApplicationStatusBarItemType>(barItems[0])
+  const { t } = useTranslation('applications')
   const sortedApplications: Application[] = useMemo(() => sortApplications(updatedApplications), [updatedApplications])
   const filteredApplications: Application[] = useMemo(
     () =>
@@ -101,11 +104,11 @@ const ApplicationsOverview = ({ applications }: { applications: Application[] })
       ) : (
         <StandaloneCenter>
           <NonIdealState
-            title={`Keine ${getEmptyApplicationsListStatusDescription(activeBarItem)} Anträge vorhanden`}
+            title={t('noApplicationsOfType', { status: getEmptyApplicationsListStatusDescription(activeBarItem, t) })}
             icon='clean'
-            description={`Aktuell liegen keine ${getEmptyApplicationsListStatusDescription(
-              activeBarItem
-            )} Anträge vor. Schauen Sie später wieder vorbei.`}
+            description={t('noApplicationsOfTypeDescription', {
+              status: getEmptyApplicationsListStatusDescription(activeBarItem, t),
+            })}
           />
         </StandaloneCenter>
       )}

@@ -1,8 +1,9 @@
+import i18next from 'i18next'
+
 import { CardStatisticsResultModel, Region } from '../../../generated/graphql'
 import bayernConfig from '../../../project-configs/bayern/config'
 import nuernbergConfig from '../../../project-configs/nuernberg/config'
 import { CsvStatisticsError, generateCsv, getCsvFileName } from '../CSVStatistics'
-import { statisticKeyLabels } from '../constants'
 
 jest.mock('csv-stringify/browser/esm/sync', () => ({
   stringify: (input: string[][]) => input[0].join(','),
@@ -23,7 +24,7 @@ describe('CSVStatistics', () => {
   const statisticsData: CardStatisticsResultModel[] = [
     { region: 'Stadt Augsburg', cardsCreated: 10, cardsActivated: 0 },
   ]
-  const statisticsHeader = Object.keys(statisticsData[0]).map(it => statisticKeyLabels.get(it))
+  const statisticsHeader = Object.keys(statisticsData[0]).map(it => i18next.t(`statistics:${it}`))
 
   it('should create a proper filename for a single region', () => {
     const filename = getCsvFileName(dateString, region)

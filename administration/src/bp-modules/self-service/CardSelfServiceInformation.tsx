@@ -1,4 +1,5 @@
 import React, { ReactElement } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { getBuildConfig } from '../../util/getBuildConfig'
@@ -17,15 +18,16 @@ const StyledInfoText = styled(InfoText)`
 
 const CardSelfServiceInformation = ({ goToActivation }: CardSelfServiceInformationProps): ReactElement => {
   const { ios, android } = getBuildConfig(window.location.hostname)
+  const { t } = useTranslation('selfService')
   return (
     <>
       <ActionButton onClick={goToActivation} variant='contained' size='large'>
-        Weiter zur Aktivierung
+        {t('nextToActivation')}
       </ActionButton>
       <StyledInfoText>
-        <div>Haben sie die App noch nicht?</div>
+        <div>{t('appNotInstalled')}</div>
         <div>
-          <b>Laden Sie sie jetzt herunter, um fortzufahren.</b>
+          <b>{t('downloadApp')}</b>
         </div>
       </StyledInfoText>
       <AppStoreLinks playStoreLink={android.appStoreLink} appStoreLink={ios.appStoreLink} />

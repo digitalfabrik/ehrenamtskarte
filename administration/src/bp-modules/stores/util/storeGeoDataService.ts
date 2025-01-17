@@ -1,4 +1,5 @@
 import { FeatureCollection, GeoJSON, Point } from 'geojson'
+import i18next from 'i18next'
 
 import { AcceptingStoresEntry } from '../AcceptingStoresEntry'
 import { LONG_ERROR_TIMEOUT } from '../StoresCSVInput'
@@ -14,9 +15,7 @@ const handleStoreWithMissingLocationInformation = (
   showInputError: (message: string, timeout?: number) => void
 ): AcceptingStoresEntry => {
   showInputError(
-    `Eintrag ${
-      storeIndex + 1
-    }: Es sind nicht alle notwendigen Adressdaten vorhanden, um die notwendigen Geodaten abzurufen`,
+    `${i18next.t('stores:entry')} ${storeIndex + 1}: ${i18next.t('stores:missingAddressData')}`,
     LONG_ERROR_TIMEOUT
   )
   return store
@@ -40,7 +39,7 @@ const getStoreCoordinatesFromGeoDataService = (
     .then(({ features }: FeatureCollection<Point, GeoJSON>) => {
       if (features.length === 0) {
         showInputError(
-          `Eintrag ${storeIndex + 1}: Keine passenden Geodaten gefunden! Bitte prüfen sie die Adresse.`,
+          `${i18next.t('stores:entry')} ${storeIndex + 1}: ${i18next.t('stores:noGeoDataFoundForAddress')}`,
           LONG_ERROR_TIMEOUT
         )
         return store
@@ -64,7 +63,10 @@ export const getStoresWithCoordinates = (
       return Promise.resolve(handleStoreWithMissingLocationInformation(store, index, showInputError))
     }
     if (!store.hasEmptyCoordinates() && !store.hasValidCoordinates()) {
-      showInputError(`Eintrag ${index + 1}: Koordinaten beinhalten ungültige Zeichen.`, LONG_ERROR_TIMEOUT)
+      showInputError(
+        `${i18next.t('stores:entry')} ${index + 1}: ${i18next.t('stores:coordinatesContainInvalidChars')}`,
+        LONG_ERROR_TIMEOUT
+      )
       return Promise.resolve(store)
     }
     return getStoreCoordinatesFromGeoDataService(store, index, showInputError)

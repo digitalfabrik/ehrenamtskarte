@@ -1,5 +1,6 @@
 import { NonIdealState } from '@blueprintjs/core'
 import React, { ReactElement, useContext } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { WhoAmIContext } from '../../../WhoAmIProvider'
 import { Role, useGetDataPolicyQuery } from '../../../generated/graphql'
@@ -23,14 +24,9 @@ const DataPrivacyController = ({ regionId }: { regionId: number }) => {
 
 const DataPrivacyWithRegion = (): ReactElement => {
   const { region, role } = useContext(WhoAmIContext).me!
+  const { t } = useTranslation('errors')
   if (!region || role !== Role.RegionAdmin) {
-    return (
-      <NonIdealState
-        icon='cross'
-        title='Fehlende Berechtigung'
-        description='Sie sind nicht berechtigt, Änderungen an der Datenschutzerklärung der Region vorzunehmen.'
-      />
-    )
+    return <NonIdealState icon='cross' title={t('notAuthorized')} description={t('notAuthorizedForDataPrivacy')} />
   }
   return <DataPrivacyController regionId={region.id} />
 }

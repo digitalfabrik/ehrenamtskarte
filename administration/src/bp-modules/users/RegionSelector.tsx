@@ -1,6 +1,7 @@
 import { Button, Menu } from '@blueprintjs/core'
 import { Classes, ItemListRenderer, ItemRenderer, Select } from '@blueprintjs/select'
 import React, { ReactElement, useContext, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { Region, useGetRegionsQuery } from '../../generated/graphql'
 import { ProjectConfigContext } from '../../project-configs/ProjectConfigContext'
@@ -39,6 +40,7 @@ const RegionSelector = ({
   onSelect: (region: Region) => void
   selectedId: number | null
 }): ReactElement => {
+  const { t } = useTranslation('users')
   const projectId = useContext(ProjectConfigContext).projectId
   const regionsQuery = useGetRegionsQuery({
     variables: { project: projectId },
@@ -78,7 +80,7 @@ const RegionSelector = ({
           required
           tabIndex={-1}>
           <option value={activeItem?.id ?? ''} disabled>
-            {activeItem ? getTitle(activeItem) : 'Auswählen...'}
+            {activeItem ? getTitle(activeItem) : t('select')}
           </option>
         </select>
         <Button
@@ -86,7 +88,7 @@ const RegionSelector = ({
           style={{ justifyContent: 'space-between', padding: '0 10px' }}
           fill
           rightIcon='double-caret-vertical'>
-          {activeItem ? getTitle(activeItem) : 'Auswählen...'}
+          {activeItem ? getTitle(activeItem) : t('select')}
         </Button>
       </div>
     </RegionSelect>

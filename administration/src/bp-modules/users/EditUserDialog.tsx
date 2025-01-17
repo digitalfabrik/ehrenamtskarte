@@ -1,5 +1,6 @@
 import { Button, Callout, Checkbox, Classes, Dialog, FormGroup, InputGroup } from '@blueprintjs/core'
 import React, { ReactElement, useContext, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { WhoAmIContext } from '../../WhoAmIProvider'
@@ -32,6 +33,7 @@ const EditUserDialog = ({
 }): ReactElement => {
   const appToaster = useAppToaster()
   const { me, refetch: refetchMe } = useContext(WhoAmIContext)
+  const { t } = useTranslation('users')
   const [email, setEmail] = useState('')
   const [role, setRole] = useState<Role | null>(null)
   const [regionId, setRegionId] = useState<number | null>(null)
@@ -52,7 +54,7 @@ const EditUserDialog = ({
       appToaster?.show({ intent: 'danger', message: title })
     },
     onCompleted: () => {
-      appToaster?.show({ intent: 'success', message: 'Benutzer erfolgreich bearbeitet.' })
+      appToaster?.show({ intent: 'success', message: t('editUserSuccess') })
       onClose()
       if (me?.id === selectedUser?.id) {
         refetchMe()
@@ -70,7 +72,10 @@ const EditUserDialog = ({
   }
 
   return (
-    <Dialog title={`Benutzer '${selectedUser?.email}' bearbeiten`} isOpen={selectedUser !== null} onClose={onClose}>
+    <Dialog
+      title={t('editUserWithMail', { mail: selectedUser?.email })}
+      isOpen={selectedUser !== null}
+      onClose={onClose}>
       <form
         onSubmit={e => {
           e.preventDefault()
@@ -91,7 +96,7 @@ const EditUserDialog = ({
           })
         }}>
         <div className={Classes.DIALOG_BODY}>
-          <FormGroup label='Email-Adresse'>
+          <FormGroup label={t('eMail')}>
             <InputGroup
               value={email}
               required
@@ -103,46 +108,46 @@ const EditUserDialog = ({
           <FormGroup
             label={
               <RoleFormGroupLabel>
-                Rolle <RoleHelpButton />
+                {t('role')} <RoleHelpButton />
               </RoleFormGroupLabel>
             }>
             <RoleSelector role={role} onChange={setRole} hideProjectAdmin={regionIdOverride !== null} />
           </FormGroup>
           {regionIdOverride !== null || role === null || !rolesWithRegion.includes(role) ? null : (
-            <FormGroup label='Region'>
+            <FormGroup label={t('region')}>
               <RegionSelector onSelect={region => setRegionId(region.id)} selectedId={regionId} />
             </FormGroup>
           )}
           <Callout intent='primary'>
             {selectedUser?.id === me?.id ? (
               <>
-                Sie können Ihr eigenes Passwort in den{' '}
+                {t('youCanChangeYourOwnPassword')}{' '}
                 <a href={`${window.location.origin}/user-settings`} target='_blank' rel='noreferrer'>
-                  Benutzereinstellungen
+                  {t('userSettings')}
                 </a>{' '}
-                ändern.
+                {t('change')}.
               </>
             ) : (
               <>
-                Der Benutzer kann sein Passwort unter{' '}
+                {t('userCanChangePassword')}{' '}
                 <a href={`${window.location.origin}/forgot-password`} target='_blank' rel='noreferrer'>
                   {`${window.location.origin}/forgot-password`}
                 </a>{' '}
-                zurücksetzen.
+                {t('reset')}.
               </>
             )}
           </Callout>
           {selectedUser?.id !== me?.id ? null : (
             <Callout intent='danger' style={{ marginTop: '16px' }}>
-              <b>Sie bearbeiten Ihr eigenes Konto.</b> Möglicherweise können Sie diese Änderungen nicht rückgängig
-              machen.
-              <Checkbox required>Ich bestätige, dass ich diesen Warnhinweis gelesen habe.</Checkbox>
+              <b>{t('youEditYourOwnAccount')} </b>
+              {t('youMayCannotUndoThis')}
+              <Checkbox required>{t('ownAccountWarningConfirmation')}</Checkbox>
             </Callout>
           )}
         </div>
         <div className={Classes.DIALOG_FOOTER}>
           <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-            <Button type='submit' intent='primary' text='Benutzer bearbeiten' icon='edit' loading={loading} />
+            <Button type='submit' intent='primary' text={t('editUser')} icon='edit' loading={loading} />
           </div>
         </div>
       </form>

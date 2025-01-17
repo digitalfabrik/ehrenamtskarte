@@ -1,5 +1,6 @@
 import { NonIdealState } from '@blueprintjs/core'
 import React, { ReactElement, useContext } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { WhoAmIContext } from '../../WhoAmIProvider'
@@ -17,14 +18,9 @@ const RegionSettingsContainer = styled.div`
 
 const RegionController = (): ReactElement => {
   const { region, role } = useContext(WhoAmIContext).me!
+  const { t } = useTranslation('errors')
   if (!region || role !== Role.RegionAdmin) {
-    return (
-      <NonIdealState
-        icon='cross'
-        title='Fehlende Berechtigung'
-        description='Sie sind nicht berechtigt, Änderungen an der Region vorzunehmen.'
-      />
-    )
+    return <NonIdealState icon='cross' title={t('notAuthorized')} description={t('notAuthorizedForRegionSettings')} />
   }
   return (
     <RegionSettingsContainer>

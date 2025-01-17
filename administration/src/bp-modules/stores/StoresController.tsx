@@ -1,5 +1,6 @@
 import { ButtonGroup, NonIdealState } from '@blueprintjs/core'
 import React, { ReactElement, useContext } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -17,15 +18,15 @@ const StoresController = (): ReactElement => {
   const navigate = useNavigate()
   const { role } = useContext(WhoAmIContext).me!
   const storesManagement = useContext(ProjectConfigContext).storesManagement
+  const { t } = useTranslation('stores')
+
   if (role !== Role.ProjectStoreManager || !storesManagement.enabled) {
     return (
       <NonIdealState
         icon='cross'
-        title='Fehlende Berechtigung'
+        title={t('errors:notAuthorized')}
         description={
-          storesManagement.enabled
-            ? 'Sie sind nicht berechtigt, Akzeptanzpartner zu verwalten.'
-            : 'Die Verwaltung der Akzeptanzpartner ist nicht aktiviert.'
+          storesManagement.enabled ? t('errors:notAuthorizedToManageStores') : t('errors:manageStoresNotActivated')
         }
       />
     )
@@ -33,7 +34,7 @@ const StoresController = (): ReactElement => {
   return (
     <StandaloneCenter>
       <Buttons vertical>
-        <CardFormButton text='Akzeptanzpartner CSV Import' icon='upload' onClick={() => navigate('./import')} />
+        <CardFormButton text={t('storesCsvImport')} icon='upload' onClick={() => navigate('./import')} />
       </Buttons>
     </StandaloneCenter>
   )

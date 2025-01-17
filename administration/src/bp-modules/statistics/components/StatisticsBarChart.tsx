@@ -1,11 +1,11 @@
 import { NonIdealState } from '@blueprintjs/core'
 import { ResponsiveBar } from '@nivo/bar'
 import React, { ReactElement, useContext } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { CardStatisticsResultModel } from '../../../generated/graphql'
 import { ProjectConfigContext } from '../../../project-configs/ProjectConfigContext'
-import { statisticKeyLabels } from '../constants'
 import StatisticsBarTooltip from './StatisticsBarTooltip'
 
 const BarContainer = styled.div<{ height: number }>`
@@ -18,6 +18,7 @@ type StatisticsBarChartProps = {
 
 const StatisticsBarChart = ({ statistics }: StatisticsBarChartProps): ReactElement => {
   const { cardStatistics } = useContext(ProjectConfigContext)
+  const { t } = useTranslation('statistics')
   const barHeight = 50
   const axisHeight = 90
 
@@ -25,8 +26,8 @@ const StatisticsBarChart = ({ statistics }: StatisticsBarChartProps): ReactEleme
     return (
       <NonIdealState
         icon='warning-sign'
-        title='Keine Statistiken vorhanden'
-        description='Es wurden keine Statistiken für Sie gefunden.'
+        title={t('noStatisticsAvailable')}
+        description={t('noStatisticsAvailableDescription')}
       />
     )
   }
@@ -50,7 +51,7 @@ const StatisticsBarChart = ({ statistics }: StatisticsBarChartProps): ReactEleme
         axisBottom={{
           tickSize: 5,
           tickPadding: 5,
-          legend: 'Anzahl',
+          legend: t('count'),
           legendPosition: 'middle',
           legendOffset: 44,
         }}
@@ -65,7 +66,7 @@ const StatisticsBarChart = ({ statistics }: StatisticsBarChartProps): ReactEleme
             data: statisticKeys.map((item, index) => ({
               color: [cardStatistics.theme.primaryColor, cardStatistics.theme.primaryColorLight][index],
               id: item,
-              label: statisticKeyLabels.get(item)!,
+              label: t(item)!,
             })),
             anchor: 'top-right',
             direction: 'column',
@@ -80,7 +81,7 @@ const StatisticsBarChart = ({ statistics }: StatisticsBarChartProps): ReactEleme
         ]}
         role='application'
         ariaLabel='Card statistics bar chart'
-        barAriaLabel={e => `${e.id}: ${e.formattedValue} in Region: ${e.indexValue}`}
+        barAriaLabel={e => `${e.id}: ${e.formattedValue} ${t('inRegion')}: ${e.indexValue}`}
       />
     </BarContainer>
   )

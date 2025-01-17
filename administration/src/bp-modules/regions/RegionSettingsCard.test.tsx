@@ -1,6 +1,7 @@
-import { fireEvent, render } from '@testing-library/react'
+import { fireEvent } from '@testing-library/react'
 import React from 'react'
 
+import { renderWithTranslation } from '../../testing/render'
 import RegionSettingsCard from './RegionSettingsCard'
 
 describe('RegionSettingsCard', () => {
@@ -12,7 +13,7 @@ describe('RegionSettingsCard', () => {
     defaultApplicationActivation: boolean
     defaultConfirmationMailActivation: boolean
   }) =>
-    render(
+    renderWithTranslation(
       <RegionSettingsCard
         loading={false}
         defaultApplicationActivation={defaultApplicationActivation}

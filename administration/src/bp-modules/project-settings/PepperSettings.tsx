@@ -1,5 +1,7 @@
 import { Callout } from '@blueprintjs/core'
+import { TFunction } from 'i18next'
 import React, { ReactElement } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useGetHashingPepperQuery } from '../../generated/graphql'
@@ -10,19 +12,18 @@ const Container = styled.div`
   padding: 10px 0;
 `
 
-const PepperSettingsView = ({ pepper }: { pepper: string }) => (
+const PepperSettingsView = ({ pepper, t }: { pepper: string; t: TFunction }) => (
   <Container>
-    <p>Um den Endpunkt zu nutzen, müssen die Nutzerdaten mit folgenden Pepper gehasht werden:</p>
+    <p>{t('pepperExplanation')}:</p>
     <PasswordInput label='' value={pepper} setValue={null} />
   </Container>
 )
 
 const PepperSettings = (): ReactElement => {
+  const { t } = useTranslation('projectSettings')
   const errorComponent = (
     <Container>
-      <Callout intent='danger'>
-        Es ist kein Koblenz Pepper hinterlegt. Diese Funktion ist in dieser Umgebung aktuell nicht verfügbar!
-      </Callout>
+      <Callout intent='danger'> {t('noPepper')}</Callout>
     </Container>
   )
   const pepperQuery = useGetHashingPepperQuery()
@@ -30,7 +31,7 @@ const PepperSettings = (): ReactElement => {
   if (!result.successful) {
     return result.component
   }
-  return <PepperSettingsView pepper={result.data.pepper} />
+  return <PepperSettingsView pepper={result.data.pepper} t={t} />
 }
 
 export default PepperSettings

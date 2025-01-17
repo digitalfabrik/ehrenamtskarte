@@ -1,5 +1,6 @@
 import { NonIdealState, Spinner } from '@blueprintjs/core'
 import React, { ReactElement, useContext } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import { WhoAmIContext } from '../../WhoAmIProvider'
@@ -12,6 +13,7 @@ import useCardGenerator, { CardActivationState } from './hooks/useCardGenerator'
 
 const InnerAddCardsController = ({ region }: { region: Region }) => {
   const navigate = useNavigate()
+  const { t } = useTranslation('cards')
   const {
     state,
     setState,
@@ -26,7 +28,7 @@ const InnerAddCardsController = ({ region }: { region: Region }) => {
 
   useBlockNavigation({
     when: cards.length > 0,
-    message: 'Falls Sie fortfahren, werden alle Eingaben verworfen.',
+    message: t('dataWillBeLostWarning'),
   })
 
   if (state === CardActivationState.loading) {
@@ -64,13 +66,11 @@ const InnerAddCardsController = ({ region }: { region: Region }) => {
 
 const AddCardsController = (): ReactElement => {
   const { region } = useContext(WhoAmIContext).me!
+  const { t } = useTranslation('cards')
+
   if (!region) {
     return (
-      <NonIdealState
-        icon='cross'
-        title='Fehlende Berechtigung'
-        description='Sie sind nicht berechtigt, Karten auszustellen.'
-      />
+      <NonIdealState icon='cross' title={t('error:SnotAuthorized')} description={t('notAuthorizedToCreateCards')} />
     )
   }
 

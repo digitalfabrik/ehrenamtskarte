@@ -1,5 +1,6 @@
 import { Button, Checkbox, Classes, Dialog, FormGroup, InputGroup } from '@blueprintjs/core'
 import React, { ReactElement, useContext, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import getMessageFromApolloError from '../../errors/getMessageFromApolloError'
@@ -30,6 +31,7 @@ const CreateUserDialog = ({
   regionIdOverride: number | null
 }): ReactElement => {
   const appToaster = useAppToaster()
+  const { t } = useTranslation('users')
   const [email, setEmail] = useState('')
   const [role, setRole] = useState<Role | null>(null)
   const [regionId, setRegionId] = useState<number | null>(null)
@@ -43,7 +45,7 @@ const CreateUserDialog = ({
       appToaster?.show({ intent: 'danger', message: title })
     },
     onCompleted: () => {
-      appToaster?.show({ intent: 'success', message: 'Benutzer erfolgreich erstellt.' })
+      appToaster?.show({ intent: 'success', message: t('addUserSuccess') })
       onClose()
       onSuccess()
       // Reset State
@@ -62,7 +64,7 @@ const CreateUserDialog = ({
   }
 
   return (
-    <Dialog title='Benutzer hinzufügen' isOpen={isOpen} onClose={onClose}>
+    <Dialog title={t('addUser')} isOpen={isOpen} onClose={onClose}>
       <form
         onSubmit={e => {
           e.preventDefault()
@@ -77,7 +79,7 @@ const CreateUserDialog = ({
           })
         }}>
         <div className={Classes.DIALOG_BODY}>
-          <FormGroup label='Email-Adresse'>
+          <FormGroup label={t('createUserEmailLabel')}>
             <InputGroup
               value={email}
               required
@@ -89,28 +91,27 @@ const CreateUserDialog = ({
           <FormGroup
             label={
               <RoleFormGroupLabel>
-                Rolle <RoleHelpButton />
+                {t('role')} <RoleHelpButton />
               </RoleFormGroupLabel>
             }>
             <RoleSelector role={role} onChange={setRole} hideProjectAdmin={regionIdOverride !== null} />
           </FormGroup>
           {regionIdOverride !== null || role === null || !rolesWithRegion.includes(role) ? null : (
-            <FormGroup label='Region'>
+            <FormGroup label={t('region')}>
               <RegionSelector onSelect={region => setRegionId(region.id)} selectedId={regionId} />
             </FormGroup>
           )}
           <FormGroup>
             <Checkbox checked={sendWelcomeMail} onChange={e => setSendWelcomeMail(e.currentTarget.checked)}>
-              <b>Sende eine Willkommens-Email.</b>
+              <b>{t('sendWelcomeMail')}</b>
               <br />
-              Diese Email enthält einen Link, mit dem das Passwort des Accounts gesetzt werden kann. Der Link ist 24
-              Stunden gültig.
+              {t('sendWelcomeMailExplanation')}
             </Checkbox>
           </FormGroup>
         </div>
         <div className={Classes.DIALOG_FOOTER}>
           <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-            <Button type='submit' intent='success' text='Benutzer hinzufügen' icon='add' loading={loading} />
+            <Button type='submit' intent='success' text={t('addUser')} icon='add' loading={loading} />
           </div>
         </div>
       </form>

@@ -1,6 +1,7 @@
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined'
 import { styled } from '@mui/material'
 import React, { ReactElement } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { ActionButton } from './components/ActionButton'
 import { IconTextButton } from './components/IconTextButton'
@@ -20,21 +21,25 @@ type CardSelfServiceActivationProps = {
   downloadPdf: () => Promise<void>
 }
 
-const CardSelfServiceActivation = ({ deepLink, downloadPdf }: CardSelfServiceActivationProps): ReactElement => (
-  <Container>
-    <StyledIconTextButton onClick={downloadPdf}>
-      <FileDownloadOutlinedIcon />
-      KoblenzPass PDF
-    </StyledIconTextButton>
-    <InfoText>
-      Um Ihren KoblenzPass auf dem aktuellen Gerät zu aktivieren, klicken Sie bitte auf „Pass jetzt aktivieren“. <br />
-      <br />
-      <b>Wichtig: </b>Die KoblenzPass-App muss dafür installiert sein (siehe Schritt 2 von 3).
-    </InfoText>
-    <ActionButton href={deepLink} variant='contained' size='large'>
-      KoblenzPass jetzt aktivieren
-    </ActionButton>
-  </Container>
-)
+const CardSelfServiceActivation = ({ deepLink, downloadPdf }: CardSelfServiceActivationProps): ReactElement => {
+  const { t } = useTranslation('selfService')
+  return (
+    <Container>
+      <StyledIconTextButton onClick={downloadPdf}>
+        <FileDownloadOutlinedIcon />
+        {t('koblenzPassPdf')}
+      </StyledIconTextButton>
+      <InfoText>
+        {t('howToActivateHint')} <br />
+        <br />
+        <b>{t('important')}: </b>
+        {t('koblenzPassAppNeedsToBeInstalled')}
+      </InfoText>
+      <ActionButton href={deepLink} variant='contained' size='large'>
+        {t('activatePass')}
+      </ActionButton>
+    </Container>
+  )
+}
 
 export default CardSelfServiceActivation

@@ -24,3 +24,5 @@ export const containsSpecialCharacters = (value: string): boolean =>
  * */
 export const containsOnlyLatinAndCommonCharset = (value: string): boolean =>
   XRegExp('^[\\p{Latin}\\p{Common}]+$').test(value)
+
+export const toLowerCaseFirstLetter = (value: string): string => value.charAt(0).toLowerCase() + value.slice(1)

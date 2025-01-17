@@ -1,4 +1,5 @@
 import React, { ReactElement, useContext } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { WhoAmIContext } from '../../WhoAmIProvider'
 import { CardStatisticsResultModel, Region, Role } from '../../generated/graphql'
@@ -20,12 +21,13 @@ const StatisticsOverview = ({ statistics, onApplyFilter, region }: StatisticsOve
   const { role } = useContext(WhoAmIContext).me!
   const appToaster = useAppToaster()
   const { cardStatistics } = useContext(ProjectConfigContext)
+  const { t } = useTranslation('statistics')
   const exportCardDataToCsv = (dateStart: string, dateEnd: string) => {
     try {
       downloadDataUri(generateCsv(statistics, cardStatistics), getCsvFileName(`${dateStart}_${dateEnd}`, region))
     } catch {
       appToaster?.show({
-        message: 'Etwas ist schiefgegangen beim Export der CSV.',
+        message: t('exportCsvNotPossible'),
         intent: 'danger',
       })
     }

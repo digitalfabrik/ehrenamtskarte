@@ -1,6 +1,7 @@
 import { Spinner } from '@blueprintjs/core'
 import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined'
 import React, { ReactElement, useContext, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import KoblenzLogo from '../../assets/koblenz_logo.svg'
@@ -88,6 +89,7 @@ export enum DataPrivacyAcceptingStatus {
 // TODO 1646 Add tests for CardSelfService
 const CardSelfServiceView = (): ReactElement => {
   const projectConfig = useContext(ProjectConfigContext)
+  const { t } = useTranslation('selfService')
   const [dataPrivacyCheckbox, setDataPrivacyCheckbox] = useState<DataPrivacyAcceptingStatus>(
     DataPrivacyAcceptingStatus.untouched
   )
@@ -123,12 +125,12 @@ const CardSelfServiceView = (): ReactElement => {
       <Header>
         <HeaderLogo src={KoblenzLogo} />
         <StyledInfoTextButton onClick={() => setOpenHelpDialog(true)}>
-          Hilfe
+          {t('help')}
           <HelpOutlineOutlinedIcon />
         </StyledInfoTextButton>
       </Header>
       <Body>
-        <Step>{`Schritt ${selfServiceStepInfo[selfServiceState].stepNr}/${selfServiceStepInfo.length}`}</Step>
+        <Step>{`${t('step')} ${selfServiceStepInfo[selfServiceState].stepNr}/${selfServiceStepInfo.length}`}</Step>
         <Headline>{selfServiceStepInfo[selfServiceState].headline}</Headline>
         <SubHeadline>{selfServiceStepInfo[selfServiceState].subHeadline}</SubHeadline>
         <Text>{selfServiceStepInfo[selfServiceState].text}</Text>
@@ -152,14 +154,14 @@ const CardSelfServiceView = (): ReactElement => {
         open={openHelpDialog}
         maxWidth='lg'
         onUpdateOpen={setOpenHelpDialog}
-        title='Hilfe'
+        title={t('help')}
         content={
           <>
             <InfoText>
-              Sie haben ein Problem bei der Aktivierung oder dem Abrufen des KoblenzPass? <br />
-              Dann kontaktieren Sie uns bitte per E-Mail via koblenzpass@stadt.koblenz.de
+              {t('youHaveProblemsCreatingAPass')} <br />
+              {t('pleaseContactUsForHelp')}
             </InfoText>
-            <ActionButton href='mailto:koblenzpass@stadt.koblenz.de'>E-Mail schreiben</ActionButton>
+            <ActionButton href='mailto:koblenzpass@stadt.koblenz.de'>{t('sendMail')}</ActionButton>
           </>
         }
       />

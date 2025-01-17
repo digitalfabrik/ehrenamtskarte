@@ -1,5 +1,6 @@
 import { Button, Checkbox, H2 } from '@blueprintjs/core'
 import React, { ReactElement, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import SettingsCard from '../user-settings/SettingsCard'
@@ -24,6 +25,7 @@ const RegionSettingsCard = ({
   defaultApplicationActivation: boolean
   defaultConfirmationMailActivation: boolean
 }): ReactElement => {
+  const { t } = useTranslation('regionSettings')
   const [activatedForApplication, setActivatedForApplication] = useState<boolean>(defaultApplicationActivation)
   const [activatedForCardConfirmationMail, setActivatedForCardConfirmationMail] = useState<boolean>(
     defaultConfirmationMailActivation
@@ -31,20 +33,20 @@ const RegionSettingsCard = ({
 
   return (
     <SettingsCard>
-      <Headline>Regionsspezifische Einstellungen</Headline>
+      <Headline>{t('regionSettings')}</Headline>
       <Checkbox
         checked={activatedForApplication}
         onChange={e => setActivatedForApplication(e.currentTarget.checked)}
-        label='Region ist für den neuen Beantragungsprozess freigeschaltet'
+        label={t('activatedForApplication')}
       />
       <Checkbox
         checked={activatedForCardConfirmationMail}
         onChange={e => setActivatedForCardConfirmationMail(e.currentTarget.checked)}
-        label='Nach der Erstellung einer Karte verschickt das System eine E-Mail-Bestätigung an den Antragsstellenden mit einem Link zur Vorab-Aktivierung'
+        label={t('activatedForCardConfirmationMail')}
       />
       <ButtonContainer>
         <Button
-          text='Speichern'
+          text={t('save')}
           intent='primary'
           onClick={() => onSave(activatedForApplication, activatedForCardConfirmationMail)}
           loading={loading}

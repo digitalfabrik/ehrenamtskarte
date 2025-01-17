@@ -1,5 +1,6 @@
 import { NonIdealState } from '@blueprintjs/core'
 import React, { ReactElement, useContext } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { WhoAmIContext } from '../../WhoAmIProvider'
 import { Region, useGetApplicationsQuery } from '../../generated/graphql'
@@ -20,15 +21,10 @@ const ApplicationsController = ({ region }: { region: Region }) => {
 
 const ControllerWithRegion = (): ReactElement => {
   const region = useContext(WhoAmIContext).me!.region
+  const { t } = useTranslation('errors')
 
   if (!region) {
-    return (
-      <NonIdealState
-        icon='cross'
-        title='Fehlende Berechtigung'
-        description='Sie sind nicht berechtigt, Anträge einzusehen.'
-      />
-    )
+    return <NonIdealState icon='cross' title={t('notAuthorized')} description={t('notAuthorizedToSeeApplications')} />
   }
   return <ApplicationsController region={region} />
 }

@@ -1,5 +1,6 @@
 import { Button, Checkbox, H2 } from '@blueprintjs/core'
 import React, { ReactElement, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import getMessageFromApolloError from '../../errors/getMessageFromApolloError'
 import { useGetNotificationSettingsQuery, useUpdateNotificationSettingsMutation } from '../../generated/graphql'
@@ -12,6 +13,7 @@ type NotificationSettingsProps = {
 }
 
 const NotificationSettings = ({ projectId }: NotificationSettingsProps): ReactElement => {
+  const { t } = useTranslation('userSettings')
   const [receiveEmailForActivation, setReceiveEmailForActivation] = useState<boolean>(false)
   const [receiveEmailForVerification, setReceiveEmailForVerification] = useState<boolean>(false)
 
@@ -21,8 +23,7 @@ const NotificationSettings = ({ projectId }: NotificationSettingsProps): ReactEl
       const { title } = getMessageFromApolloError(error)
       appToaster?.show({ intent: 'danger', message: title })
     },
-    onCompleted: () =>
-      appToaster?.show({ intent: 'success', message: 'Benachrichtigungseinstellungen erfolgreich aktualisiert.' }),
+    onCompleted: () => appToaster?.show({ intent: 'success', message: t('notificationUpdateSuccess') }),
   })
 
   const notificationSettingsQuery = useGetNotificationSettingsQuery({ variables: { project: projectId } })
@@ -56,8 +57,8 @@ const NotificationSettings = ({ projectId }: NotificationSettingsProps): ReactEl
 
   return (
     <SettingsCard>
-      <H2>Benachrichtigungen</H2>
-      <p>Wählen Sie aus, für welche Aktivitäten Sie eine E-Mail erhalten möchten.</p>
+      <H2>{t('notifications')}</H2>
+      <p>{t('notificationsExplanation')}</p>
       <form
         onSubmit={event => {
           event.preventDefault()
@@ -66,15 +67,15 @@ const NotificationSettings = ({ projectId }: NotificationSettingsProps): ReactEl
         <Checkbox
           checked={receiveEmailForActivation}
           onChange={e => setReceiveEmailForActivation(e.currentTarget.checked)}
-          label='Neue Anträge'
+          label={t('newApplications')}
         />
         <Checkbox
           checked={receiveEmailForVerification}
           onChange={e => setReceiveEmailForVerification(e.currentTarget.checked)}
-          label='Antragsverifizierungen'
+          label={t('newVerifications')}
         />
         <div style={{ textAlign: 'right', padding: '10px 0' }}>
-          <Button text='Speichern' intent='primary' type='submit' loading={loading} />
+          <Button text={t('save')} intent='primary' type='submit' loading={loading} />
         </div>
       </form>
     </SettingsCard>

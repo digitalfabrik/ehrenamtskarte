@@ -1,5 +1,6 @@
 import { ApolloError } from '@apollo/client'
 import React, { useCallback, useContext, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useSearchParams } from 'react-router-dom'
 
 import { Card, generateCardInfo, initializeCardFromCSV } from '../../../cards/Card'
@@ -37,6 +38,7 @@ type UseCardGeneratorSelfServiceReturn = {
 const useCardGeneratorSelfService = (): UseCardGeneratorSelfServiceReturn => {
   const projectConfig = useContext(ProjectConfigContext)
   const appToaster = useAppToaster()
+  const { t } = useTranslation('errors')
   const [searchParams] = useSearchParams()
   const [selfServiceCard, setSelfServiceCard] = useState(() => {
     const headers = getCsvHeaders(projectConfig)
@@ -66,14 +68,14 @@ const useCardGeneratorSelfService = (): UseCardGeneratorSelfServiceReturn => {
         })
       } else {
         appToaster?.show({
-          message: 'Unbekannter Fehler: Etwas ist schiefgegangen.',
+          message: t('unknown'),
           intent: 'danger',
         })
       }
       setSelfServiceState(CardSelfServiceStep.form)
       setIsLoading(false)
     },
-    [appToaster, setSelfServiceState]
+    [appToaster, setSelfServiceState, t]
   )
 
   const generateCards = useCallback(async (): Promise<void> => {
@@ -94,7 +96,7 @@ const useCardGeneratorSelfService = (): UseCardGeneratorSelfServiceReturn => {
         return Promise.reject(new CreateCardsError(title))
       }
       if (!result.data) {
-        return Promise.reject(new CreateCardsError('Beim Erstellen der Karte(n) ist ein Fehler aufgetreten.'))
+        return Promise.reject(new CreateCardsError(t('cardCreationFailed')))
       }
       const cardResult = result.data.card
       const dynamicActivationCode = DynamicActivationCode.fromBinary(
@@ -122,7 +124,7 @@ const useCardGeneratorSelfService = (): UseCardGeneratorSelfServiceReturn => {
     } catch (error) {
       handleErrors(error)
     }
-  }, [projectConfig, setIsLoading, setDeepLink, setCode, createCardsSelfService, handleErrors, selfServiceCard])
+  }, [projectConfig, setIsLoading, setDeepLink, setCode, createCardsSelfService, handleErrors, selfServiceCard, t])
 
   const downloadPdf = async (code: CreateCardsResult, fileName: string): Promise<void> => {
     const blob = await generatePdf([code], [selfServiceCard], projectConfig.pdf)

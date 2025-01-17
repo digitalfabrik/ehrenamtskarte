@@ -1,8 +1,8 @@
 import { stringify } from 'csv-stringify/browser/esm/sync'
+import i18next from 'i18next'
 
 import { CardStatisticsResultModel, Region } from '../../generated/graphql'
 import { CardStatistics } from '../../project-configs/getProjectConfig'
-import { statisticKeyLabels } from './constants'
 
 export class CsvStatisticsError extends Error {
   constructor(message: string) {
@@ -21,7 +21,7 @@ export const generateCsv = (statistics: CardStatisticsResultModel[], cardStatist
   if (statistics.length === 0) {
     throw new CsvStatisticsError('There is no data available to create a csv file')
   }
-  const header = Object.keys(statistics[0]).map(it => statisticKeyLabels.get(it))
+  const header = Object.keys(statistics[0]).map(it => i18next.t(`statistics:${it}`))
   let csvContent = stringify([header])
   try {
     statistics.forEach(element => {

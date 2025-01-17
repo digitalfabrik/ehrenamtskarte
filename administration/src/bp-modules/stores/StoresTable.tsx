@@ -1,6 +1,7 @@
 import { Cell, Column, Table2, TruncatedFormat } from '@blueprintjs/table'
 import '@blueprintjs/table/lib/css/table.css'
 import React, { ReactElement, useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { StoresFieldConfig } from '../../project-configs/getProjectConfig'
@@ -24,6 +25,7 @@ type CardImportTableProps = {
 }
 
 const StoresTable = ({ fields, acceptingStores }: CardImportTableProps): ReactElement => {
+  const { t } = useTranslation('stores')
   const headers = fields.map(field => field.name)
   const cellRenderer = useCallback(
     (rowIndex: number, columnIndex: number) => {
@@ -36,7 +38,7 @@ const StoresTable = ({ fields, acceptingStores }: CardImportTableProps): ReactEl
         <StyledCell
           wrapText
           key={`${rowIndex}-${columnIndex}`}
-          tooltip={valid ? undefined : 'Validierungsfehler'}
+          tooltip={valid ? undefined : t('validationError')}
           intent={valid ? 'none' : 'danger'}>
           <TruncatedFormat detectTruncation preformatted>
             {/* This is necessary, can be removed once "noUncheckedIndexedAccess" is enabled in tsconfig  */}
@@ -46,7 +48,7 @@ const StoresTable = ({ fields, acceptingStores }: CardImportTableProps): ReactEl
         </StyledCell>
       )
     },
-    [acceptingStores, fields, headers]
+    [acceptingStores, fields, headers, t]
   )
 
   return (

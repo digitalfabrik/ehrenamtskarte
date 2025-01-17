@@ -2,6 +2,7 @@ import { Checkbox, FormGroup, InputGroup, Intent } from '@blueprintjs/core'
 import InfoOutlined from '@mui/icons-material/InfoOutlined'
 import { styled } from '@mui/material'
 import React, { ReactElement, useContext, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useSearchParams } from 'react-router-dom'
 
 import { Card, getFullNameValidationErrorMessage, isFullNameValid, isValid } from '../../cards/Card'
@@ -45,6 +46,7 @@ const CardSelfServiceForm = ({
 }: CardSelfServiceFormProps): ReactElement => {
   const { viewportSmall } = useWindowDimensions()
   const projectConfig = useContext(ProjectConfigContext)
+  const { t } = useTranslation('selfService')
   const [formSendAttempt, setFormSendAttempt] = useState(false)
   const [touchedFullName, setTouchedFullName] = useState(false)
   const [openDataPrivacy, setOpenDataPrivacy] = useState<boolean>(false)
@@ -61,9 +63,7 @@ const CardSelfServiceForm = ({
     }
     if (!cardValid || dataPrivacyAccepted !== DataPrivacyAcceptingStatus.accepted) {
       appToaster?.show({
-        message: (
-          <FormErrorMessage style={{ color: 'white' }} errorMessage='Mindestens eine Ihrer Angaben ist ungültig.' />
-        ),
+        message: <FormErrorMessage style={{ color: 'white' }} errorMessage={t('atLeastOneInputIsInvalid')} />,
         timeout: 0,
         intent: 'danger',
       })
@@ -76,7 +76,7 @@ const CardSelfServiceForm = ({
   return (
     <>
       <Container key={card.id}>
-        <FormGroup label='Vorname Name'>
+        <FormGroup label={t('firstNameLastName')}>
           <InputGroup
             large={viewportSmall}
             placeholder='Erika Musterfrau'
@@ -98,7 +98,7 @@ const CardSelfServiceForm = ({
         <ExtensionForms card={card} updateCard={updateCard} showRequired={formSendAttempt} />
         <IconTextButton onClick={() => setOpenReferenceInformation(true)}>
           <InfoOutlined />
-          Wo finde ich das Aktenzeichen?
+          {t('whereToFindReferenceNumber')}
         </IconTextButton>
         <StyledCheckbox
           checked={dataPrivacyAccepted === DataPrivacyAcceptingStatus.accepted}
@@ -109,30 +109,33 @@ const CardSelfServiceForm = ({
                 : DataPrivacyAcceptingStatus.accepted
             )
           }>
-          Ich akzeptiere die{' '}
-          <UnderlineTextButton onClick={() => setOpenDataPrivacy(true)}>Datenschutzerklärung</UnderlineTextButton>.
+          {t('iAccept')}
+          <UnderlineTextButton onClick={() => setOpenDataPrivacy(true)}>
+            {t('datePrivacyAgreement')}
+          </UnderlineTextButton>
+          .
         </StyledCheckbox>
         {dataPrivacyAccepted === DataPrivacyAcceptingStatus.denied && (
-          <FormErrorMessage errorMessage='Bitte akzeptieren sie die Datenschutzerklärung' />
+          <FormErrorMessage errorMessage={t('pleaseAcceptPrivacyPolicy')} />
         )}
       </Container>
       <ActionButton onClick={createKoblenzPass} variant='contained' size='large'>
-        KoblenzPass erstellen
+        {t('createKoblenzPass')}
       </ActionButton>
       <BasicDialog
         open={openReferenceInformation}
         maxWidth='lg'
         onUpdateOpen={setOpenReferenceInformation}
-        title='Wo finde ich das Aktenzeichen?'
+        title={t('whereToFindReferenceNumber')}
         content={
           <>
-            Das Aktenzeichen finden Sie meist oben rechts auf dem postalischen Bescheid. <br />
-            Weitere Informationen und Beispiele finden Sie unter{' '}
+            {t('whereToFindReferenceNumberExplanation')} <br />
+            {t('moreInformationAndExamples')}
             <a href='https://www.koblenz.de/koblenzpass' target='_blank' rel='noreferrer'>
               www.koblenz.de/koblenzpass
             </a>
             . <br />
-            <br /> Bei Fragen dazu kontaktieren Sie uns bitte via{' '}
+            <br /> {t('forQuestionsPleaseContact')}
             <a href='mailto:koblenzpass@stadt.koblenz.de'>koblenzpass@stadt.koblenz.de</a>.
           </>
         }

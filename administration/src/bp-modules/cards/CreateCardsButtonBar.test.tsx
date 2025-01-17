@@ -5,6 +5,7 @@ import { initializeCard } from '../../cards/Card'
 import { Region } from '../../generated/graphql'
 import { ProjectConfigProvider } from '../../project-configs/ProjectConfigContext'
 import bayernConfig from '../../project-configs/bayern/config'
+import { renderWithTranslation } from '../../testing/render'
 import CreateCardsButtonBar from './CreateCardsButtonBar'
 
 jest.useFakeTimers()
@@ -44,7 +45,7 @@ describe('CreateCardsButtonBar', () => {
   it('Should disable generate button for no cards', async () => {
     const generateCardsPdf = jest.fn()
     const generateCardsCsv = jest.fn()
-    const { getByText } = render(
+    const { getByText } = renderWithTranslation(
       <CreateCardsButtonBar
         goBack={() => undefined}
         cards={[]}
@@ -72,7 +73,7 @@ describe('CreateCardsButtonBar', () => {
     const generateCardsPdf = jest.fn()
     const generateCardsCsv = jest.fn()
     const cards = [initializeCard(bayernConfig.card, region, { fullName: '' })]
-    const { getByText } = render(
+    const { getByText } = renderWithTranslation(
       <CreateCardsButtonBar
         goBack={() => undefined}
         cards={cards}

@@ -1,5 +1,6 @@
 import { NonIdealState } from '@blueprintjs/core'
 import React, { ReactElement, useContext } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { WhoAmIContext } from '../../WhoAmIProvider'
 import {
@@ -60,6 +61,7 @@ const ViewRegionStatistics = ({ region }: { region: Region }) => {
 const StatisticsController = (): ReactElement => {
   const { role, region } = useContext(WhoAmIContext).me!
   const { cardStatistics } = useContext(ProjectConfigContext)
+  const { t } = useTranslation('errors')
 
   if (role === Role.RegionAdmin && region && cardStatistics.enabled) {
     return <ViewRegionStatistics region={region} />
@@ -67,12 +69,6 @@ const StatisticsController = (): ReactElement => {
   if (role === Role.ProjectAdmin && cardStatistics.enabled) {
     return <ViewProjectStatistics />
   }
-  return (
-    <NonIdealState
-      icon='cross'
-      title='Fehlende Berechtigung'
-      description='Sie sind nicht berechtigt, Statistiken einzusehen.'
-    />
-  )
+  return <NonIdealState icon='cross' title={t('notAuthorized')} description={t('notAuthorizedToSeeStatistics')} />
 }
 export default StatisticsController

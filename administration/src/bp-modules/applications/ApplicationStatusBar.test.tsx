@@ -1,6 +1,6 @@
-import { render } from '@testing-library/react'
 import React from 'react'
 
+import { renderWithTranslation } from '../../testing/render'
 import ApplicationStatusBar from './ApplicationStatusBar'
 import { Application } from './ApplicationsOverview'
 import { barItems } from './constants'
@@ -71,7 +71,7 @@ const applications: Application[] = [
 describe('ApplicationStatusBar', () => {
   const setActiveBarItem = jest.fn()
   it('Should show the correct count for all applications', () => {
-    const { getByTestId } = render(
+    const { getByTestId } = renderWithTranslation(
       <ApplicationStatusBar
         applications={applications}
         setActiveBarItem={setActiveBarItem}
@@ -84,7 +84,7 @@ describe('ApplicationStatusBar', () => {
     expect(allApplicationsCount).toHaveTextContent('4')
   })
   it('Should show the correct count for open applications', () => {
-    const { getByTestId } = render(
+    const { getByTestId } = renderWithTranslation(
       <ApplicationStatusBar
         applications={applications}
         setActiveBarItem={setActiveBarItem}
@@ -97,7 +97,7 @@ describe('ApplicationStatusBar', () => {
     expect(openApplicationsCount).toHaveTextContent('1')
   })
   it('Should show the correct count for withdrawed applications', () => {
-    const { getByTestId } = render(
+    const { getByTestId } = renderWithTranslation(
       <ApplicationStatusBar
         applications={applications}
         setActiveBarItem={setActiveBarItem}
@@ -110,7 +110,7 @@ describe('ApplicationStatusBar', () => {
     expect(withdrawedApplicationsCount).toHaveTextContent('1')
   })
   it('Should show the correct count for rejected applications', () => {
-    const { getByTestId } = render(
+    const { getByTestId } = renderWithTranslation(
       <ApplicationStatusBar
         applications={applications}
         setActiveBarItem={setActiveBarItem}
@@ -123,7 +123,7 @@ describe('ApplicationStatusBar', () => {
     expect(rejectedApplicationsCount).toHaveTextContent('0')
   })
   it('Should show the correct count for accepted applications', () => {
-    const { getByTestId } = render(
+    const { getByTestId } = renderWithTranslation(
       <ApplicationStatusBar
         applications={applications}
         setActiveBarItem={setActiveBarItem}

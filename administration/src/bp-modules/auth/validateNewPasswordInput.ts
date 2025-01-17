@@ -1,3 +1,5 @@
+import { TFunction } from 'i18next'
+
 const isUpperCase = (value: string) => value === value.toUpperCase() && value !== value.toLowerCase()
 
 const isLowerCase = (value: string) => value === value.toLowerCase() && value !== value.toUpperCase()
@@ -10,21 +12,28 @@ const getNumChars = (value: string, predicate: (char: string) => boolean): numbe
   value.split('').filter(predicate).length
 const minPasswordLength = 12
 
-const validateNewPasswordInput = (newPassword: string, repeatNewPassword: string): string | null => {
+const validateNewPasswordInput = (
+  newPassword: string,
+  repeatNewPassword: string,
+  t: TFunction<'auth', undefined>
+): string | null => {
   if (newPassword.length < minPasswordLength) {
-    return `Ihr Passwort muss mindestens ${minPasswordLength} Zeichen lang sein (aktuell ${newPassword.length}).`
+    return t('passwordValidationNeedsLength', {
+      minPasswordLength,
+      currentPasswordLength: newPassword.length,
+    })
   }
   if (getNumChars(newPassword, isLowerCase) < 1) {
-    return 'Ihr Passwort muss mindestens einen Kleinbuchstaben enthalten.'
+    return t('passwordValidationNeedsLowerCaseLetter')
   }
   if (getNumChars(newPassword, isUpperCase) < 1) {
-    return 'Ihr Passwort muss mindestens einen Großbuchstaben enthalten.'
+    return t('passwordValidationNeedsUpperCaseLetter')
   }
   if (getNumChars(newPassword, isSpecialChar) < 1) {
-    return 'Ihr Passwort muss mindestens ein Sonderzeichen enthalten.'
+    return t('passwordValidationNeedsSpecialCharacter')
   }
   if (newPassword !== repeatNewPassword) {
-    return 'Die Passwörter stimmen nicht überein.'
+    return t('passwordValidationMustBeEqual')
   }
   return null
 }

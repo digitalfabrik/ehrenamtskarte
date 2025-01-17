@@ -1,5 +1,6 @@
 import { NonIdealState, Spinner } from '@blueprintjs/core'
 import React, { ReactElement, useContext, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -95,14 +96,9 @@ const StoresImport = ({ fields }: StoreImportProps): ReactElement => {
 const StoresImportController = (): ReactElement => {
   const { role } = useContext(WhoAmIContext).me!
   const storesManagement = useContext(ProjectConfigContext).storesManagement
+  const { t } = useTranslation('errors')
   if (role !== Role.ProjectStoreManager || !storesManagement.enabled) {
-    return (
-      <NonIdealState
-        icon='cross'
-        title='Fehlende Berechtigung'
-        description='Sie sind nicht berechtigt, Akzeptanzpartner zu verwalten.'
-      />
-    )
+    return <NonIdealState icon='cross' title={t('notAuthorized')} description={t('notAuthorizedToManageStores')} />
   }
 
   return <StoresImport fields={storesManagement.fields} />

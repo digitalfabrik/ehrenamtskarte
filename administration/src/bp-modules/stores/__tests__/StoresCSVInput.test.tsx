@@ -1,11 +1,12 @@
 import { OverlayToaster } from '@blueprintjs/core'
-import { fireEvent, render, waitFor } from '@testing-library/react'
+import { fireEvent, waitFor } from '@testing-library/react'
 import { parse } from 'csv-parse/browser/esm/sync'
 import { mocked } from 'jest-mock'
 import React, { ReactNode } from 'react'
 
 import { ProjectConfigProvider } from '../../../project-configs/ProjectConfigContext'
 import nuernbergConfig from '../../../project-configs/nuernberg/config'
+import { renderWithTranslation } from '../../../testing/render'
 import { AppToasterProvider } from '../../AppToaster'
 import StoresCSVInput, { DEFAULT_ERROR_TIMEOUT } from '../StoresCSVInput'
 import StoresImportDuplicates from '../StoresImportDuplicates'
@@ -38,7 +39,7 @@ describe('StoresCSVInput', () => {
     jest.spyOn(global, 'FileReader').mockReturnValue(fileReaderMock)
     const file = new File([csv], 'Stores.csv', { type: 'text/csv' })
     const fields = nuernbergConfig.storesManagement.enabled ? nuernbergConfig.storesManagement.fields : []
-    const { getByTestId } = render(
+    const { getByTestId } = renderWithTranslation(
       <StoresCSVInput
         setAcceptingStores={setAcceptingStores}
         fields={fields}

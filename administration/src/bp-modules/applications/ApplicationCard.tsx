@@ -11,6 +11,7 @@ import {
   Tooltip,
 } from '@blueprintjs/core'
 import React, { ReactElement, memo, useContext, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 
 import getMessageFromApolloError from '../../errors/getMessageFromApolloError'
@@ -164,6 +165,7 @@ const ApplicationCard = ({
   onChange,
 }: ApplicationCardProps) => {
   const [isExpanded, setIsExpanded] = useState(false)
+  const { t } = useTranslation('applications')
   const { createdDate: createdDateString, jsonValue, id, withdrawalDate, cardCreated } = application
   const jsonField: JsonField<'Array'> = JSON.parse(jsonValue)
   const config = useContext(ProjectConfigContext)
@@ -181,7 +183,7 @@ const ApplicationCard = ({
         onDelete()
       } else {
         console.error('Delete operation returned false.')
-        appToaster?.show({ intent: 'danger', message: 'Etwas ist schief gelaufen.' })
+        appToaster?.show({ intent: 'danger', message: t('errors:unknown') })
       }
     },
   })
@@ -200,10 +202,12 @@ const ApplicationCard = ({
     <ApplicationViewCard
       title={
         <div>
-          <Title>Antrag vom {formatDateWithTimezone(createdDateString, config.timezone)}&emsp;</Title>{' '}
+          <Title>
+            {t('applicationFrom')} {formatDateWithTimezone(createdDateString, config.timezone)}&emsp;
+          </Title>{' '}
           {personalData && personalData.forenames !== undefined && personalData.surname !== undefined && (
             <CardContentHint>
-              Name: {personalData.surname}, {personalData.forenames}
+              {t('name')}: {personalData.surname}, {personalData.forenames}
             </CardContentHint>
           )}
         </div>
@@ -225,9 +229,9 @@ const ApplicationCard = ({
 
           {!!withdrawalDate && (
             <WithdrawAlert intent='warning'>
-              Der Antrag wurde vom Antragsteller am {formatDateWithTimezone(withdrawalDate, config.timezone)}{' '}
-              zurückgezogen. <br />
-              Bitte löschen Sie den Antrag zeitnah.
+              {t('withdrawalMessage', { withdrawalDate: formatDateWithTimezone(withdrawalDate, config.timezone) })}
+              <br />
+              {t('deleteApplicationSoonPrompt')}
             </WithdrawAlert>
           )}
         </SectionCardHeader>
@@ -245,35 +249,33 @@ const ApplicationCard = ({
       </SectionCard>
       <SectionCard>
         <ButtonContainer>
-          <Tooltip
-            disabled={!!createCardQuery}
-            content='Es existiert kein passendes Mapping, um aus diesem Antrag das Kartenformular vollständig auszufüllen.'>
+          <Tooltip disabled={!!createCardQuery} content={t('incompleteMappingTooltip')}>
             <PrintAwareAnchorButton
               disabled={!createCardQuery}
               href={createCardQuery ? `./cards/add${createCardQuery}` : undefined}
               icon='id-number'
               intent='primary'>
-              {cardCreated ? 'Karte erneut erstellen' : 'Karte erstellen'}
+              {cardCreated ? t('createCardAgain') : t('createCard')}
             </PrintAwareAnchorButton>
           </Tooltip>
           <PrintAwareButton onClick={() => setDeleteDialogOpen(true)} intent='danger' icon='trash'>
-            Antrag löschen
+            {t('deleteApplication')}
           </PrintAwareButton>
           <PrintAwareButton onClick={() => printApplicationById(id)} intent='none' icon='print'>
-            PDF exportieren
+            {t('exportPdf')}
           </PrintAwareButton>
           <CollapseIcon icon='chevron-up' onClick={() => setIsExpanded(!isExpanded)} style={{ marginLeft: 'auto' }} />
         </ButtonContainer>
         <Alert
-          cancelButtonText='Abbrechen'
-          confirmButtonText='Antrag löschen'
+          cancelButtonText={t('cancel')}
+          confirmButtonText={t('deleteApplication')}
           icon='trash'
           intent='danger'
           isOpen={deleteDialogOpen}
           loading={loading}
           onCancel={() => setDeleteDialogOpen(false)}
           onConfirm={() => deleteApplication({ variables: { applicationId: application.id } })}>
-          <p>Möchten Sie den Antrag unwiderruflich löschen?</p>
+          <p>{t('deleteApplicationConfirmationPrompt')}</p>
         </Alert>
       </SectionCard>
     </ApplicationViewCard>

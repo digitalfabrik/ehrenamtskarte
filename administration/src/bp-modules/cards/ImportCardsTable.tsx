@@ -1,6 +1,7 @@
 import { Cell, Column, Table2, TruncatedFormat } from '@blueprintjs/table'
 import '@blueprintjs/table/lib/css/table.css'
 import React, { ReactElement, useCallback, useContext } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { Card, getValueByCSVHeader, isValueValid } from '../../cards/Card'
@@ -28,6 +29,7 @@ const CardImportTable = ({ cards }: CardImportTableProps): ReactElement => {
   const projectConfig = useContext(ProjectConfigContext)
   const { card: cardConfig } = projectConfig
   const csvHeaders = getCsvHeaders(projectConfig)
+  const { t } = useTranslation('cards')
 
   const cellRenderer = useCallback(
     (rowIndex: number, columnIndex: number) => {
@@ -39,7 +41,7 @@ const CardImportTable = ({ cards }: CardImportTableProps): ReactElement => {
         <StyledCell
           wrapText
           key={`${rowIndex}-${columnIndex}`}
-          tooltip={!valid ? 'Validierungsfehler' : undefined}
+          tooltip={!valid ? t('validationError') : undefined}
           intent={!valid ? 'danger' : 'none'}>
           <TruncatedFormat detectTruncation preformatted>
             {value?.toString() || '-'}
@@ -47,7 +49,7 @@ const CardImportTable = ({ cards }: CardImportTableProps): ReactElement => {
         </StyledCell>
       )
     },
-    [cardConfig, cards, csvHeaders]
+    [cardConfig, cards, csvHeaders, t]
   )
 
   return (

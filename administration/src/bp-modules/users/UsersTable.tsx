@@ -1,5 +1,7 @@
 import { Button } from '@blueprintjs/core'
+import i18next from 'i18next'
 import React, { ReactElement, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { Administrator, Region, Role } from '../../generated/graphql'
@@ -33,17 +35,17 @@ const StyledTable = styled.table`
 export const roleToText = (role: Role): string => {
   switch (role) {
     case Role.NoRights:
-      return 'Keine'
+      return i18next.t('users:noRights')
     case Role.ProjectAdmin:
-      return 'Administrator'
+      return i18next.t('users:projectAdmin')
     case Role.ProjectStoreManager:
-      return 'Verwaltung Akzeptanzpartner'
+      return i18next.t('users:projectStoreManager')
     case Role.RegionAdmin:
-      return 'Regionsadministrator'
+      return i18next.t('users:regionAdmin')
     case Role.RegionManager:
-      return 'Regionsverwalter'
+      return i18next.t('users:regionManager')
     case Role.ExternalVerifiedApiUser:
-      return 'Externer API-Nutzer'
+      return i18next.t('users:externalVerifiedApiUser')
     default:
       return role
   }
@@ -62,6 +64,7 @@ const UsersTable = ({
   selectedRegionId?: number | null
   refetch: () => void
 }): ReactElement => {
+  const { t } = useTranslation('users')
   const [createUserDialogOpen, setCreateUserDialogOpen] = useState(false)
   const [userInEditDialog, setUserInEditDialog] = useState<Administrator | null>(null)
   const [userInDeleteDialog, setUserInDeleteDialog] = useState<Administrator | null>(null)
@@ -71,10 +74,10 @@ const UsersTable = ({
       <StyledTable>
         <thead>
           <tr>
-            <th>Email-Adresse</th>
-            {selectedRegionId !== null ? null : <th>Region</th>}
+            <th>{t('eMail')}</th>
+            {selectedRegionId !== null ? null : <th>{t('role')}</th>}
             <th>
-              Rolle <RoleHelpButton />
+              {t('role')} <RoleHelpButton />
             </th>
             <th>{/* Action Buttons */}</th>
           </tr>
@@ -86,20 +89,20 @@ const UsersTable = ({
             return (
               <tr key={user.id}>
                 <td>{user.email}</td>
-                {selectedRegionId !== null ? null : <td>{regionName === null ? <i>(Keine)</i> : regionName}</td>}
+                {selectedRegionId !== null ? null : <td>{regionName === null ? <i>({t('none')})</i> : regionName}</td>}
                 <td>{roleToText(user.role)}</td>
                 <td>
                   <Button
                     icon='edit'
                     intent='warning'
-                    text='Bearbeiten'
+                    text={t('edit')}
                     minimal
                     onClick={() => setUserInEditDialog(user)}
                   />
                   <Button
                     icon='trash'
                     intent='danger'
-                    text='Löschen'
+                    text={t('delete')}
                     minimal
                     onClick={() => setUserInDeleteDialog(user)}
                   />
@@ -110,7 +113,7 @@ const UsersTable = ({
         </tbody>
       </StyledTable>
       <div style={{ padding: '16px', textAlign: 'center' }}>
-        <Button intent='success' text='Benutzer hinzufügen' icon='add' onClick={() => setCreateUserDialogOpen(true)} />
+        <Button intent='success' text={t('addUser')} icon='add' onClick={() => setCreateUserDialogOpen(true)} />
         <CreateUserDialog
           isOpen={createUserDialogOpen}
           onClose={() => setCreateUserDialogOpen(false)}

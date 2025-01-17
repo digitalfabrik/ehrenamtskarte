@@ -1,5 +1,6 @@
 import { NonIdealState } from '@blueprintjs/core'
 import React, { ChangeEvent, ReactElement, useCallback, useContext, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -42,6 +43,7 @@ const ImportCardsInput = ({ setCards, region }: ImportCardsInputProps): ReactEle
   const isFreinetFormat = new URLSearchParams(useLocation().search).get(FREINET_PARAM) === 'true'
   const projectConfig = useContext(ProjectConfigContext)
   const csvHeaders = getCsvHeaders(projectConfig)
+  const { t } = useTranslation('cards')
   const [inputState, setInputState] = useState<'loading' | 'error' | 'idle'>('idle')
   const fileInput = useRef<HTMLInputElement>(null)
   const appToaster = useAppToaster()
@@ -69,22 +71,22 @@ const ImportCardsInput = ({ setCards, region }: ImportCardsInputProps): ReactEle
       const numberOfColumns = lines[0]?.length
 
       if (!numberOfColumns) {
-        showInputError('Die gewählte Datei ist leer.')
+        showInputError(t('importFileIsEmpty'))
         return
       }
 
       if (lines.length < 2) {
-        showInputError('Die Datei muss mindestens einen Eintrag enthalten.')
+        showInputError(t('importFileHasNoEntries'))
         return
       }
 
       if (!lines.every(line => line.length === numberOfColumns)) {
-        showInputError('Keine gültige CSV Datei. Nicht jede Reihe enthält gleich viele Elemente.')
+        showInputError(t('importFileInvalidLineLength'))
         return
       }
 
       if (lines.length > ENTRY_LIMIT + 1) {
-        showInputError(`Die Datei hat mehr als ${ENTRY_LIMIT} Einträge.`)
+        showInputError(t('importFileTooManyEntries', { limit: ENTRY_LIMIT }))
         return
       }
 
@@ -94,7 +96,7 @@ const ImportCardsInput = ({ setCards, region }: ImportCardsInputProps): ReactEle
       setCards(cards)
       setInputState('idle')
     },
-    [setCards, showInputError, isFreinetFormat, projectConfig, region]
+    [setCards, showInputError, isFreinetFormat, projectConfig, region, t]
   )
 
   const onInputChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -106,12 +108,12 @@ const ImportCardsInput = ({ setCards, region }: ImportCardsInputProps): ReactEle
 
     const file = event.currentTarget.files[0]
     if (!(file.type in defaultExtensionsByMIMEType)) {
-      showInputError('Die gewählte Datei hat einen unzulässigen Dateityp.')
+      showInputError(t('importFileWrongFormat'))
       return
     }
 
     if (file.size > FILE_SIZE_LIMIT_BYTES) {
-      showInputError('Die ausgewählte Datei ist zu groß.')
+      showInputError(t('importFileTooBig'))
       return
     }
     setInputState('loading')
@@ -120,7 +122,7 @@ const ImportCardsInput = ({ setCards, region }: ImportCardsInputProps): ReactEle
 
   return (
     <InputContainer
-      title='Wählen Sie eine Datei'
+      title={t('selectAFile')}
       icon={<FileInputStateIcon inputState={inputState} />}
       description={<ImportCardsRequirementsText csvHeaders={csvHeaders} isFreinetFormat={isFreinetFormat} />}
       action={

@@ -1,5 +1,7 @@
 import { Alert, Button, Tooltip } from '@blueprintjs/core'
+import { TFunction } from 'i18next'
 import React, { ReactElement, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import ButtonBar from '../ButtonBar'
 import { AcceptingStoresEntry } from './AcceptingStoresEntry'
@@ -13,14 +15,14 @@ type UploadStoresButtonBarProps = {
   setDryRun: (value: boolean) => void
 }
 
-const getToolTipMessage = (hasNoAcceptingStores: boolean, hasInvalidStores: boolean): string => {
+const getToolTipMessage = (hasNoAcceptingStores: boolean, hasInvalidStores: boolean, t: TFunction): string => {
   if (hasNoAcceptingStores) {
-    return 'Laden sie bitte eine Datei mit Akzeptanzpartnern hoch.'
+    return t('hasNoAcceptingStores')
   }
   if (hasInvalidStores) {
-    return 'Fehlerhafte Einträge. Bitte prüfen sie die rot markierten Felder.'
+    return t('hasInvalidStores')
   }
-  return 'Importiere Akzeptanzpartner'
+  return t('importStores')
 }
 
 const StoresButtonBar = ({
@@ -32,6 +34,7 @@ const StoresButtonBar = ({
 }: UploadStoresButtonBarProps): ReactElement => {
   const hasInvalidStores = !acceptingStores.every(store => store.isValid())
   const hasNoAcceptingStores = acceptingStores.length === 0
+  const { t } = useTranslation('stores')
   const [importDialogIsOpen, setImportDialogIsOpen] = useState(false)
   const confirmImportDialog = () => {
     importStores()
@@ -40,23 +43,23 @@ const StoresButtonBar = ({
 
   return (
     <ButtonBar>
-      <Button icon='arrow-left' text='Zurück zur Auswahl' onClick={goBack} />
+      <Button icon='arrow-left' text={t('backToSelection')} onClick={goBack} />
       <Tooltip
         placement='top'
-        content={getToolTipMessage(hasNoAcceptingStores, hasInvalidStores)}
+        content={getToolTipMessage(hasNoAcceptingStores, hasInvalidStores, t)}
         disabled={false}
         openOnTargetFocus={false}>
         <Button
           icon='upload'
-          text='Import Stores'
+          text={t('importStores')}
           intent='success'
           onClick={() => setImportDialogIsOpen(true)}
           disabled={hasNoAcceptingStores || hasInvalidStores}
         />
       </Tooltip>
       <Alert
-        cancelButtonText='Abbrechen'
-        confirmButtonText='Stores importieren'
+        cancelButtonText={t('cancel')}
+        confirmButtonText={t('importStores')}
         icon='upload'
         intent='warning'
         isOpen={importDialogIsOpen}

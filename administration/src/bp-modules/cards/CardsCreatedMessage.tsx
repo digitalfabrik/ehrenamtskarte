@@ -1,5 +1,6 @@
 import { Button, Icon } from '@blueprintjs/core'
 import React, { ReactElement } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 const Container = styled.div`
@@ -17,11 +18,14 @@ type Props = {
   reset: () => void
 }
 
-const CardsCreatedMessage = ({ reset }: Props): ReactElement => (
-  <Container>
-    <Icon icon='tick-circle' color='green' iconSize={100} />
-    <p>Die Karten wurden erstellt.</p>
-    <Button onClick={reset}>Mehr Karten erstellen</Button>
-  </Container>
-)
+const CardsCreatedMessage = ({ reset }: Props): ReactElement => {
+  const { t } = useTranslation('cards')
+  return (
+    <Container>
+      <Icon icon='tick-circle' color='green' iconSize={100} />
+      <p>{t('addCardSuccessMessage')}</p>
+      <Button onClick={reset}>{t('createMoreCards')}</Button>
+    </Container>
+  )
+}
 export default CardsCreatedMessage

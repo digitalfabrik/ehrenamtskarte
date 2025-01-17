@@ -1,5 +1,6 @@
 import { Checkbox } from '@blueprintjs/core'
 import React, { ReactElement } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 const StyledCheckbox = styled(Checkbox)`
@@ -24,33 +25,34 @@ type StoreImportAlertProps = {
 
 const STORES_COUNT_NOTE_THRESHOLD = 500
 const STORES_IMPORT_PER_SECOND = 100
-const StoresImportAlert = ({ dryRun, setDryRun, storesCount }: StoreImportAlertProps): ReactElement => (
-  <>
-    {dryRun ? (
-      <span data-testid='dry-run-alert'>
-        <b>Testlauf:</b> In diesem Testlauf wird nur simuliert, wie viele Akzeptanzpartner geändert oder gelöscht werden
-        würden. Es werden noch keine Änderungen an der Datenbank vorgenommen.
-      </span>
-    ) : (
-      <>
-        <span data-testid='prod-run-alert'>
-          <b>Achtung:</b> Akzeptanzpartner, welche aktuell in der Datenbank gespeichert, aber nicht in der Tabelle
-          vorhanden sind, werden gelöscht!
+const StoresImportAlert = ({ dryRun, setDryRun, storesCount }: StoreImportAlertProps): ReactElement => {
+  const { t } = useTranslation('stores')
+  return (
+    <>
+      {dryRun ? (
+        <span data-testid='dry-run-alert'>
+          <b>{t('dryRun')}:</b> {t('dryRunDescription')}
         </span>
-        <br />
-        {storesCount > STORES_COUNT_NOTE_THRESHOLD && (
-          <DurationContainer data-testid='duration-alert'>
-            <b>Geschätzte Dauer des Imports:</b> {Math.ceil(storesCount / STORES_IMPORT_PER_SECOND / 60)} Minuten.{' '}
-            <br />
-            Bitte schließen sie das Browserfenster nicht!
-          </DurationContainer>
-        )}
-      </>
-    )}
-    <CheckboxContainer>
-      <StyledCheckbox checked={dryRun} onChange={e => setDryRun(e.currentTarget.checked)} label='Testlauf' />
-    </CheckboxContainer>
-  </>
-)
+      ) : (
+        <>
+          <span data-testid='prod-run-alert'>
+            <b>{t('caution')}:</b> {t('cautionDescription')}
+          </span>
+          <br />
+          {storesCount > STORES_COUNT_NOTE_THRESHOLD && (
+            <DurationContainer data-testid='duration-alert'>
+              <b>{t('timeForImport')}:</b> {Math.ceil(storesCount / STORES_IMPORT_PER_SECOND / 60)} {t('minutes')}.{' '}
+              <br />
+              {t('pleaseDoNotCloseTheWindow')}
+            </DurationContainer>
+          )}
+        </>
+      )}
+      <CheckboxContainer>
+        <StyledCheckbox checked={dryRun} onChange={e => setDryRun(e.currentTarget.checked)} label={t('dryRun')} />
+      </CheckboxContainer>
+    </>
+  )
+}
 
 export default StoresImportAlert

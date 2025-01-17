@@ -1,5 +1,6 @@
 import { Button, Callout, Checkbox, Classes, Dialog } from '@blueprintjs/core'
 import React, { ReactElement, useContext } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { AuthContext } from '../../AuthProvider'
 import { WhoAmIContext } from '../../WhoAmIProvider'
@@ -21,6 +22,7 @@ const DeleteUserDialog = ({
   const { signOut } = useContext(AuthContext)
   const actingAdminId = useContext(WhoAmIContext).me?.id
   const { projectId: project } = useContext(ProjectConfigContext)
+  const { t } = useTranslation('users')
 
   const [deleteAdministrator, { loading }] = useDeleteAdministratorMutation({
     onError: error => {
@@ -28,7 +30,7 @@ const DeleteUserDialog = ({
       appToaster?.show({ intent: 'danger', message: title })
     },
     onCompleted: () => {
-      appToaster?.show({ intent: 'success', message: 'Benutzer erfolgreich gelöscht.' })
+      appToaster?.show({ intent: 'success', message: t('deleteUserSuccess') })
       if (selectedUser?.id === actingAdminId) {
         signOut()
       } else {
@@ -39,7 +41,10 @@ const DeleteUserDialog = ({
   })
 
   return (
-    <Dialog title={`Benutzer '${selectedUser?.email}' löschen?`} isOpen={selectedUser !== null} onClose={onClose}>
+    <Dialog
+      title={t('deleteUserConfirmPrompt', { mail: selectedUser?.email })}
+      isOpen={selectedUser !== null}
+      onClose={onClose}>
       <form
         onSubmit={e => {
           e.preventDefault()
@@ -57,17 +62,17 @@ const DeleteUserDialog = ({
           })
         }}>
         <div className={Classes.DIALOG_BODY}>
-          Möchten Sie den Benutzer &apos;{selectedUser?.email}&apos; unwiderruflich löschen?
+          {t('deleteUserIrrevocableConfirmPrompt', { mail: selectedUser?.email })}
           {selectedUser?.id !== actingAdminId ? null : (
             <Callout intent='danger' style={{ marginTop: '16px' }}>
-              <b>Sie löschen Ihr eigenes Konto.</b> Sie werden ausgeloggt und können sich nicht mehr einloggen.
-              <Checkbox required>Ich bestätige, dass ich diesen Warnhinweis gelesen habe.</Checkbox>
+              <b>{t('deleteOwnAccountWarning')}</b> {t('deleteOwnAccountWarningExplanation')}
+              <Checkbox required>{t('ownAccountWarningConfirmation')}</Checkbox>
             </Callout>
           )}
         </div>
         <div className={Classes.DIALOG_FOOTER}>
           <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-            <Button type='submit' intent='danger' text='Benutzer löschen' icon='trash' loading={loading} />
+            <Button type='submit' intent='danger' text={t('deleteUser')} icon='trash' loading={loading} />
           </div>
         </div>
       </form>

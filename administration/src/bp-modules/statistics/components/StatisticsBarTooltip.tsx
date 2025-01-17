@@ -1,9 +1,9 @@
 import { BarTooltipProps } from '@nivo/bar'
 import React, { ReactElement } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { CardStatisticsResultModel } from '../../../generated/graphql'
-import { statisticKeyLabels } from '../constants'
 
 const ToolTipContainer = styled.div`
   background: white;
@@ -27,11 +27,13 @@ const ValueContainer = styled.span`
   margin-left: 4px;
 `
 
-const StatisticsBarTooltip = ({ data, id, color, value }: BarTooltipProps<CardStatisticsResultModel>): ReactElement => (
-  <ToolTipContainer>
-    <ColorContainer color={color} /> {statisticKeyLabels.get(id.toString())} - {data.region}:{' '}
-    <ValueContainer>{value}</ValueContainer>
-  </ToolTipContainer>
-)
+const StatisticsBarTooltip = ({ data, id, color, value }: BarTooltipProps<CardStatisticsResultModel>): ReactElement => {
+  const { t } = useTranslation('statistics')
+  return (
+    <ToolTipContainer>
+      <ColorContainer color={color} /> {t(id.toString())} - {data.region}: <ValueContainer>{value}</ValueContainer>
+    </ToolTipContainer>
+  )
+}
 
 export default StatisticsBarTooltip

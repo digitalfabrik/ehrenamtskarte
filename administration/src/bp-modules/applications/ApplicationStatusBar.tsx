@@ -1,4 +1,5 @@
 import React, { ReactElement } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import ApplicationStatusHelpButton from './ApplicationStatusBarHelpButton'
@@ -60,22 +61,25 @@ const ApplicationStatusBar = ({
   activeBarItem,
   barItems,
   setActiveBarItem,
-}: ApplicationStatusBarProps): ReactElement => (
-  <Container>
-    <Title>Status</Title>
-    <ApplicationStatusHelpButton />
-    <BarItemContainer>
-      {barItems.map(item => (
-        <ApplicationStatusBarItem
-          key={item.title}
-          count={getApplicationCount(applications, item.status)}
-          item={item}
-          setActiveBarItem={setActiveBarItem}
-          active={item === activeBarItem}
-        />
-      ))}
-    </BarItemContainer>
-  </Container>
-)
+}: ApplicationStatusBarProps): ReactElement => {
+  const { t } = useTranslation('applications')
+  return (
+    <Container>
+      <Title>{t('status')}</Title>
+      <ApplicationStatusHelpButton />
+      <BarItemContainer>
+        {barItems.map(item => (
+          <ApplicationStatusBarItem
+            key={item.title}
+            count={getApplicationCount(applications, item.status)}
+            item={item}
+            setActiveBarItem={setActiveBarItem}
+            active={item === activeBarItem}
+          />
+        ))}
+      </BarItemContainer>
+    </Container>
+  )
+}
 
 export default ApplicationStatusBar

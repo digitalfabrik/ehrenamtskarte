@@ -1,5 +1,6 @@
 import { Button, H3, TextArea, Tooltip } from '@blueprintjs/core'
 import React, { ReactElement, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -42,13 +43,14 @@ const MAX_CHARS = 20000
 const DataPrivacyOverview = ({ dataPrivacyPolicy, regionId }: RegionOverviewProps): ReactElement => {
   const navigate = useNavigate()
   const appToaster = useAppToaster()
+  const { t } = useTranslation('regionSettings')
   const [dataPrivacyText, setDataPrivacyText] = useState<string>(dataPrivacyPolicy)
   const [updateDataPrivacy, { loading }] = useUpdateDataPolicyMutation({
     onError: error => {
       const { title } = getMessageFromApolloError(error)
       appToaster?.show({ intent: 'danger', message: title })
     },
-    onCompleted: () => appToaster?.show({ intent: 'success', message: 'Datenschutzerklärung erfolgreich geändert.' }),
+    onCompleted: () => appToaster?.show({ intent: 'success', message: t('dataPrivacyChangeSuccessful') }),
   })
   const maxCharsExceeded = dataPrivacyText.length > MAX_CHARS
 
@@ -62,26 +64,26 @@ const DataPrivacyOverview = ({ dataPrivacyPolicy, regionId }: RegionOverviewProp
   return (
     <>
       <Content>
-        <Label>Datenschutzerklärung</Label>
+        <Label>{t('dataPrivacy')}</Label>
         <TextArea
           fill
           onChange={e => setDataPrivacyText(e.target.value)}
           value={dataPrivacyText}
           large
           rows={20}
-          placeholder='Fügen Sie hier Ihre Datenschutzerklärung ein...'
+          placeholder={t('dataPrivacyPlaceholder')}
         />
         <CharCounter $hasError={maxCharsExceeded}>
           {dataPrivacyText.length}/{MAX_CHARS}
         </CharCounter>
       </Content>
       <ButtonBar>
-        <Button icon='arrow-left' text='Zurück' onClick={() => navigate(-1)} />
+        <Button icon='arrow-left' text={t('back')} onClick={() => navigate(-1)} />
         <Tooltip disabled={!maxCharsExceeded} content={errorMessage}>
           <Button
             disabled={maxCharsExceeded}
             icon='floppy-disk'
-            text='Speichern'
+            text={t('save')}
             intent='success'
             onClick={onSave}
             loading={loading}

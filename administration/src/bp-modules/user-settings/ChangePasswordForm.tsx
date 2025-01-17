@@ -1,5 +1,6 @@
 import { Button, Callout, H2 } from '@blueprintjs/core'
 import React, { ReactElement, useContext, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { WhoAmIContext } from '../../WhoAmIProvider'
 import getMessageFromApolloError from '../../errors/getMessageFromApolloError'
@@ -11,6 +12,8 @@ import validatePasswordInput from '../auth/validateNewPasswordInput'
 import SettingsCard from './SettingsCard'
 
 const ChangePasswordForm = (): ReactElement => {
+  const { t: tAuth } = useTranslation('auth')
+  const { t } = useTranslation('userSettings')
   const [currentPassword, setCurrentPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
   const [repeatNewPassword, setRepeatNewPassword] = useState('')
@@ -24,7 +27,7 @@ const ChangePasswordForm = (): ReactElement => {
     onCompleted: () => {
       appToaster?.show({
         intent: 'success',
-        message: 'Passwort erfolgreich geändert.',
+        message: t('passwordChangeSuccessful'),
       })
       setCurrentPassword('')
       setNewPassword('')
@@ -37,7 +40,7 @@ const ChangePasswordForm = (): ReactElement => {
 
   const isDirty = newPassword !== '' || repeatNewPassword !== ''
 
-  const warnMessage = isDirty ? validatePasswordInput(newPassword, repeatNewPassword) : null
+  const warnMessage = isDirty ? validatePasswordInput(newPassword, repeatNewPassword, tAuth) : null
 
   const valid = warnMessage === null
 
@@ -53,22 +56,19 @@ const ChangePasswordForm = (): ReactElement => {
 
   return (
     <SettingsCard>
-      <H2>Passwort ändern</H2>
-      <p>
-        Ein gültiges Passwort ist mindestens zwölf Zeichen lang, enthält mindestens einen Klein- und einen
-        Großbuchstaben sowie mindestens ein Sonderzeichen.
-      </p>
+      <H2>{t('changePassword')}</H2>
+      <p>{t('changePasswordExplanation')}</p>
       <form
         onSubmit={event => {
           event.preventDefault()
           submit()
         }}>
-        <PasswordInput label='Aktuelles Passwort' value={currentPassword} setValue={setCurrentPassword} />
-        <PasswordInput label='Neues Passwort' value={newPassword} setValue={setNewPassword} />
-        <PasswordInput label='Neues Passwort bestätigen' value={repeatNewPassword} setValue={setRepeatNewPassword} />
+        <PasswordInput label={t('currentPassword')} value={currentPassword} setValue={setCurrentPassword} />
+        <PasswordInput label={t('newPassword')} value={newPassword} setValue={setNewPassword} />
+        <PasswordInput label={t('newPasswordConfirm')} value={repeatNewPassword} setValue={setRepeatNewPassword} />
         {warnMessage === null ? null : <Callout intent='danger'>{warnMessage}</Callout>}
         <div style={{ textAlign: 'right', padding: '10px 0' }}>
-          <Button text='Passwort ändern' intent='primary' type='submit' disabled={!valid} loading={loading} />
+          <Button text={t('changePassword')} intent='primary' type='submit' disabled={!valid} loading={loading} />
         </div>
       </form>
     </SettingsCard>

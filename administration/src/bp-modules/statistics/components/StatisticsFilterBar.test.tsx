@@ -1,6 +1,7 @@
-import { act, fireEvent, render } from '@testing-library/react'
+import { act, fireEvent } from '@testing-library/react'
 import React from 'react'
 
+import { renderWithTranslation } from '../../../testing/render'
 import { defaultEndDate, defaultStartDate } from '../constants'
 import StatisticsFilterBar from './StatisticsFilterBar'
 
@@ -12,7 +13,7 @@ describe('StatisticFilterBar', () => {
   beforeEach(jest.resetAllMocks)
 
   it('should execute onApplyFilter if filter button was clicked', async () => {
-    const { getByText } = render(
+    const { getByText } = renderWithTranslation(
       <StatisticsFilterBar onApplyFilter={onApplyFilter} isDataAvailable onExportCsv={onExportCsv} />
     )
     const applyFilterButton = getByText('Filter anwenden')
@@ -22,7 +23,7 @@ describe('StatisticFilterBar', () => {
   })
 
   it('should disable filter button if start date is after end date', async () => {
-    const { getByText, getByDisplayValue } = render(
+    const { getByText, getByDisplayValue } = renderWithTranslation(
       <StatisticsFilterBar onApplyFilter={onApplyFilter} isDataAvailable onExportCsv={onExportCsv} />
     )
     const applyFilterButton = getByText('Filter anwenden')
@@ -42,7 +43,7 @@ describe('StatisticFilterBar', () => {
   })
 
   it('should disable filter button if input is not a correct date string', () => {
-    const { getByText, getByDisplayValue } = render(
+    const { getByText, getByDisplayValue } = renderWithTranslation(
       <StatisticsFilterBar onApplyFilter={onApplyFilter} isDataAvailable onExportCsv={onExportCsv} />
     )
     const applyFilterButton = getByText('Filter anwenden')
@@ -56,7 +57,7 @@ describe('StatisticFilterBar', () => {
   })
 
   it('should display a proper tooltip message if filter button is disabled and filtering should not be applied', async () => {
-    const { getByText, getByDisplayValue } = render(
+    const { getByText, getByDisplayValue } = renderWithTranslation(
       <StatisticsFilterBar onApplyFilter={onApplyFilter} isDataAvailable onExportCsv={onExportCsv} />
     )
     const startInput = getByDisplayValue(defaultStartDate)
@@ -80,7 +81,7 @@ describe('StatisticFilterBar', () => {
   })
 
   it('should execute onExportCsv if csv export button was clicked', async () => {
-    const { getByText } = render(
+    const { getByText } = renderWithTranslation(
       <StatisticsFilterBar onApplyFilter={onApplyFilter} isDataAvailable onExportCsv={onExportCsv} />
     )
     const csvExportButton = getByText('CSV Export')
@@ -90,7 +91,7 @@ describe('StatisticFilterBar', () => {
   })
 
   it('should disable csv export button if no data is available and show tooltip', async () => {
-    const { getByText } = render(
+    const { getByText } = renderWithTranslation(
       <StatisticsFilterBar onApplyFilter={onApplyFilter} isDataAvailable={false} onExportCsv={onExportCsv} />
     )
 

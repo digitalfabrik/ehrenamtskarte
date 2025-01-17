@@ -1,6 +1,7 @@
 import { Button, FormGroup, InputGroup, Intent, Card as UiCard } from '@blueprintjs/core'
 import { TextField } from '@mui/material'
 import React, { ReactElement } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { Card, hasInfiniteLifetime, isExpirationDateValid, isFullNameValid } from '../../cards/Card'
@@ -25,12 +26,14 @@ export const maxCardValidity = { years: 99 }
 
 const AddCardForm = ({ card, onRemove, updateCard }: CreateCardsFormProps): ReactElement => {
   const today = PlainDate.fromLocalDate(new Date())
+  const { t } = useTranslation('cards')
+
   return (
     <UiCard>
       <CardHeader>
         <Button minimal icon='cross' onClick={() => onRemove()} />
       </CardHeader>
-      <FormGroup label='Name'>
+      <FormGroup label={t('name')}>
         <InputGroup
           placeholder='Erika Mustermann'
           autoFocus
@@ -41,7 +44,7 @@ const AddCardForm = ({ card, onRemove, updateCard }: CreateCardsFormProps): Reac
         />
       </FormGroup>
       {!hasInfiniteLifetime(card) && (
-        <FormGroup label='Ablaufdatum'>
+        <FormGroup label={t('expirationDate')}>
           <TextField
             fullWidth
             type='date'

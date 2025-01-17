@@ -1,14 +1,14 @@
-import { render } from '@testing-library/react'
 import React, { ReactNode } from 'react'
 
 import { ProjectConfigProvider } from '../../../project-configs/ProjectConfigContext'
+import { renderWithTranslation } from '../../../testing/render'
 import StoresImportResult from '../StoresImportResult'
 
 const wrapper = ({ children }: { children: ReactNode }) => <ProjectConfigProvider>{children}</ProjectConfigProvider>
 
 describe('StoresImportResult', () => {
   it('should show the correct amount of stores that were affected', () => {
-    const { getByTestId } = render(
+    const { getByTestId } = renderWithTranslation(
       <StoresImportResult dryRun={false} storesUntouched={5} storesCreated={15} storesDeleted={20} />,
       {
         wrapper,
@@ -20,7 +20,7 @@ describe('StoresImportResult', () => {
   })
 
   it('should show the correct headline for test import', () => {
-    const { getByTestId } = render(
+    const { getByTestId } = renderWithTranslation(
       <StoresImportResult dryRun={false} storesUntouched={5} storesCreated={15} storesDeleted={20} />,
       {
         wrapper,
@@ -30,7 +30,7 @@ describe('StoresImportResult', () => {
   })
 
   it('should show the correct headline for production import', () => {
-    const { getByTestId } = render(
+    const { getByTestId } = renderWithTranslation(
       <StoresImportResult dryRun storesUntouched={5} storesCreated={15} storesDeleted={20} />,
       {
         wrapper,
