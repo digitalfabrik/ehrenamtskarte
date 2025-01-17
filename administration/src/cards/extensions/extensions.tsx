@@ -53,7 +53,6 @@ const Extensions = [
   AddressPlzExtension,
   AddressLocationExtension,
   NuernbergPassIdExtension,
-  NuernbergPassIdExtension,
   EMailNotificationExtension,
   KoblenzReferenceNumberExtension,
 ] as const

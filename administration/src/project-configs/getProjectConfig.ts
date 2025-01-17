@@ -119,6 +119,7 @@ export type ProjectConfig = {
   selfServiceEnabled: boolean
   storesManagement: StoresManagementConfig
   userImportApiEnabled: boolean
+  showBirthdayMinorHint: boolean
 }
 
 export const setProjectConfigOverride = (hostname: string): void => {

@@ -93,6 +93,7 @@ const config: ProjectConfig = {
     enabled: false,
   },
   userImportApiEnabled: false,
+  showBirthdayMinorHint: false,
 }
 
 export default config

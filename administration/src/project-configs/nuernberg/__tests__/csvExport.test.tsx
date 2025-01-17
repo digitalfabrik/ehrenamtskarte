@@ -9,7 +9,10 @@ jest.mock('csv-stringify/browser/esm/sync', () => ({
   stringify: (input: string[][]) => input[0].join(','),
 }))
 
-jest.mock('../../getProjectConfig')
+jest.mock('../../getProjectConfig', () => ({
+  __esModule: true,
+  default: jest.fn(),
+}))
 
 describe('csvExport', () => {
   it('header should have same length as line', () => {

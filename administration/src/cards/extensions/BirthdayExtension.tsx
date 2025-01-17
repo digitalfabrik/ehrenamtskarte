@@ -1,10 +1,23 @@
-import { FormGroup } from '@blueprintjs/core'
-import React, { ReactElement, useState } from 'react'
+import { Classes, FormGroup, Tooltip } from '@blueprintjs/core'
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
+import React, { ReactElement, useContext, useState } from 'react'
+import styled from 'styled-components'
 
 import CustomDatePicker from '../../bp-modules/components/CustomDatePicker'
 import FormErrorMessage from '../../bp-modules/self-service/components/FormErrorMessage'
+import { ProjectConfigContext } from '../../project-configs/ProjectConfigContext'
 import PlainDate from '../../util/PlainDate'
 import { Extension, ExtensionComponentProps } from './extensions'
+
+const StyledToolTip = styled(Tooltip)`
+  border: 0;
+  width: 20px;
+  margin-left: 16px;
+`
+
+const StyledHelpOutlineIcon = styled(HelpOutlineIcon)`
+  color: #595959;
+`
 
 export const BIRTHDAY_EXTENSION_NAME = 'birthday'
 export type BirthdayExtensionState = { [BIRTHDAY_EXTENSION_NAME]: PlainDate | null }
@@ -21,6 +34,8 @@ const BirthdayForm = ({
   const [touched, setTouched] = useState(false)
   const { birthday } = value
   const showErrorMessage = touched || showRequired
+  const projectConfig = useContext(ProjectConfigContext)
+
   const getErrorMessage = (): string | null => {
     if (!birthday) {
       return 'Bitte geben Sie ein gültiges Geburtsdatum an.'
@@ -45,6 +60,17 @@ const BirthdayForm = ({
         isValid={isValid || !showErrorMessage}
         maxDate={new Date()}
         disableFuture
+        sideComponent={
+          <>
+            {projectConfig.showBirthdayMinorHint && (
+              <StyledToolTip
+                className={Classes.TOOLTIP_INDICATOR}
+                content='Bei Minderjährigen unter 16 Jahren darf der KoblenzPass nur mit Einverständnis der Erziehungsberechtigten abgerufen werden.'>
+                <StyledHelpOutlineIcon fontSize='small' />
+              </StyledToolTip>
+            )}
+          </>
+        }
       />
       {showErrorMessage && <FormErrorMessage errorMessage={getErrorMessage()} />}
     </FormGroup>
